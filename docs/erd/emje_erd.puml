@@ -1,0 +1,255 @@
+@startuml ERD Database PT EMJE PANDAJAYA
+
+' !pragma layout smetana
+skinparam linetype ortho
+
+'=================================
+' Enums
+'=================================
+
+
+enum Role{
+    +ADMIN
+    +PESERTA
+    +BENDAHARA
+    +PENGELOLA_PENDAFTARAN
+}
+enum PendidikanTerakhir{
+    +D3/S1
+    +SMK/SMA
+    +SMP
+    +SD
+}
+enum JenisKelamin{
+    +Pria
+    +Wanita
+}
+enum KategoriPelatihan{
+    +manufaktur
+    +pengolahan_makanan
+    +pertanian
+    +konstruksi
+    +kaigo
+    +logistik
+    +metal
+}
+enum StatusPelatihan{
+    +AKTIF
+    +NONAKTIF
+}
+enum StatusUjianPelatihan{
+    +LULUS
+    +TIDAK_LULUS
+    +BERLANGSUNG
+}
+enum StatusKontrakKerja{
+    +AKTIF
+    +NONAKTIF
+}
+enum StatusPelatihanDiikuti{
+    +BERLANGSUNG
+    +SELESAI
+    +DIBATALKAN
+}
+enum StatusKontrakKerjaDiikuti{
+    +BERLANGSUNG
+    +SELESAI
+    +DIBATALKAN
+}
+enum StatusPengajuanKontrakKerja{
+    +DISETUJUI
+    +DITOLAK
+    +DALAM_PROSES
+    +DIBATALKAN
+}
+enum StatusPendaftaranPelatihan{
+    +DITERIMA
+    +DITOLAK
+    +DALAM_PROSES
+    +DIBATALKAN
+}
+enum StatusCicilanPelatihan{
+    +DIBAYAR
+    +BELUM_BAYAR
+    +DIBATALKAN
+}
+enum TipeTransaksi {
+    +Pemasukan
+    +Pengeluaran
+}
+enum TenorCicilanPelatihan{
+    +TIGA_BULAN
+    +ENAM_BULAN
+    +SEMBILAN_BULAN
+    +DUA_BELAS_BULAN
+}
+enum MetodePembayaranPendaftaranPelatihan{
+    +CASH
+    +CICILAN
+}
+
+
+
+'==================================
+' Tables
+'==================================
+
+' Registration flow
+entity users{
+    *id : Bigint
+    ===
+    #name : String
+    #email : String
+    -password : String
+    -role : Role
+}
+entity profil_user{
+    *id : Bigint
+    -users_id : Bigint
+    ===
+    #nama_lengkap : String
+    -alamat : String
+    #nomor_telepon : String
+    -pendidikan_terakhir : PendidikanTerakhir
+    -jenis_kelamin : JenisKelamin
+    -tanggal_lahir : Date
+}
+
+
+
+' Pelatihan Flow
+entity pendaftaran_pelatihan{
+    *id : Bigint
+    -users_id: Bigint
+    -pelatihan_id: Bigint
+    ===
+    -status : StatusPendaftaranPelatihan
+    -metode_pembayaran : MetodePembayaranPendaftaranPelatihan
+    -tanggal_dibayar : Datetime
+}
+entity pelatihan{
+    *id : Bigint
+    ===
+    #nama_pelatihan : String
+    -nominal_biaya : Decimal (15,3)
+    -durasi_bulan : Int
+    -kategori_pelatihan : String
+    -deskripsi : String
+    -status : StatusPelatihan
+}
+entity pelatihan_diikuti{
+    *id : Bigint
+    -users_id : Bigint
+    -pendaftaran_pelatihan_id : Bigint
+    ===
+    -status : StatusPelatihanDiikuti
+}
+entity cicilan_biaya_pelatihan{
+    *id : Bigint
+    -pelatihan_id : Bigint
+    ===
+    -nominal_cicilan : Decimal (15,3)
+    -status : StatusCicilanPelatihan
+}
+entity ujian_pelatihan{
+    *id : Bigint
+    -pelatihan_id : Bigint
+    ===
+    -nama_ujian : String
+    -tanggal_mulai : Datetime
+    -tanggal_selesai : Datetime
+    -status : StatusUjianPelatihan
+}
+
+' Kontrak kerja
+entity pengajuan_kontrak_kerja{
+    *id : Bigint
+    -kontrak_kerja_id : Bigint
+    -users_id : Bigint
+    -status : StatusPengajuanKontrakKerja
+}
+entity kontrak_kerja{
+    *id : Bigint
+    ===
+    -nama_perusahaan : String
+    -gaji_terendah : Decimal (15,3)
+    -gaji_tertinggi : Decimal (15,3)
+    -status : StatusKontrakKerja
+    -durasi_kontrak_keja : Int
+}
+entity kontrak_kerja_diikuti{
+    *id : Bigint
+    -pengajuan_kontrak_kerja_id : Bigint
+    -users_id : Bigint
+    ===
+    -status : StatusKontrakKerjaDiikuti
+}
+
+entity sertifikasi{
+    *id : Bigint
+    -pelatihan_diikuti_id : Bigint
+    ===
+    nomor_sertifikat : String
+    tanggal_terbit : Datetime
+}
+
+entity rekening {
+    *id : Bigint
+    ===
+    -name : String
+    -saldo : Decimal (15,3)
+}
+entity transaksi_rekening{
+    *id : Bigint
+    ===
+    -nominal_transaksi : Decimal (15,3)
+    -catatan : Text
+    -tipe_transaksi : TipeTransaksi
+    -rekening_id : Bigint
+}
+
+' =======================
+' Relationships
+' =======================
+
+' One users has one profile
+users ||--|| profil_user
+
+' One users has many pelatihan
+users ||--o{ pelatihan_diikuti
+
+' One user has many kontrak_kerja_diikuti
+users ||--o{ kontrak_kerja_diikuti
+
+' One user has many pendaftaran_pelatihan
+users ||--o{ pendaftaran_pelatihan
+
+' One user has many pengajuan_kontrak_kerja
+users ||--o{ pengajuan_kontrak_kerja
+
+' One kontrak_kerja has many pendaftaran_kontrak_kerja
+kontrak_kerja ||--o{ pengajuan_kontrak_kerja
+
+' One pelatihan has many pendaftaran_pelatihan
+pelatihan ||--o{ pendaftaran_pelatihan
+
+' One pelatihan_diikuti has many ujian_pelatihan
+pelatihan_diikuti ||--o{ ujian_pelatihan
+
+' One pelatihan_diikuti has many cicilan_biaya_pelatihan
+pelatihan_diikuti ||--o{ cicilan_biaya_pelatihan
+
+' One pelatihan_diikuti has many sertifikasi
+pelatihan_diikuti ||--|| sertifikasi
+
+' One pelatihan_diikuti has many pendaftaran_pelatihan
+pelatihan_diikuti ||--|| pendaftaran_pelatihan
+
+' One kontrak_kerja_diikuti has many pengajuan_kontrak_kerja
+kontrak_kerja_diikuti ||--|| pengajuan_kontrak_kerja
+
+
+' One rekening has many transaksi_rekening
+rekening ||--o{ transaksi_rekening
+
+@enduml

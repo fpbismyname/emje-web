@@ -1,0 +1,21 @@
+@startuml Login Admin Activity
+start
+
+:Guess akses route '/admin/login';
+
+:Guess input krendensial;
+
+note right
+Email & Password
+endnote
+
+if(kredensial valid ? ) then (redirect)
+:route '/admin/dashboard';
+:Role guess berubah jadi **role User Admin**;
+else (redirect)
+:route '/admin/login';
+:Menampilkan pesan kredensial invalid;
+endif
+
+stop
+@enduml
