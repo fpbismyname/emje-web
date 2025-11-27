@@ -1,29 +1,36 @@
 @startuml ERD Database PT EMJE PANDAJAYA
 
-' !pragma layout smetana
 skinparam linetype ortho
 
 '=================================
 ' Enums
 '=================================
 
-
+' Table     
+' enum users.role
 enum Role{
     +ADMIN
     +PESERTA
     +BENDAHARA
     +PENGELOLA_PENDAFTARAN
 }
+
+' Table profile_user
+' enum profil_user.pendidikan_terakhir
 enum PendidikanTerakhir{
     +D3/S1
     +SMK/SMA
     +SMP
     +SD
 }
+' enum profil_user.jenis_kelamin
 enum JenisKelamin{
     +Pria
     +Wanita
 }
+
+' Table pelatihan
+' enum pelatihan.kategori
 enum KategoriPelatihan{
     +manufaktur
     +pengolahan_makanan
@@ -33,56 +40,87 @@ enum KategoriPelatihan{
     +logistik
     +metal
 }
+' enum pelatihan.status
 enum StatusPelatihan{
     +AKTIF
     +NONAKTIF
 }
+
+' Table ujian_pelatihan
+' ujian_pelatihan.status
 enum StatusUjianPelatihan{
+    +DIMULAI
+    +TERJADWAL
+    +BERLANGSUNG
+    +SELESAI
+}
+' Table hasil_ujian_pelatihan
+' enum hasil_ujian_pelatihan.status
+enum StatusHasilUjianPelatihan{
     +LULUS
     +TIDAK_LULUS
-    +BERLANGSUNG
 }
+
+' Table kontrak_Kerja
+' enum kontrak_kerja.status
 enum StatusKontrakKerja{
     +AKTIF
     +NONAKTIF
 }
+
+' Table pelatihan_diikuti
+' enum pelatihan_diikuti.status
 enum StatusPelatihanDiikuti{
     +BERLANGSUNG
     +SELESAI
     +DIBATALKAN
 }
+' Table kontrak_kerja_diikuti
+' enum kontrak_kerja_diikuti.status
 enum StatusKontrakKerjaDiikuti{
     +BERLANGSUNG
     +SELESAI
     +DIBATALKAN
 }
+' Table pengajuan_kontrak_kerja
+' enum pengajuan_kontrak_kerja.status
 enum StatusPengajuanKontrakKerja{
     +DISETUJUI
     +DITOLAK
     +DALAM_PROSES
     +DIBATALKAN
 }
+' Table pendaftaran_pelatihan
+' enum pendaftaran_pelatihan.status
 enum StatusPendaftaranPelatihan{
     +DITERIMA
     +DITOLAK
     +DALAM_PROSES
     +DIBATALKAN
 }
+' Table cicilan_biaya_pelatihan
+' enum cicilan_biaya_pelatihan.status
 enum StatusCicilanPelatihan{
     +DIBAYAR
     +BELUM_BAYAR
     +DIBATALKAN
 }
+
+' Table transaksi_rekening
+' enum transaksi_rekening.status
 enum TipeTransaksi {
     +Pemasukan
     +Pengeluaran
 }
+' Table cicilan_biaya_pelatihan
 enum TenorCicilanPelatihan{
     +TIGA_BULAN
     +ENAM_BULAN
     +SEMBILAN_BULAN
     +DUA_BELAS_BULAN
 }
+' Table pendaftaran_pelatihan
+' enum pendaftaran_pelatihan.metode_pembayaran
 enum MetodePembayaranPendaftaranPelatihan{
     +CASH
     +CICILAN
@@ -98,8 +136,8 @@ enum MetodePembayaranPendaftaranPelatihan{
 entity users{
     *id : Bigint
     ===
-    #name : String
-    #email : String
+    -name : String
+    -email : String
     -password : String
     -role : Role
 }
@@ -107,12 +145,15 @@ entity profil_user{
     *id : Bigint
     -users_id : Bigint
     ===
-    #nama_lengkap : String
+    -nama_lengkap : String
     -alamat : String
-    #nomor_telepon : String
+    -nomor_telepon : String
     -pendidikan_terakhir : PendidikanTerakhir
     -jenis_kelamin : JenisKelamin
     -tanggal_lahir : Date
+    -foto_profil : String
+    -ktp : String
+    -ijazah : String
 }
 
 
@@ -123,6 +164,7 @@ entity pendaftaran_pelatihan{
     -users_id: Bigint
     -pelatihan_id: Bigint
     ===
+    -bukti_pembayaran : String
     -status : StatusPendaftaranPelatihan
     -metode_pembayaran : MetodePembayaranPendaftaranPelatihan
     -tanggal_dibayar : Datetime
@@ -130,8 +172,8 @@ entity pendaftaran_pelatihan{
 entity pelatihan{
     *id : Bigint
     ===
-    #nama_pelatihan : String
-    -nominal_biaya : Decimal (15,3)
+    -nama_pelatihan : String
+    -nominal_biaya : Decimal (15,2)
     -durasi_bulan : Int
     -kategori_pelatihan : String
     -deskripsi : String
@@ -139,48 +181,55 @@ entity pelatihan{
 }
 entity pelatihan_diikuti{
     *id : Bigint
-    -users_id : Bigint
     -pendaftaran_pelatihan_id : Bigint
     ===
     -status : StatusPelatihanDiikuti
 }
 entity cicilan_biaya_pelatihan{
     *id : Bigint
-    -pelatihan_id : Bigint
+    -pelatihan_diikuti_id : Bigint
     ===
-    -nominal_cicilan : Decimal (15,3)
+    -bukti_pembayaran : String
+    -nominal_cicilan : Decimal (15,2)
     -status : StatusCicilanPelatihan
 }
 entity ujian_pelatihan{
     *id : Bigint
-    -pelatihan_id : Bigint
+    -pelatihan_diikuti_id : Bigint
     ===
     -nama_ujian : String
     -tanggal_mulai : Datetime
     -tanggal_selesai : Datetime
     -status : StatusUjianPelatihan
 }
-
-' Kontrak kerja
+entity hasil_ujian_pelatihan{
+    *id : Bigint
+    -ujian_pelatihan_id : Bigint
+    ===
+    -nilai : decimal(5,2)
+    -status : StatusHasilUjianPelatihan
+}
 entity pengajuan_kontrak_kerja{
     *id : Bigint
-    -kontrak_kerja_id : Bigint
     -users_id : Bigint
+    -kontrak_kerja_id : Bigint
+    ===
+    -surat_lamaran : String
     -status : StatusPengajuanKontrakKerja
 }
 entity kontrak_kerja{
     *id : Bigint
     ===
     -nama_perusahaan : String
-    -gaji_terendah : Decimal (15,3)
-    -gaji_tertinggi : Decimal (15,3)
+    -gaji_terendah : Decimal (15,2)
+    -gaji_tertinggi : Decimal (15,2)
+    -deskripsi : Text
     -status : StatusKontrakKerja
     -durasi_kontrak_keja : Int
 }
 entity kontrak_kerja_diikuti{
     *id : Bigint
     -pengajuan_kontrak_kerja_id : Bigint
-    -users_id : Bigint
     ===
     -status : StatusKontrakKerjaDiikuti
 }
@@ -197,59 +246,39 @@ entity rekening {
     *id : Bigint
     ===
     -name : String
-    -saldo : Decimal (15,3)
+    -saldo : Decimal (15,2)
 }
 entity transaksi_rekening{
     *id : Bigint
     ===
-    -nominal_transaksi : Decimal (15,3)
-    -catatan : Text
+    -nominal_transaksi : Decimal (15,2)
+    -keterangan : Text
     -tipe_transaksi : TipeTransaksi
     -rekening_id : Bigint
 }
 
-' =======================
-' Relationships
-' =======================
+' =============
+' Relationship
+' =============
 
-' One users has one profile
-users ||--|| profil_user
+' Flow relation profil_user
+users ||--o{ profil_user
 
-' One users has many pelatihan
-users ||--o{ pelatihan_diikuti
-
-' One user has many kontrak_kerja_diikuti
-users ||--o{ kontrak_kerja_diikuti
-
-' One user has many pendaftaran_pelatihan
+' Flow relation pelatihan
 users ||--o{ pendaftaran_pelatihan
-
-' One user has many pengajuan_kontrak_kerja
-users ||--o{ pengajuan_kontrak_kerja
-
-' One kontrak_kerja has many pendaftaran_kontrak_kerja
-kontrak_kerja ||--o{ pengajuan_kontrak_kerja
-
-' One pelatihan has many pendaftaran_pelatihan
+pendaftaran_pelatihan ||--|| pelatihan_diikuti
 pelatihan ||--o{ pendaftaran_pelatihan
-
-' One pelatihan_diikuti has many ujian_pelatihan
-pelatihan_diikuti ||--o{ ujian_pelatihan
-
-' One pelatihan_diikuti has many cicilan_biaya_pelatihan
 pelatihan_diikuti ||--o{ cicilan_biaya_pelatihan
-
-' One pelatihan_diikuti has many sertifikasi
 pelatihan_diikuti ||--|| sertifikasi
+pelatihan_diikuti ||--o{ ujian_pelatihan
+ujian_pelatihan ||--|| hasil_ujian_pelatihan
 
-' One pelatihan_diikuti has many pendaftaran_pelatihan
-pelatihan_diikuti ||--|| pendaftaran_pelatihan
+' Flow relation kontrak_kerja
+users ||--o{ pengajuan_kontrak_kerja
+kontrak_kerja ||--o{ pengajuan_kontrak_kerja
+pengajuan_kontrak_kerja ||--|| kontrak_kerja_diikuti
 
-' One kontrak_kerja_diikuti has many pengajuan_kontrak_kerja
-kontrak_kerja_diikuti ||--|| pengajuan_kontrak_kerja
-
-
-' One rekening has many transaksi_rekening
+' Flow rekening
 rekening ||--o{ transaksi_rekening
 
 @enduml

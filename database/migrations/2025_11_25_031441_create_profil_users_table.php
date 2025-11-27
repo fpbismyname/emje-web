@@ -10,7 +10,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('profil_users', function (Blueprint $table) {
+        Schema::create('profil_user', function (Blueprint $table) {
             $table->id();
             $table->string('nama_lengkap')->unique();
             $table->string('alamat')->nullable();
@@ -18,6 +18,9 @@ return new class extends Migration {
             $table->string('pendidikan_terakhir')->nullable();
             $table->string('jenis_kelamin')->nullable();
             $table->string('tanggal_lahir')->nullable();
+            $table->string('foto_profil')->nullable();
+            $table->string('ktp')->nullable();
+            $table->string('ijazah')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('profil_users');
+        Schema::dropIfExists('profil_user');
     }
 };

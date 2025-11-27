@@ -12,6 +12,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap" rel="stylesheet">
 
+    <link rel="shortcut icon" href="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}"
+        type="image/x-icon">
+
     <!-- Styles / Scripts -->
     @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -1521,6 +1524,9 @@
 </head>
 
 <body>
+    @session('toast')
+        <x-ui.toast :message="session('toast')['message']" :type="session('toast')['type']" />
+    @endsession
     {{ $slot }}
 </body>
 

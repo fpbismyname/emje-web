@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::create('cicilan_biaya_pelatihan', function (Blueprint $table) {
             $table->id();
-            $table->decimal('nominal_cicilan', 15, 3);
+            $table->string('bukti_pembayaran');
+            $table->decimal('nominal_cicilan', 15, 2);
             $table->string('status');
             $table->timestamps();
         });

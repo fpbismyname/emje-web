@@ -36,12 +36,8 @@ class KontrakKerjaDiikuti extends Model
     /**
      * Relationships
      */
-    public function kontrak_kerja()
+    public function pengajuan_kontrak_kerja()
     {
-        return $this->belongsTo(KontrakKerja::class, 'kontrak_kerja_id');
-    }
-    public function users()
-    {
-        return $this->belongsTo(User::class, 'users_id');
+        return $this->belongsTo(PengajuanKontrakKerja::class, 'pengajuan_kontrak_kerja_id');
     }
 }

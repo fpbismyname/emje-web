@@ -10,14 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('pelatihan', function (Blueprint $table) {
+        Schema::create('kontrak_kerja', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_pelatihan');
-            $table->decimal('nominal_biaya', 15, 3);
-            $table->integer('durasi_bulan');
-            $table->string('kategori_pelatihan');
-            $table->text('deskripsi');
+            $table->string('nama_perusahaan');
+            $table->decimal('gaji_terendah', 15, 2);
+            $table->decimal('gaji_tertinggi', 15, 2);
             $table->string('status');
+            $table->text('deskripsi');
+            $table->integer('durasi_kontrak_kerja');
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('pelatihan');
+        Schema::dropIfExists('kontrak_kerja');
     }
 };

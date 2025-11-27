@@ -14,6 +14,47 @@
     root: ":root";
 }
 
+@layer base {
+    h1 {
+        @apply text-4xl font-extrabold;
+    }
+
+    h2 {
+        @apply text-3xl font-bold;
+    }
+
+    h3 {
+        @apply text-2xl font-semibold;
+    }
+
+    h4 {
+        @apply text-xl font-semibold;
+    }
+
+    h5 {
+        @apply text-lg font-medium;
+    }
+
+    h6 {
+        @apply text-base font-medium;
+    }
+
+    p,
+    li,
+    span,
+    div,
+    button,
+    a,
+    label,
+    input,
+    textarea,
+    select,
+    option,
+    summary {
+        @apply text-base font-normal;
+    }
+}
+
 html {
     @apply scroll-smooth;
 }

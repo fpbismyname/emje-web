@@ -34,31 +34,20 @@ class PelatihanDiikuti extends Model
     /**
      * Relationships
      */
-    // Users
-    public function users()
-    {
-        return $this->belongsTo(User::class, 'users_id');
-    }
-    // Pendaftaran pelatihan
     public function pendaftaran_pelatihan()
     {
         return $this->belongsTo(PendaftaranPelatihan::class, 'pendaftaran_pelatihan_id');
     }
-    // Pelatihan
-    public function pelatihan()
-    {
-        return $this->hasOneThrough(
-            Pelatihan::class,
-            PendaftaranPelatihan::class,
-            'id',
-            'id',
-            'pendaftaran_pelatihan_id',
-            'pelatihan_id'
-        );
-    }
-    // Sertifikasi
     public function sertifikasi()
     {
         return $this->hasOne(Sertifikasi::class, 'pelatihan_diikuti_id');
+    }
+    public function ujian_pelatihan()
+    {
+        return $this->hasMany(UjianPelatihan::class, 'pelatihan_diikuti_id');
+    }
+    public function cicilan_biaya_pelatihan()
+    {
+        return $this->hasMany(CicilanBiayaPelatihan::class, 'pelatihan_diikuti_id');
     }
 }

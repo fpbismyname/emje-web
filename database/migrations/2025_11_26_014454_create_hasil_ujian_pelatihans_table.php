@@ -4,15 +4,16 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('pengajuan_kontrak_kerjas', function (Blueprint $table) {
+        Schema::create('hasil_ujian_pelatihan', function (Blueprint $table) {
             $table->id();
+            $table->decimal('nilai', 5, 2);
+            $table->string('status');
             $table->timestamps();
         });
     }
@@ -22,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengajuan_kontrak_kerjas');
+        Schema::dropIfExists('hasil_ujian_pelatihan');
     }
 };

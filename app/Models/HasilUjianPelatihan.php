@@ -1,0 +1,41 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Model;
+
+class HasilUjianPelatihan extends Model
+{
+    /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'hasil_ujian_pelatihan';
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'nilai',
+        'status',
+        'ujian_pelatihan_id'
+    ];
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+    ];
+    /**
+     * Relationships
+     */
+    public function ujian_pelatihan()
+    {
+        return $this->belongsTo(UjianPelatihan::class, 'ujian_pelatihan_id');
+    }
+}

@@ -5,7 +5,8 @@
             <div class="navbar bg-base-300 shadow-sm">
                 <div class="flex-1">
                     <a href="/" class="py-4">
-                        <x-ui.img class="w-full max-w-12 min-w-12" src="{{ asset('default/company_icon.png') }}" />
+                        <x-ui.img class="w-full max-w-12 min-w-12"
+                            src="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}" />
                     </a>
                 </div>
                 <div class="hidden md:flex md:flex-none">
@@ -80,7 +81,8 @@
         <div class="flex flex-col mt-auto">
             <footer class="footer sm:footer-horizontal bg-base-300 text-base-content p-10">
                 <aside>
-                    <x-ui.img src="{{ asset('default/company_icon.png') }}" class="max-w-24 min-w-12" />
+                    <x-ui.img src="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}"
+                        class="max-w-24 min-w-12" />
                     <p class="max-w-xs line-clamp-3">
                         {{ config('site.description') }}
                     </p>

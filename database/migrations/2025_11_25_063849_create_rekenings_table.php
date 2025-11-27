@@ -13,7 +13,7 @@ return new class extends Migration {
         Schema::create('rekening', function (Blueprint $table) {
             $table->id();
             $table->string('nama_rekening');
-            $table->decimal('saldo', 15, 3);
+            $table->decimal('saldo', 15, 2);
             $table->timestamps();
         });
     }

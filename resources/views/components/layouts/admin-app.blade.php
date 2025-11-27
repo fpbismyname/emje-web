@@ -3,15 +3,45 @@
         <input id="admin-drawer" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content">
             <!-- Navbar -->
-            <nav class="navbar w-full bg-base-300">
-                <label for="admin-drawer" aria-label="open sidebar" class="btn btn-square btn-ghost">
-                    <!-- Sidebar toggle icon -->
-                    <x-lucide-menu class="w-4" />
-                </label>
-                <div class="px-4">{{ $title ?? config('site.title') }}</div>
+            <nav class="navbar w-full bg-base-300 sticky top-0 z-10">
+                <div class="flex flex-1">
+                    <label for="admin-drawer" class="btn btn-ghost">
+                        <!-- Sidebar toggle icon -->
+                        <x-lucide-menu class="w-4" />
+                    </label>
+                </div>
+                <div class="flex flex-none">
+                    <div class="dropdown dropdown-bottom dropdown-end">
+                        <div role="button" tabindex="0" class="btn btn-primary btn-circle">
+                            <x-lucide-user class="w-4" />
+                        </div>
+                        <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 shadow-sm">
+                            <li class="menu-title">
+                                {{ auth()->user()->formatted_name }}
+                            </li>
+                            <li>
+                                <a href="">Pengaturan</a>
+                            </li>
+                            <form action="{{ route('admin.logout.submit') }}" method="post">
+                                @csrf
+                                @method('post')
+                                <li>
+                                    <button type="submit" class="text-error w-full">Logout</button>
+                                </li>
+                            </form>
+                        </ul>
+                    </div>
+                </div>
             </nav>
             <!-- Page content here -->
-            <div class="flex flex-col min-h-screen">
+            <div class="flex flex-col gap-4 p-4">
+                <div class="flex flex-row justify-between">
+                    @if (!empty($title))
+                        <div class="flex flex-col">
+                            <h3>{{ $title ?? null }}</h3>
+                        </div>
+                    @endif
+                </div>
                 {{ $slot }}
             </div>
         </div>
@@ -22,7 +52,8 @@
                 <!-- Sidebar content here -->
                 <div class="flex flex-col w-full items-center p-2 py-4">
                     {{-- Logo --}}
-                    <x-ui.img src="{{ asset('default/company_icon.png') }}" class="w-full max-w-12" />
+                    <x-ui.img src="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}"
+                        class="w-full max-w-12" />
                     <label class="is-drawer-close:hidden whitespace-nowrap">PT
                         Pandajaya
                         Indonesia
@@ -31,51 +62,37 @@
                 <ul class="menu w-full grow">
                     <!-- List item -->
                     @foreach (config('admin_sidebar') as $item)
-                        @switch($item['type'])
-                            @case('menu-title')
-                                <li class="menu-title is-drawer-close:hidden whitespace-nowrap">{{ $item['label'] }}</li>
-                            @break
+                        @if (in_array(auth()->user()->role->value, $item['roles']))
+                            @switch($item['type'])
+                                @case('menu-title')
+                                    <li class="menu-title is-drawer-close:hidden whitespace-nowrap">{{ $item['label'] }}</li>
+                                    <span class="is-drawer-close:py-4 is-drawer-open:hidden"></span>
+                                @break
 
-                            @case('menu')
-                                <li>
-                                    <a role="button" href="{{ route($item['route_name']) }}"
-                                        class="is-drawer-close:tooltip is-drawer-close:tooltip-right"
-                                        data-tip="{{ $item['label'] }}">
-                                        <!-- Home icon -->
-                                        <x-dynamic-component :component="'lucide-' . $item['icon']" class="w-4" />
-                                        <span class="is-drawer-close:hidden">{{ $item['label'] }}</span>
-                                    </a>
-                                </li>
-                            @break
+                                @case('menu')
+                                    @php
+                                        $base_route = implode(
+                                            '.',
+                                            array_slice(explode('.', $item['route_name']), 0, 2),
+                                        );
+                                        $is_active = request()->routeIs($base_route . '*');
+                                    @endphp
+                                    <li class="rounded-field {{ $is_active ? 'bg-base-300' : '' }}">
+                                        <a role="button" href="{{ route($item['route_name']) }}"
+                                            class="is-drawer-close:tooltip is-drawer-close:tooltip-right tooltip-primary whitespace-nowrap"
+                                            data-tip="{{ $item['label'] }}">
+                                            <!-- Home icon -->
+                                            <x-dynamic-component :component="'lucide-' . $item['icon']" class="w-4" />
+                                            <span class="is-drawer-close:hidden">{{ $item['label'] }}</span>
+                                        </a>
+                                    </li>
+                                @break
 
-                            @default
-                        @endswitch
+                                @default
+                            @endswitch
+                        @endif
                     @endforeach
                 </ul>
-                <div class="flex flex-col w-full">
-                    <ul class="menu w-full mt-auto">
-                        <li>
-                            <div class="dropdown dropdown-top">
-                                <div tabindex="0" role="button" class="w-full flex gap-2">
-                                    <x-lucide-user class="w-4" />
-                                    {{-- {{ auth()->user()->formatted_name }} --}}
-                                    <span class="is-drawer-close:hidden">
-                                        Gunawan
-                                    </span>
-                                </div>
-                                <ul tabindex="1"
-                                    class="dropdown-content z-10 menu menu-vertical bg-base-300 w-64 rounded-box">
-                                    <li>
-                                        <a href="">Pengaturan</a>
-                                    </li>
-                                    <li>
-                                        <a href="">Logout</a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
             </div>
         </div>
     </div>

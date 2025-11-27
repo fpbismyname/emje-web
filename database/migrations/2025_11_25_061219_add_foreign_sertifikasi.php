@@ -12,7 +12,8 @@ return new class extends Migration {
     {
         Schema::table('sertifikasi', function (Blueprint $table) {
             $table->foreignId('pelatihan_diikuti_id')
-                ->constrained('pelatihan_diikuti_id')
+                ->nullable()
+                ->constrained('pelatihan_diikuti')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });

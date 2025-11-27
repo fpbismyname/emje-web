@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('transaksi_rekening', function (Blueprint $table) {
             $table->id();
-            $table->decimal('nominal_transaksi', 15, 3);
+            $table->decimal('nominal_transaksi', 15, 2);
             $table->text('keterangan');
             $table->string('tipe_transaksi');
             $table->timestamps();

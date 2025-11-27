@@ -20,6 +20,7 @@ class CicilanBiayaPelatihan extends Model
      */
     protected $fillable = [
         'nominal_cicilan',
+        'bukti_pembayaran',
         'status',
         'pelatihan_diikuti_id'
     ];

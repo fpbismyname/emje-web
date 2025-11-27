@@ -12,10 +12,12 @@ return new class extends Migration {
     {
         Schema::table('pendaftaran_pelatihan', function (Blueprint $table) {
             $table->foreignId('pelatihan_id')
+                ->nullable()
                 ->constrained('pelatihan')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
             $table->foreignId('users_id')
+                ->nullable()
                 ->constrained('users')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

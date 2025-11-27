@@ -19,6 +19,7 @@ class PengajuanKontrakKerja extends Model
      */
     protected $fillable = [
         'status',
+        'surat_lamaran',
         'kontrak_kerja_id',
         'users_id'
     ];
@@ -33,13 +34,13 @@ class PengajuanKontrakKerja extends Model
     /**
      * Relationships
      */
-    public function kontrak_kerja()
-    {
-        return $this->belongsTo(KontrakKerja::class, 'kontrak_kerja_id');
-    }
     public function users()
     {
         return $this->belongsTo(User::class, 'users_id');
+    }
+    public function kontrak_kerja()
+    {
+        return $this->belongsTo(KontrakKerja::class, 'kontrak_kerja_id');
     }
     public function kontrak_kerja_diikuti()
     {
