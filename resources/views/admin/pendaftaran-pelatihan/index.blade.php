@@ -10,15 +10,15 @@
                         {{ $status->label() }}</option>
                 @endforeach
             </select>
-            <select name="metode_pembayaran" class="select">
-                <option value="">Pilih metode pembayaran</option>
-                @foreach (App\Enums\Pelatihan\MetodePembayaranEnum::cases() as $status)
-                    <option value="{{ $status->value }}" @if (request('metode_pembayaran') === $status->value) selected @endif>
+            <select name="skema_pembayaran" class="select">
+                <option value="">Pilih skema pembayaran</option>
+                @foreach (App\Enums\Pelatihan\SkemaPembayaranEnum::cases() as $status)
+                    <option value="{{ $status->value }}" @if (request('skema_pembayaran') === $status->value) selected @endif>
                         {{ $status->label() }}</option>
                 @endforeach
             </select>
             <input type="text" class="input" name="search" value="{{ request('search') }}"
-                placeholder="Cari kontra kerja" />
+                placeholder="Cari pendaftaran pelatihan" />
             <button class="btn btn-primary">
                 <x-lucide-search class="w-4" />
             </button>
@@ -34,8 +34,7 @@
                     <th>Nama pelatihan</th>
                     <th>Nama peserta</th>
                     <th>Status</th>
-                    <th>Metode pembayaran</th>
-                    <th>Tanggal dibayar</th>
+                    <th>Skema pembayaran</th>
                     <th>Aksi</th>
                 </tr>
             </thead>
@@ -47,8 +46,7 @@
                             <td>{{ $item->pelatihan_nama_pelatihan }}</td>
                             <td>{{ $item->users_profil_user_nama_lengkap }}</td>
                             <td>{{ $item->status->label() }}</td>
-                            <td>{{ $item->metode_pembayaran->label() }}</td>
-                            <td>{{ $item->formatted_tanggal_dibayar }}</td>
+                            <td>{{ $item->skema_pembayaran->label() }}</td>
                             <td>
                                 <div class="flex flex-row gap-4">
                                     <a href="{{ route('admin.pendaftaran-pelatihan.edit', [$item->id]) }}"
@@ -60,7 +58,7 @@
                 @else
                     <tr>
                         <td colspan="5">
-                            Data user tidak tersedia.
+                            Data pendaftaran pelatihan tidak tersedia.
                         </td>
                     </tr>
                 @endif

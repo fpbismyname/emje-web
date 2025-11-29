@@ -53,12 +53,6 @@ class User extends Authenticatable
         ];
     }
     /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
-    protected $appends = ['formatted_name'];
-    /**
      * Relationships
      */
     public function profil_user()
@@ -93,13 +87,12 @@ class User extends Authenticatable
         if (is_array($keyword)) {
             return $query->whereIn($column, $operator, $keywords);
         }
-        if (is_array($column)) {
-            foreach ($column as $col) {
-                return $query->where($col, $operator, $keywords);
-            }
-        }
         return $query->where($column, $operator, $keywords);
     }
+    /**
+     * Appends
+     */
+    protected $appends = ['formatted_name', 'jumlah_pelatihan_diikuti'];
     /**
      * Accessor
      */
@@ -107,6 +100,12 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn() => Str::of($this->name)->ucfirst()
+        );
+    }
+    public function jumlahPelatihanDiikuti(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->pendaftaran_pelatihan()->whereHas('pelatihan_peserta')->count()
         );
     }
 }

@@ -30,5 +30,9 @@ class AppServiceProvider extends ServiceProvider
         Gate::define('manage-user', fn($authed_user, $user) => in_array($authed_user->role, [RoleEnum::ADMIN]) || $authed_user->id === $user->id);
         Gate::define('manage-kontrak-kerja', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
         Gate::define('manage-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
+        Gate::define('manage-pendaftaran-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
+        Gate::define('manage-gelombang-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
+        Gate::define('manage-rekening', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
+        Gate::define('manage-jadwal-ujian-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
     }
 }

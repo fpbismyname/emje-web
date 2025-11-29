@@ -11,9 +11,9 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('sertifikasi', function (Blueprint $table) {
-            $table->foreignId('pelatihan_diikuti_id')
+            $table->foreignId('pelatihan_peserta_id')
                 ->nullable()
-                ->constrained('pelatihan_diikuti')
+                ->constrained('pelatihan_peserta')
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
         });
@@ -25,8 +25,8 @@ return new class extends Migration {
     public function down(): void
     {
         Schema::table('sertifikasi', function (Blueprint $table) {
-            $table->dropForeign(['pelatihan_diikuti_id']);
-            $table->dropColumn(['pelatihan_diikuti_id']);
+            $table->dropForeign(['pelatihan_peserta_id']);
+            $table->dropColumn(['pelatihan_peserta_id']);
         });
     }
 };

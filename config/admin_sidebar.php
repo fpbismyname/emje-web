@@ -22,7 +22,7 @@ return [
         'label' => 'Rekening',
         'icon' => 'banknote',
         'type' => 'menu',
-        'route_name' => 'admin.dashboard.index',
+        'route_name' => 'admin.rekening.index',
         'roles' => ['admin']
     ],
     [
@@ -50,6 +50,13 @@ return [
         'roles' => ['admin']
     ],
     [
+        'label' => 'Gelombang pelatihan',
+        'icon' => 'users',
+        'type' => 'menu',
+        'route_name' => 'admin.gelombang-pelatihan.index',
+        'roles' => ['admin']
+    ],
+    [
         'label' => 'Pendaftaran pelatihan',
         'icon' => 'file-input',
         'type' => 'menu',
@@ -57,10 +64,24 @@ return [
         'roles' => ['admin']
     ],
     [
+        'label' => 'Pembayaran pelatihan',
+        'icon' => 'coins',
+        'type' => 'menu',
+        'route_name' => 'admin.dashboard.index',
+        'roles' => ['admin']
+    ],
+    [
         'label' => 'Pelatihan peserta',
         'icon' => 'user-round-pen',
         'type' => 'menu',
-        'route_name' => 'admin.dashboard.index',
+        'route_name' => 'admin.pelatihan-peserta.index',
+        'roles' => ['admin']
+    ],
+    [
+        'label' => 'Jadwal ujian pelatihan',
+        'icon' => 'calendar-clock',
+        'type' => 'menu',
+        'route_name' => 'admin.jadwal-ujian-pelatihan.index',
         'roles' => ['admin']
     ],
     [

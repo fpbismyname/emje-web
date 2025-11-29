@@ -10,10 +10,8 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('cicilan_biaya_pelatihan', function (Blueprint $table) {
+        Schema::create('kontrak_kerja_peserta', function (Blueprint $table) {
             $table->id();
-            $table->string('bukti_pembayaran');
-            $table->decimal('nominal_cicilan', 15, 2);
             $table->string('status');
             $table->timestamps();
         });
@@ -24,6 +22,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('cicilan_biaya_pelatihan');
+        Schema::dropIfExists('kontrak_kerja_peserta');
     }
 };

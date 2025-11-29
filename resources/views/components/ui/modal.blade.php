@@ -2,6 +2,9 @@
 <dialog class="modal" id="{{ $id }}">
     @isset($modal_box)
         <div class="modal-box">
+            @isset($card_title)
+                <h1 class="card-title">{{ $card_title }}</h1>
+            @endisset
             {{ $modal_box ?? 'x-slot:modal_box' }}
         </div>
     @endisset

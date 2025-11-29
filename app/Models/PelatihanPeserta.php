@@ -2,26 +2,26 @@
 
 namespace App\Models;
 
-use App\Enums\Pelatihan\StatusPelatihanDiikutiEnum;
+use App\Enums\Pelatihan\StatusPelatihanPesertaEnum;
 use Illuminate\Database\Eloquent\Model;
 
-class PelatihanDiikuti extends Model
+class PelatihanPeserta extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'pelatihan_diikuti';
+    protected $table = 'pelatihan_peserta';
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'status',
         'pendaftaran_pelatihan_id',
-        'users_id',
+        'gelombang_pelatihan_id',
+        'status',
     ];
     /**
      * The attributes that should be cast to native types.
@@ -29,7 +29,7 @@ class PelatihanDiikuti extends Model
      * @var array
      */
     protected $casts = [
-        'status' => StatusPelatihanDiikutiEnum::class,
+        'status' => StatusPelatihanPesertaEnum::class,
     ];
     /**
      * Relationships
@@ -40,14 +40,10 @@ class PelatihanDiikuti extends Model
     }
     public function sertifikasi()
     {
-        return $this->hasOne(Sertifikasi::class, 'pelatihan_diikuti_id');
+        return $this->hasOne(Sertifikasi::class, 'pelatihan_peserta_id');
     }
-    public function ujian_pelatihan()
+    public function gelombang_pelatihan()
     {
-        return $this->hasMany(UjianPelatihan::class, 'pelatihan_diikuti_id');
-    }
-    public function cicilan_biaya_pelatihan()
-    {
-        return $this->hasMany(CicilanBiayaPelatihan::class, 'pelatihan_diikuti_id');
+        return $this->belongsTo(GelombangPelatihan::class, 'gelombang_pelatihan_id');
     }
 }

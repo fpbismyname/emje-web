@@ -11,7 +11,7 @@
                 @endforeach
             </select>
             <input type="text" class="input" name="search" value="{{ request('search') }}"
-                placeholder="Cari kontra kerja" />
+                placeholder="Cari daftar kontrak kerja" />
             <button class="btn btn-primary">
                 <x-lucide-search class="w-4" />
             </button>
@@ -64,7 +64,7 @@
                 @else
                     <tr>
                         <td colspan="5">
-                            Data user tidak tersedia.
+                            Data kontrak kerja tidak tersedia.
                         </td>
                     </tr>
                 @endif

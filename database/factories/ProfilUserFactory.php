@@ -31,9 +31,9 @@ class ProfilUserFactory extends Factory
             'pendidikan_terakhir' => $this->faker->randomElement([PendidikanTerakhirEnum::SMK_SMA->value, PendidikanTerakhirEnum::D3_S1->value]),
             'jenis_kelamin' => $gender,
             'tanggal_lahir' => $this->faker->dateTimeBetween(now()->subYears(30), now()->subYears(15)),
-            'ktp' => '',
-            'foto_profil' => '',
-            'ijazah' => '',
+            'ktp' => 'users/ktp/ktp.png',
+            'foto_profil' => 'users/foto_profil/foto_profil.jpg',
+            'ijazah' => 'users/ijazah/ijazah.jpg',
         ];
     }
     public function withUser()

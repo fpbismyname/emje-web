@@ -12,10 +12,10 @@ return new class extends Migration {
     {
         Schema::create('pendaftaran_pelatihan', function (Blueprint $table) {
             $table->id();
-            $table->string('bukti_pembayaran')->nullable();
             $table->string('status');
-            $table->string('metode_pembayaran');
-            $table->dateTime('tanggal_dibayar')->nullable();
+            $table->string('skema_pembayaran');
+            $table->string('tenor');
+            $table->string('catatan')->nullable();
             $table->timestamps();
         });
     }

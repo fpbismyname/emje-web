@@ -14,7 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->string('nama_pelatihan');
             $table->decimal('nominal_biaya', 15, 2);
-            $table->integer('durasi_bulan');
+            $table->decimal('persentasi_dp', 5, 2);
+            $table->integer('durasi_pelatihan');
             $table->string('kategori_pelatihan');
             $table->text('deskripsi');
             $table->string('status');

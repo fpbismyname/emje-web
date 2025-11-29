@@ -1,6 +1,8 @@
 <x-layouts.app title="{{ $title ?? null }}">
     <div class="drawer md:drawer-open">
+
         <input id="admin-drawer" type="checkbox" class="drawer-toggle" />
+
         <div class="drawer-content">
             <!-- Navbar -->
             <nav class="navbar w-full bg-base-300 sticky top-0 z-10">
@@ -54,10 +56,13 @@
                     {{-- Logo --}}
                     <x-ui.img src="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}"
                         class="w-full max-w-12" />
-                    <label class="is-drawer-close:hidden whitespace-nowrap">PT
-                        Pandajaya
-                        Indonesia
-                    </label>
+                    <div class="flex flex-col gap-2 is-drawer-close:hidden items-center">
+                        <label class="whitespace-nowrap">PT
+                            Pandajaya
+                            Indonesia
+                        </label>
+                        <div class="badge badge-primary">{{ auth()->user()->role->label() }}</div>
+                    </div>
                 </div>
                 <ul class="menu w-full grow">
                     <!-- List item -->
@@ -71,17 +76,14 @@
 
                                 @case('menu')
                                     @php
-                                        $base_route = implode(
-                                            '.',
-                                            array_slice(explode('.', $item['route_name']), 0, 2),
-                                        );
+                                        $base_route =
+                                            implode('.', array_slice(explode('.', $item['route_name']), 0, 2)) . '.';
                                         $is_active = request()->routeIs($base_route . '*');
                                     @endphp
                                     <li class="rounded-field {{ $is_active ? 'bg-base-300' : '' }}">
                                         <a role="button" href="{{ route($item['route_name']) }}"
                                             class="is-drawer-close:tooltip is-drawer-close:tooltip-right tooltip-primary whitespace-nowrap"
                                             data-tip="{{ $item['label'] }}">
-                                            <!-- Home icon -->
                                             <x-dynamic-component :component="'lucide-' . $item['icon']" class="w-4" />
                                             <span class="is-drawer-close:hidden">{{ $item['label'] }}</span>
                                         </a>

@@ -34,8 +34,8 @@ class HasilUjianPelatihan extends Model
     /**
      * Relationships
      */
-    public function ujian_pelatihan()
+    public function jadwal_ujian_pelatihan()
     {
-        return $this->belongsTo(UjianPelatihan::class, 'ujian_pelatihan_id');
+        return $this->belongsTo(JadwalUjianPelatihan::class, 'jadwal_ujian_pelatihan_id');
     }
 }

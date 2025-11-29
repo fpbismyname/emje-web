@@ -48,8 +48,7 @@ enum StatusPelatihan{
 
 ' Table ujian_pelatihan
 ' ujian_pelatihan.status
-enum StatusUjianPelatihan{
-    +DIMULAI
+enum StatusJadwalUjianPelatihan{
     +TERJADWAL
     +BERLANGSUNG
     +SELESAI
@@ -59,6 +58,7 @@ enum StatusUjianPelatihan{
 enum StatusHasilUjianPelatihan{
     +LULUS
     +TIDAK_LULUS
+    +REMEDIAL
 }
 
 ' Table kontrak_Kerja
@@ -121,9 +121,29 @@ enum TenorCicilanPelatihan{
 }
 ' Table pendaftaran_pelatihan
 ' enum pendaftaran_pelatihan.metode_pembayaran
-enum MetodePembayaranPendaftaranPelatihan{
+enum SkemaPembayaranPendaftaranPelatihan{
     +CASH
     +CICILAN
+}
+' Table pembayaran_pendaftaran
+' enum pembayaran_pendaftaran.status
+enum StatusPembayaran{
+    +DITERIMA
+    +DITOLAK
+}
+' Table pembayaran_pendaftaran
+' enum pembayaran_pendaftaran.metode_pembayaran
+enum JenisPembayaran{
+    +ANGSURAN
+    +PELUNASAN
+    +DP
+}
+'  Table gelombang_pelatihan
+' enum gelombang_pelatihan.sesi
+enum SesiGelombangPelatihan{
+    +PENDAFTARAN
+    +BERLANGSUNG
+    +SELESAI
 }
 
 
@@ -132,7 +152,7 @@ enum MetodePembayaranPendaftaranPelatihan{
 ' Tables
 '==================================
 
-' Registration flow
+' Users flow
 entity users{
     *id : Bigint
     ===
@@ -141,6 +161,7 @@ entity users{
     -password : String
     -role : Role
 }
+
 entity profil_user{
     *id : Bigint
     -users_id : Bigint
@@ -156,59 +177,81 @@ entity profil_user{
     -ijazah : String
 }
 
-
-
 ' Pelatihan Flow
-entity pendaftaran_pelatihan{
-    *id : Bigint
-    -users_id: Bigint
-    -pelatihan_id: Bigint
-    ===
-    -bukti_pembayaran : String
-    -status : StatusPendaftaranPelatihan
-    -metode_pembayaran : MetodePembayaranPendaftaranPelatihan
-    -tanggal_dibayar : Datetime
-}
 entity pelatihan{
     *id : Bigint
     ===
     -nama_pelatihan : String
     -nominal_biaya : Decimal (15,2)
-    -durasi_bulan : Int
+    -persentasi_dp : Decimal (5,2)
+    -durasi_pelatihan : Int
     -kategori_pelatihan : String
     -deskripsi : String
     -status : StatusPelatihan
 }
-entity pelatihan_diikuti{
+entity pendaftaran_pelatihan{
+    *id : Bigint
+    -users_id: Bigint
+    -pelatihan_id: Bigint
+    ===
+    -status : StatusPendaftaranPelatihan
+    -skema_pembayaran : SkemaPembayaranPendaftaranPelatihan
+    -tenor : TenorCicilanPelatihan
+    -catatan : Text
+}
+entity pembayaran_pelatihan{
     *id : Bigint
     -pendaftaran_pelatihan_id : Bigint
     ===
+    -nominal : Decimal (15,2)
+    -status : StatusPembayaran
+    -jenis_pembayaran : JenisPembayaran
+    -bukti_pembayaran : String
+    -catatan : Text
+    -tanggal_bayar : Datetime
+}
+entity pelatihan_diikuti{
+    *id : Bigint
+    -pendaftaran_pelatihan_id : Bigint
+    -gelombang_pelatihan_id : Bigint
+    ===
     -status : StatusPelatihanDiikuti
 }
-entity cicilan_biaya_pelatihan{
+entity gelombang_pelatihan{
     *id : Bigint
-    -pelatihan_diikuti_id : Bigint
-    ===
-    -bukti_pembayaran : String
-    -nominal_cicilan : Decimal (15,2)
-    -status : StatusCicilanPelatihan
-}
-entity ujian_pelatihan{
-    *id : Bigint
-    -pelatihan_diikuti_id : Bigint
-    ===
-    -nama_ujian : String
+    -pelatihan_id : Bigint
+    ---
     -tanggal_mulai : Datetime
     -tanggal_selesai : Datetime
-    -status : StatusUjianPelatihan
+    -sesi : SesiGelombangPelatihan
+    -maksimal_peserta : Int
+}
+entity jadwal_ujian_pelatihan{
+    *id : Bigint
+    -gelombang_pelatihan_id : Bigint
+    ===
+    -nama_ujian : String
+    -lokasi : String
+    -tanggal_mulai : Datetime
+    -tanggal_selesai : Datetime
+    -status : StatusJadwalUjianPelatihan
 }
 entity hasil_ujian_pelatihan{
     *id : Bigint
-    -ujian_pelatihan_id : Bigint
+    -jadwal_ujian_pelatihan_id : Bigint
     ===
     -nilai : decimal(5,2)
     -status : StatusHasilUjianPelatihan
 }
+entity sertifikasi{
+    *id : Bigint
+    -pelatihan_diikuti_id : Bigint
+    ===
+    nomor_sertifikat : String
+    tanggal_terbit : Datetime
+}
+
+' Kontrak kerja flow
 entity pengajuan_kontrak_kerja{
     *id : Bigint
     -users_id : Bigint
@@ -217,6 +260,7 @@ entity pengajuan_kontrak_kerja{
     -surat_lamaran : String
     -status : StatusPengajuanKontrakKerja
 }
+
 entity kontrak_kerja{
     *id : Bigint
     ===
@@ -227,6 +271,7 @@ entity kontrak_kerja{
     -status : StatusKontrakKerja
     -durasi_kontrak_keja : Int
 }
+
 entity kontrak_kerja_diikuti{
     *id : Bigint
     -pengajuan_kontrak_kerja_id : Bigint
@@ -234,20 +279,14 @@ entity kontrak_kerja_diikuti{
     -status : StatusKontrakKerjaDiikuti
 }
 
-entity sertifikasi{
-    *id : Bigint
-    -pelatihan_diikuti_id : Bigint
-    ===
-    nomor_sertifikat : String
-    tanggal_terbit : Datetime
-}
-
+' Rekening flow
 entity rekening {
     *id : Bigint
     ===
     -name : String
     -saldo : Decimal (15,2)
 }
+
 entity transaksi_rekening{
     *id : Bigint
     ===
@@ -268,10 +307,12 @@ users ||--o{ profil_user
 users ||--o{ pendaftaran_pelatihan
 pendaftaran_pelatihan ||--|| pelatihan_diikuti
 pelatihan ||--o{ pendaftaran_pelatihan
-pelatihan_diikuti ||--o{ cicilan_biaya_pelatihan
+pelatihan ||--o{ gelombang_pelatihan
+pendaftaran_pelatihan ||--|| pembayaran_pelatihan
+gelombang_pelatihan ||--o{ pelatihan_diikuti
 pelatihan_diikuti ||--|| sertifikasi
-pelatihan_diikuti ||--o{ ujian_pelatihan
-ujian_pelatihan ||--|| hasil_ujian_pelatihan
+gelombang_pelatihan ||--o{ jadwal_ujian_pelatihan
+jadwal_ujian_pelatihan ||--o{ hasil_ujian_pelatihan
 
 ' Flow relation kontrak_kerja
 users ||--o{ pengajuan_kontrak_kerja

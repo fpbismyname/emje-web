@@ -67,6 +67,34 @@ class ProfilUser extends Model
         'formatted_date_tanggal_lahir'
     ];
     /**
+     * Scope
+     */
+    public function scopeSearch($query, $keyword)
+    {
+        if ($keyword == '' || $keyword == null) {
+            return $query;
+        }
+        return $query->where('nama_lengkap', 'like', "%{$keyword}%")
+            ->orWhere('alamat', 'like', "%{$keyword}%")
+            ->orWhere('nomor_telepon', 'like', "%{$keyword}%");
+    }
+    public function scopeSearch_by_column($query, $column, $keyword, $operator = "=")
+    {
+        $keywords = $operator === 'like' ? "%{$keyword}%" : $keyword;
+        if ($keyword == '' || $keyword == null || $column == '' || $column == null) {
+            return $query;
+        }
+        if (is_array($keyword)) {
+            return $query->whereIn($column, $operator, $keywords);
+        }
+        if (is_array($column)) {
+            foreach ($column as $col) {
+                return $query->where($col, $operator, $keywords);
+            }
+        }
+        return $query->where($column, $operator, $keywords);
+    }
+    /**
      * Accessor
      */
     public function formattedNamaLengkap(): Attribute

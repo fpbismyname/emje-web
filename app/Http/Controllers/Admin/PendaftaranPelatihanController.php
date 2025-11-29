@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Pelatihan\StatusPelatihanPesertaEnum;
+use App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum;
 use App\Enums\Utils\PaginateSize;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\PendaftaranPelatihanRequest;
 use App\Models\PendaftaranPelatihan;
+use App\Services\Utils\Toast;
 use Illuminate\Http\Request;
 
 class PendaftaranPelatihanController extends Controller
@@ -12,7 +16,7 @@ class PendaftaranPelatihanController extends Controller
 
     public function index(Request $request, PendaftaranPelatihan $pendaftaran_pelatihan_model)
     {
-        $filters = $request->only('search', 'status', 'metode_pembayaran');
+        $filters = $request->only('search', 'status', 'skema_pembayaran');
 
         $query = $pendaftaran_pelatihan_model->query();
 
@@ -36,8 +40,33 @@ class PendaftaranPelatihanController extends Controller
         return view('admin.pendaftaran-pelatihan.edit', $payload);
     }
 
-    public function update(Request $request, string $id)
-    {
-        //
+    public function update(
+        PendaftaranPelatihanRequest $request,
+        string $id,
+        PendaftaranPelatihan $pendaftaran_pelatihan_model,
+    ) {
+
+        $gelombang_pelatihan_id = $request->get('gelombang_pelatihan_id');
+        $update_entries = $request->validated();
+
+        $pendaftaran_pelatihan = $pendaftaran_pelatihan_model->findOrFail($id);
+        $pendaftaran_pelatihan->update($update_entries);
+
+
+        if ($pendaftaran_pelatihan->status === StatusPendaftaranPelatihanEnum::DITERIMA) {
+            $pendaftaran_pelatihan->pelatihan_peserta()->create([
+                'gelombang_pelatihan_id' => $gelombang_pelatihan_id,
+                'status' => StatusPelatihanPesertaEnum::BERLANGSUNG,
+                'tanggal_mulai' => now(),
+                'tanggal_selesai' => now()->addMonths($pendaftaran_pelatihan->durasi_pelatihan)
+            ]);
+        }
+
+        if ($pendaftaran_pelatihan->wasChanged()) {
+            Toast::success('Pendaftaran pelatihan berhasil direview.');
+        } else {
+            Toast::success('Terjadi kesalahan.');
+        }
+        return redirect()->back();
     }
 }

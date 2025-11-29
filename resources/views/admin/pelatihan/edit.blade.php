@@ -30,9 +30,9 @@
             </fieldset>
             {{-- Durasi (Bulan) --}}
             <fieldset class="fieldset">
-                <legend class="fieldset-legend">Durasi (Bulan)</legend>
-                <input type="number" name="durasi_bulan" required
-                    value="{{ old('durasi_bulan', $pelatihan->durasi_bulan) }}" min="1"
+                <legend class="fieldset-legend">Durasi pelatihan (Bulan)</legend>
+                <input type="number" name="durasi_pelatihan" required
+                    value="{{ old('durasi_pelatihan', $pelatihan->durasi_pelatihan) }}" min="1"
                     class="input validator w-full">
                 <p class="validator-hint hidden text-error">Durasi pelatihan wajib diisi.</p>
                 @error('durasi_bulan')
@@ -65,15 +65,16 @@
                     <p class="text-error">{{ $message }}</p>
                 @enderror
             </fieldset>
+
             {{-- Status --}}
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Status</legend>
                 <select name="status" required class="select validator w-full">
-                    <option value="" disabled>Pilih status</option>
-                    <option value="aktif" {{ old('status', $pelatihan->status) == 'aktif' ? 'selected' : '' }}>Aktif
-                    </option>
-                    <option value="nonaktif" {{ old('status', $pelatihan->status) == 'nonaktif' ? 'selected' : '' }}>
-                        Nonaktif</option>
+                    <option value="" disabled selected>Pilih status</option>
+                    @foreach (App\Enums\Pelatihan\StatusPelatihanEnum::cases() as $status)
+                        <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>
+                            {{ $status->label() }}</option>
+                    @endforeach
                 </select>
                 <p class="validator-hint hidden text-error">Status wajib dipilih.</p>
                 @error('status')

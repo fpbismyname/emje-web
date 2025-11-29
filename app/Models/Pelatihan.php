@@ -27,7 +27,7 @@ class Pelatihan extends Model
     protected $fillable = [
         'nama_pelatihan',
         'nominal_biaya',
-        'durasi_bulan',
+        'durasi_pelatihan',
         'kategori_pelatihan',
         'deskripsi',
         'status'
@@ -51,6 +51,10 @@ class Pelatihan extends Model
     public function pendaftaran_pelatihan()
     {
         return $this->hasMany(PendaftaranPelatihan::class, 'pelatihan_id');
+    }
+    public function gelombang_pelatihan()
+    {
+        return $this->hasMany(GelombangPelatihan::class, 'pelatihan_id');
     }
     /**
      * Scope
@@ -88,7 +92,7 @@ class Pelatihan extends Model
     protected $appends = [
         'formatted_nama_pelatihan',
         'formatted_nominal_biaya',
-        'formatted_durasi_bulan'
+        'formatted_durasi_pelatihan'
     ];
     /**
      * Accessor
@@ -105,10 +109,10 @@ class Pelatihan extends Model
             get: fn() => "Rp " . number_format($this->nominal_biaya, 0, ',', '.')
         );
     }
-    public function formattedDurasiBulan(): Attribute
+    public function formattedDurasiPelatihan(): Attribute
     {
         return Attribute::make(
-            get: fn() => "{$this->durasi_bulan} bulan"
+            get: fn() => "{$this->durasi_pelatihan} bulan"
         );
     }
 }

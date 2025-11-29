@@ -10,9 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('cicilan_biaya_pelatihan', function (Blueprint $table) {
-            $table->foreignId('pelatihan_diikuti_id')
-                ->constrained('pelatihan_diikuti')
+        Schema::table('jadwal_ujian_pelatihan', function (Blueprint $table) {
+            $table->foreignId('gelombang_pelatihan_id')
+                ->constrained('gelombang_pelatihan')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -23,9 +23,9 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('cicilan_biaya_pelatihan', function (Blueprint $table) {
-            $table->dropForeign(['pelatihan_diikuti_id']);
-            $table->dropColumn(['pelatihan_diikuti_id']);
+        Schema::table('jadwal_ujian_pelatihan', function (Blueprint $table) {
+            $table->dropForeign(['gelombang_pelatihan_id']);
+            $table->dropColumn(['gelombang_pelatihan_id']);
         });
     }
 };

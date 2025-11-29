@@ -2,7 +2,7 @@
     {{-- Data pendaftaran --}}
     <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
         <div class="grid md:col-span-2">
-            Data pendaftaran
+            <h6>Data pendaftaran</h6>
         </div>
         {{-- Nama Pelatihan --}}
         <fieldset class="fieldset">
@@ -10,16 +10,10 @@
             <p class="py-2">{{ $pendaftaran_pelatihan->pelatihan_nama_pelatihan }}</p>
         </fieldset>
 
-        {{-- Nominal Biaya --}}
-        <fieldset class="fieldset">
-            <legend class="fieldset-legend">Nominal Biaya</legend>
-            <p class="py-2">{{ $pendaftaran_pelatihan?->pelatihan_nominal_biaya }}</p>
-        </fieldset>
-
         {{-- Durasi (Bulan) --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Durasi (Bulan)</legend>
-            <p class="py-2">{{ $pendaftaran_pelatihan?->pelatihan_durasi_bulan }} bulan</p>
+            <p class="py-2">{{ $pendaftaran_pelatihan?->pelatihan_durasi_pelatihan }}</p>
         </fieldset>
 
         {{-- Kategori Pelatihan --}}
@@ -34,11 +28,38 @@
             <p class="py-2">{{ $pendaftaran_pelatihan->status->label() }}</p>
         </fieldset>
 
-        {{-- Metode pembayaran --}}
+        {{-- Skema pembayaran --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Metode pembayaran</legend>
-            <p class="py-2">{{ $pendaftaran_pelatihan->metode_pembayaran->label() }}</p>
+            <legend class="fieldset-legend">Skema pembayaran</legend>
+            <p class="py-2">{{ $pendaftaran_pelatihan->skema_pembayaran->label() }}</p>
         </fieldset>
+
+        {{-- Dp dibayar --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Dp dibayar</legend>
+            <p class="py-2">
+                {{ $pendaftaran_pelatihan->pembayaran_pelatihan_dp?->formatted_nominal ?? 'Rp 0' }}</p>
+        </fieldset>
+
+        {{-- Bukti pembayaran --}}
+        <fieldset class="fieldset w-fit">
+            <legend class="fieldset-legend">Bukti pembayaran</legend>
+            @if ($pendaftaran_pelatihan->pembayaran_pelatihan_dp?->bukti_pembayaran)
+                <a target="_blank"
+                    href="{{ route('storage.private.show', ['file' => $pendaftaran_pelatihan->pembayaran_pelatihan_dp?->bukti_pembayaran]) }}"
+                    class="link link-primary link-hover">Lihat selengkapnya</a>
+            @else
+                <p>Tidak ada</p>
+            @endif
+        </fieldset>
+
+        {{-- Tenor cicilan --}}
+        @if ($pendaftaran_pelatihan->tenor_cicilan)
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Tenor cicilan</legend>
+                <p class="py-2">{{ $pendaftaran_pelatihan->formatted_tenor_cicilan }}</p>
+            </fieldset>
+        @endif
 
         {{-- Tanggal dibayar --}}
         @if ($pendaftaran_pelatihan->tanggal_dibayar)
@@ -66,7 +87,7 @@
     {{-- Data pelatihan --}}
     <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
         <div class="grid md:col-span-2">
-            Data pelatihan
+            <h6>Data pelatihan</h6>
         </div>
         {{-- Nama Pelatihan --}}
         <fieldset class="fieldset">
@@ -83,7 +104,7 @@
         {{-- Durasi (Bulan) --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Durasi (Bulan)</legend>
-            <p class="py-2">{{ $pendaftaran_pelatihan?->pelatihan_durasi_bulan }} bulan</p>
+            <p class="py-2">{{ $pendaftaran_pelatihan?->pelatihan_durasi_pelatihan }}</p>
         </fieldset>
 
         {{-- Kategori Pelatihan --}}
@@ -101,10 +122,10 @@
 
     <div class="divider"></div>
 
-    {{-- Data User  --}}
+    {{-- Data peserta  --}}
     <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
         <div class="grid md:col-span-2">
-            <h6>Data {{ $pendaftaran_pelatihan->users_profil_user_nama_lengkap }}</h6>
+            <h6>Data peserta</h6>
         </div>
         {{-- Nama lengkap --}}
         <fieldset class="fieldset">
@@ -138,12 +159,13 @@
         </fieldset>
 
     </div>
-    {{-- Divider --}}
+
     <div class="divider"></div>
-    {{-- Data dokumen  --}}
+
+    {{-- Dokumen peserta  --}}
     <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
         <div class="grid md:col-span-2">
-            <h6>Data dokumen</h6>
+            <h6>Dokumen peserta</h6>
         </div>
         {{-- Foto profil --}}
         <fieldset class="fieldset">
@@ -181,18 +203,74 @@
     {{-- Action  --}}
     <div class="grid place-items-center">
         <div class="flex flex-row gap-2">
-            <button onclick="window.open_modal('periksa-pendaftaran')" class="btn btn-primary">Keputusan</button>
+            @if (!$pendaftaran_pelatihan->has_reviewed)
+                <button onclick="window.open_modal('review-pendaftaran')" class="btn btn-primary">Review</button>
+            @endif
             <a href="{{ route('admin.pendaftaran-pelatihan.index') }}" class="btn btn-neutral">Kembali</a>
         </div>
     </div>
 
-    <x-ui.modal id="periksa-pendaftaran">
-        <x-slot:modal_box>
-            <form action="{{ route('admin.pendaftaran-pelatihan.update', $pendaftaran_pelatihan->id) }}" method="POST"
-                class="space-y-4">
-                @csrf
-                @method('put')
-            </form>
-        </x-slot:modal_box>
-    </x-ui.modal>
+    {{-- Modal review --}}
+    @if (!$pendaftaran_pelatihan->has_reviewed)
+        <x-ui.modal id="review-pendaftaran">
+            <x-slot:card_title>
+                Review pendaftaran
+            </x-slot:card_title>
+            <x-slot:modal_box>
+                <form action="{{ route('admin.pendaftaran-pelatihan.update', $pendaftaran_pelatihan->id) }}"
+                    method="POST" class="grid gap-4 py-4">
+                    @csrf
+                    @method('put')
+                    {{-- Gelombang pelatihan --}}
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">Gelombang pelatihan</legend>
+                        <select name="gelombang_pelatihan_id" class="select validator w-full">
+                            <option value="" selected disabled>Pilih gelombang pelatihan</option>
+                            @foreach ($pendaftaran_pelatihan->pelatihan->gelombang_pelatihan()->tersedia_untuk_registrasi()->get() as $gelombang)
+                                <option value="{{ $gelombang->id }}" @selected($gelombang->id === old('gelombang_pelatihan_id'))>
+                                    {{ $gelombang->nama_gelombang }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('gelombang_pelatihan_id')
+                            <p class="text-error">{{ $message }}</p>
+                        @enderror
+                        <p class="validator-hint hidden">
+                            Status pendaftaran wajib dipilih.
+                        </p>
+                    </fieldset>
+                    {{-- Status pendaftaran --}}
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-legend">Status</legend>
+                        <select name="status" class="select validator w-full">
+                            <option value="" selected disabled>Pilih status</option>
+                            @foreach (App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum::cases_review() as $status)
+                                <option value="{{ $status->value }}" @selected($status === old('status'))>
+                                    {{ $status->label() }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('status')
+                            <p class="text-error">{{ $message }}</p>
+                        @enderror
+                        <p class="validator-hint hidden">
+                            Status pendaftaran wajib dipilih.
+                        </p>
+                    </fieldset>
+                    {{-- Catatan review --}}
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-label">Catatan (Opsional)</legend>
+                        <textarea name="catatan" class="textarea w-full"></textarea>
+                    </fieldset>
+                    <div class="grid place-items-center">
+                        <div class="flex flex-row gap-2">
+                            <button type="submit" class="btn btn-primary">Simpan</button>
+                            <button type="reset" onclick="window.close_modal('review-pendaftaran')"
+                                class="btn btn-neutral">Batal</button>
+                        </div>
+                    </div>
+                </form>
+            </x-slot:modal_box>
+        </x-ui.modal>
+    @endif
 </x-layouts.admin-app>

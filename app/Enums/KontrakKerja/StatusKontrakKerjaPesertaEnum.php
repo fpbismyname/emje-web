@@ -4,7 +4,7 @@ namespace App\Enums\KontrakKerja;
 
 use Illuminate\Support\Str;
 
-enum StatusKontrakKerjaDiikutiEnum: string
+enum StatusKontrakKerjaPesertaEnum: string
 {
     case BERLANGSUNG = 'berlangsung';
     case SELESAI = 'selesai';

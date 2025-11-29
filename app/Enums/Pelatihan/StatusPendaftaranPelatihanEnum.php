@@ -9,13 +9,21 @@ enum StatusPendaftaranPelatihanEnum: string
     case DITERIMA = 'diterima';
     case DITOLAK = 'ditolak';
     case DALAM_PROSES = 'dalam_proses';
+    case MENUNGGU_DP = 'menunggu_dp';
     case DIBATALKAN = 'dibatalkan';
     public function label()
     {
         return Str::of($this->value)->replace("_", " ")->ucfirst();
     }
-    public static function getValues()
+    public static function cases_review()
     {
-        return collect(self::cases())->pluck('value')->toArray();
+        return collect(self::cases())->filter(fn($case) => in_array($case, [self::DITERIMA, self::DITOLAK, self::MENUNGGU_DP]))->toArray();
+    }
+    public static function getValues($type = null)
+    {
+        return match ($type) {
+            'cases_review' => collect(self::cases_review())->pluck('value')->toArray(),
+            default => collect(self::cases())->pluck('value')->toArray()
+        };
     }
 }

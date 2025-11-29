@@ -18,7 +18,7 @@
                 @endforeach
             </select>
             <input type="text" class="input" name="search" value="{{ request('search') }}"
-                placeholder="Cari kontra kerja" />
+                placeholder="Cari pelatihan" />
             <button class="btn btn-primary">
                 <x-lucide-search class="w-4" />
             </button>
@@ -52,7 +52,7 @@
                             <td>{{ $item->formatted_nominal_biaya }}</td>
                             <td>{{ $item->kategori_pelatihan->label() }}</td>
                             <td>{{ $item->status->label() }}</td>
-                            <td>{{ $item->formatted_durasi_bulan }}</td>
+                            <td>{{ $item->formatted_durasi_pelatihan }}</td>
                             <td>
                                 <div class="flex flex-row gap-4">
                                     <a href="{{ route('admin.pelatihan.show', [$item->id]) }}"
@@ -72,7 +72,7 @@
                 @else
                     <tr>
                         <td colspan="5">
-                            Data user tidak tersedia.
+                            Data pelatihan tidak tersedia.
                         </td>
                     </tr>
                 @endif

@@ -72,8 +72,10 @@
                 <legend class="fieldset-legend">Status</legend>
                 <select name="status" required class="select validator w-full">
                     <option value="" disabled selected>Pilih status</option>
-                    <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                    <option value="nonaktif" {{ old('status') == 'nonaktif' ? 'selected' : '' }}>Nonaktif</option>
+                    @foreach (App\Enums\Pelatihan\StatusPelatihanEnum::cases() as $status)
+                        <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>
+                            {{ $status->label() }}</option>
+                    @endforeach
                 </select>
                 <p class="validator-hint hidden text-error">Status wajib dipilih.</p>
                 @error('status')

@@ -10,9 +10,9 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::table('kontrak_kerja_diikuti', function (Blueprint $table) {
-            $table->foreignId('pengajuan_kontrak_kerja_id')
-                ->constrained('pengajuan_kontrak_kerja')
+        Schema::table('pembayaran_pelatihan', function (Blueprint $table) {
+            $table->foreignId('pendaftaran_pelatihan_id')
+                ->constrained('pendaftaran_pelatihan')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();
         });
@@ -23,9 +23,9 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::table('kontrak_kerja_diikuti', function (Blueprint $table) {
-            $table->dropForeign(['pengajuan_kontrak_kerja_id']);
-            $table->dropColumn(['pengajuan_kontrak_kerja_id']);
+        Schema::table('pembayaran_pelatihan', function (Blueprint $table) {
+            $table->dropForeign(['pendaftaran_pelatihan_id']);
+            $table->dropColumn(['pendaftaran_pelatihan_id']);
         });
     }
 };

@@ -2,12 +2,13 @@
 
 namespace App\Models;
 
-use App\Enums\Pelatihan\MetodePembayaranEnum;
+use App\Enums\Pelatihan\JenisPembayaranEnum;
+use App\Enums\Pelatihan\SkemaPembayaranEnum;
 use App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum;
+use App\Enums\Pelatihan\TenorCicilanPelatihanEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
 
 class PendaftaranPelatihan extends Model
 {
@@ -24,9 +25,10 @@ class PendaftaranPelatihan extends Model
      */
     protected $fillable = [
         'status',
-        'bukti_pembayaran',
-        'metode_pembayaran',
-        'tanggal_dibayar',
+        'skema_pembayaran',
+        'tenor',
+        'catatan',
+        'tanggal_pembayaran',
         'users_id',
         'pelatihan_id'
     ];
@@ -37,9 +39,10 @@ class PendaftaranPelatihan extends Model
      */
     protected $casts = [
         'status' => StatusPendaftaranPelatihanEnum::class,
-        'tanggal_dibayar' => 'datetime',
         'created_at' => 'datetime',
-        'metode_pembayaran' => MetodePembayaranEnum::class,
+        'tanggal_pembayaran' => 'datetime',
+        'skema_pembayaran' => SkemaPembayaranEnum::class,
+        'tenor_cicilan' => TenorCicilanPelatihanEnum::class,
     ];
     /**
      * Relationships
@@ -52,9 +55,17 @@ class PendaftaranPelatihan extends Model
     {
         return $this->belongsTo(Pelatihan::class, 'pelatihan_id');
     }
-    public function pelatihan_diikuti()
+    public function pelatihan_peserta()
     {
-        return $this->hasOne(PelatihanDiikuti::class, 'pendaftaran_pelatihan_id');
+        return $this->hasOne(PelatihanPeserta::class, 'pendaftaran_pelatihan_id');
+    }
+    public function pembayaran_pelatihan()
+    {
+        return $this->hasMany(PembayaranPelatihan::class, 'pendaftaran_pelatihan_id');
+    }
+    public function pembayaran_pelatihan_dp()
+    {
+        return $this->hasOne(PembayaranPelatihan::class, 'pendaftaran_pelatihan_id')->latest('tanggal_pembayaran')->search_by_column('jenis_pembayaran', JenisPembayaranEnum::DP);
     }
     /**
      * Scope
@@ -65,8 +76,10 @@ class PendaftaranPelatihan extends Model
             return $query;
         }
         $kw = "%{$keyword}%";
-        return $query->where('metode_pembayaran', 'like', $kw)
+        return $query->where('skema_pembayaran', 'like', $kw)
             ->orWhere('status', 'like', $kw)
+            ->orWhere('tenor', 'like', $kw)
+            ->orWhere('catatan', 'like', $kw)
             ->orWhereHas('pelatihan', function ($q) use ($kw) {
                 $q->where('nama_pelatihan', 'like', $kw);
             })
@@ -99,28 +112,25 @@ class PendaftaranPelatihan extends Model
      */
     protected $appends = [
         'link_bukti_pembayaran',
+        'has_reviewed',
         'formatted_tanggal_dibayar',
+        'formatted_nominal_dp_dibayar',
+        'formatted_tanggal_dp_dibayar',
+        'formatted_tenor_cicilan',
         'users_profil_user_nama_lengkap',
         'pelatihan_nama_pelatihan',
         'pelatihan_nominal_biaya',
-        'pelatihan_durasi_bulan',
+        'pelatihan_durasi_pelatihan',
         'pelatihan_kategori_pelatihan',
         'pelatihan_deskripsi_pelatihan',
     ];
     /**
      * Accessor
      */
-    public function linkBuktiPembayaran(): Attribute
-    {
-        $private_storage = Storage::disk('local');
-        return Attribute::make(
-            get: fn() => $private_storage->path($this->bukti_pembayaran)
-        );
-    }
-    public function formattedTanggalDibayar(): Attribute
+    public function formattedTenorCicilan(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->tanggal_dibayar ? $this->tanggal_dibayar->format('d F Y H:i') : "-"
+            get: fn() => "{$this->tenor_cicilan->value} Bulan"
         );
     }
     public function usersProfilUserNamaLengkap(): Attribute
@@ -141,10 +151,10 @@ class PendaftaranPelatihan extends Model
             get: fn() => $this->pelatihan?->formatted_nominal_biaya ?? "-"
         );
     }
-    public function pelatihanDurasiBulan(): Attribute
+    public function pelatihanDurasiPelatihan(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->pelatihan?->formatted_durasi_bulan ?? "-"
+            get: fn() => $this->pelatihan?->formatted_durasi_pelatihan ?? "-"
         );
     }
     public function pelatihanKategoriPelatihan(): Attribute
@@ -157,6 +167,12 @@ class PendaftaranPelatihan extends Model
     {
         return Attribute::make(
             get: fn() => $this->pelatihan?->deskripsi ?? '-'
+        );
+    }
+    public function hasReviewed(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => in_array($this->status, [StatusPendaftaranPelatihanEnum::DITERIMA, StatusPendaftaranPelatihanEnum::DITOLAK, StatusPendaftaranPelatihanEnum::DIBATALKAN])
         );
     }
 }

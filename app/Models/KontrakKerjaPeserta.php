@@ -2,17 +2,17 @@
 
 namespace App\Models;
 
-use App\Enums\KontrakKerja\StatusKontrakKerjaDiikutiEnum;
+use App\Enums\KontrakKerja\StatusKontrakKerjaPesertaEnum;
 use Illuminate\Database\Eloquent\Model;
 
-class KontrakKerjaDiikuti extends Model
+class KontrakKerjaPeserta extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'kontrak_kerja_diikuti';
+    protected $table = 'kontrak_kerja_peserta';
     /**
      * The attributes that are mass assignable.
      *

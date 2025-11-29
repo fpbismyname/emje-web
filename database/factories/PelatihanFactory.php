@@ -21,8 +21,6 @@ class PelatihanFactory extends Factory
     {
         $kategori_pelatihan = KategoriPelatihanEnum::getValues();
 
-        $status = StatusPelatihanEnum::getValues();
-
         // nama pelatihan realistis
         $title = "Pelatihan " . $this->faker->unique()->jobTitle();
         $durasi = $this->faker->numberBetween(3, 12);
@@ -31,10 +29,11 @@ class PelatihanFactory extends Factory
         return [
             'nama_pelatihan' => Str::title($title),
             'nominal_biaya' => $biaya,
-            'durasi_bulan' => $durasi,
+            'persentasi_dp' => $this->faker->numberBetween(10, 20),
+            'durasi_pelatihan' => $durasi,
             'kategori_pelatihan' => $this->faker->randomElement($kategori_pelatihan),
             'deskripsi' => $this->faker->paragraphs(2, true),
-            'status' => $this->faker->randomElement($status),
+            'status' => StatusPelatihanEnum::AKTIF,
         ];
     }
 }
