@@ -4,26 +4,14 @@ return [
     [
         'label' => 'Menu utama',
         'type' => 'menu-title',
-        'roles' => ['admin']
+        'roles' => ['admin', 'pengelola_pendaftaran', 'bendahara']
     ],
     [
         'label' => 'Dashboard',
         'type' => 'menu',
         'icon' => 'home',
         'route_name' => 'admin.dashboard.index',
-        'roles' => ['admin']
-    ],
-    [
-        'label' => 'Manajemen rekening',
-        'type' => 'menu-title',
-        'roles' => ['admin']
-    ],
-    [
-        'label' => 'Rekening',
-        'icon' => 'banknote',
-        'type' => 'menu',
-        'route_name' => 'admin.rekening.index',
-        'roles' => ['admin']
+        'roles' => ['admin', 'pengelola_pendaftaran', 'bendahara']
     ],
     [
         'label' => 'Manajemen akun',
@@ -38,9 +26,28 @@ return [
         'roles' => ['admin']
     ],
     [
+        'label' => 'Manajemen keuangan',
+        'type' => 'menu-title',
+        'roles' => ['bendahara']
+    ],
+    [
+        'label' => 'Rekening',
+        'icon' => 'banknote',
+        'type' => 'menu',
+        'route_name' => 'admin.rekening.index',
+        'roles' => ['bendahara']
+    ],
+    [
+        'label' => 'Pembayaran pelatihan',
+        'icon' => 'coins',
+        'type' => 'menu',
+        'route_name' => 'admin.pembayaran-pelatihan.index',
+        'roles' => ['bendahara']
+    ],
+    [
         'label' => 'Manajemen Pelatihan',
         'type' => 'menu-title',
-        'roles' => ['admin']
+        'roles' => ['admin', 'pengelola_pendaftaran']
     ],
     [
         'label' => 'Daftar pelatihan',
@@ -51,7 +58,7 @@ return [
     ],
     [
         'label' => 'Gelombang pelatihan',
-        'icon' => 'users',
+        'icon' => 'calendar-sync',
         'type' => 'menu',
         'route_name' => 'admin.gelombang-pelatihan.index',
         'roles' => ['admin']
@@ -61,14 +68,7 @@ return [
         'icon' => 'file-input',
         'type' => 'menu',
         'route_name' => 'admin.pendaftaran-pelatihan.index',
-        'roles' => ['admin']
-    ],
-    [
-        'label' => 'Pembayaran pelatihan',
-        'icon' => 'coins',
-        'type' => 'menu',
-        'route_name' => 'admin.dashboard.index',
-        'roles' => ['admin']
+        'roles' => ['admin', 'pengelola_pendaftaran']
     ],
     [
         'label' => 'Pelatihan peserta',
@@ -78,16 +78,9 @@ return [
         'roles' => ['admin']
     ],
     [
-        'label' => 'Jadwal ujian pelatihan',
-        'icon' => 'calendar-clock',
-        'type' => 'menu',
-        'route_name' => 'admin.jadwal-ujian-pelatihan.index',
-        'roles' => ['admin']
-    ],
-    [
         'label' => 'Manajemen kontrak kerja',
         'type' => 'menu-title',
-        'roles' => ['admin']
+        'roles' => ['admin', 'pengelola_pendaftaran']
     ],
     [
         'label' => 'Daftar Kontrak kerja',
@@ -100,14 +93,14 @@ return [
         'label' => 'Pengajuan kontrak kerja',
         'icon' => 'file-input',
         'type' => 'menu',
-        'route_name' => 'admin.dashboard.index',
-        'roles' => ['admin']
+        'route_name' => 'admin.pengajuan-kontrak-kerja.index',
+        'roles' => ['admin', 'pengelola_pendaftaran']
     ],
     [
         'label' => 'Kontrak kerja peserta',
         'icon' => 'file-user',
         'type' => 'menu',
-        'route_name' => 'admin.dashboard.index',
+        'route_name' => 'admin.kontrak-kerja-peserta.index',
         'roles' => ['admin']
     ],
 ];

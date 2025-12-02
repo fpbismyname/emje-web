@@ -14,7 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('status');
             $table->string('skema_pembayaran');
-            $table->string('tenor');
+            $table->string('tenor')->nullable();
             $table->string('catatan')->nullable();
             $table->timestamps();
         });

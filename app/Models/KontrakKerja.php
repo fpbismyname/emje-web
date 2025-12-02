@@ -29,6 +29,7 @@ class KontrakKerja extends Model
         'gaji_tertinggi',
         'durasi_kontrak_kerja',
         'deskripsi',
+        'maksimal_pelamar',
         'status',
     ];
     /**
@@ -130,6 +131,12 @@ class KontrakKerja extends Model
     {
         return Attribute::make(
             get: fn() => "{$this->durasi_kontrak_kerja} Tahun"
+        );
+    }
+    public function formattedTanggalKontrakBerakhir(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => now()->addYears($this->durasi_kontrak_kerja)->format('d F Y')
         );
     }
 }

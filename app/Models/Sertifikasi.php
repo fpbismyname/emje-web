@@ -35,8 +35,8 @@ class Sertifikasi extends Model
      * Relationships
      */
     // Pelatihan Diikuti
-    public function pelatihan_diikuti()
+    public function pelatihan_peserta()
     {
-        return $this->belongsTo(PelatihanDiikuti::class, 'pelatihan_diikuti_id');
+        return $this->belongsTo(PelatihanPeserta::class, 'pelatihan_peserta_id');
     }
 }

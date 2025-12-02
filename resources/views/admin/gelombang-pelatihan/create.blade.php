@@ -29,7 +29,7 @@
                     @endforeach
                 </select>
                 <p class="validator-hint hidden text-error">Sesi gelombang wajib dipilih.</p>
-                @error('sesi')
+                @error('pelatihan_id')
                     <p class="text-error">{{ $message }}</p>
                 @enderror
             </fieldset>

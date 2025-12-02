@@ -1,5 +1,6 @@
 <x-layouts.admin-app title="Periksa pendaftaran pelatihan">
     {{-- Data pendaftaran --}}
+
     <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
         <div class="grid md:col-span-2">
             <h6>Data pendaftaran</h6>
@@ -200,10 +201,14 @@
         </fieldset>
     </div>
 
+
     {{-- Action  --}}
-    <div class="grid place-items-center">
+    <div class="grid place-items-center gap-4">
+        @if (!$pendaftaran_pelatihan->layak_diterima)
+            <p>Kuota pendaftaran sudah mencapai maksimal.</p>
+        @endif
         <div class="flex flex-row gap-2">
-            @if (!$pendaftaran_pelatihan->has_reviewed)
+            @if (!$pendaftaran_pelatihan->has_reviewed && $pendaftaran_pelatihan->layak_diterima)
                 <button onclick="window.open_modal('review-pendaftaran')" class="btn btn-primary">Review</button>
             @endif
             <a href="{{ route('admin.pendaftaran-pelatihan.index') }}" class="btn btn-neutral">Kembali</a>

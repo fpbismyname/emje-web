@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::create('hasil_ujian_pelatihan', function (Blueprint $table) {
             $table->id();
+            $table->string('nama_materi');
             $table->decimal('nilai', 5, 2);
             $table->string('status');
             $table->timestamps();

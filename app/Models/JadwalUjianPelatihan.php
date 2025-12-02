@@ -45,6 +45,10 @@ class JadwalUjianPelatihan extends Model
     {
         return $this->belongsTo(GelombangPelatihan::class, 'gelombang_pelatihan_id');
     }
+    public function hasil_ujian_pelatihan()
+    {
+        return $this->hasMany(HasilUjianPelatihan::class, 'jadwal_ujian_pelatihan_id');
+    }
     /**
      * Scope
      */
@@ -74,22 +78,36 @@ class JadwalUjianPelatihan extends Model
      * Appends
      */
     protected $appends = [
-        'tanggal_mulai',
-        'tanggal_selesai',
+        'formatted_tanggal_mulai',
+        'formatted_tanggal_selesai',
+        'date_tanggal_mulai',
+        'date_tanggal_selesai',
     ];
     /**
      * Accessor
      */
-    public function formattedTanggalMulai()
+    public function formattedTanggalMulai(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->tanggal_mulai->format('d F Y | H:i')
+            get: fn() => $this->tanggal_mulai->format('d F Y')
         );
     }
-    public function formattedTanggalSelesai()
+    public function formattedTanggalSelesai(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->tanggal_selesai->format('d F Y | H:i')
+            get: fn() => $this->tanggal_selesai->format('d F Y')
+        );
+    }
+    public function dateTanggalMulai(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->tanggal_mulai->format('Y-m-d')
+        );
+    }
+    public function dateTanggalSelesai(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->tanggal_selesai->format('Y-m-d')
         );
     }
 }

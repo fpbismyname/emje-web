@@ -29,6 +29,7 @@
                 <tr>
                     <th>#</th>
                     <th>Nama Perusahaan</th>
+                    <th>Maksimal pelamar</th>
                     <th>Gaji</th>
                     <th>Status</th>
                     <th>Durasi kontrak</th>
@@ -41,6 +42,7 @@
                         <tr>
                             <th>{{ $loop->iteration + ($datas->currentPage() - 1) * $datas->perPage() }}</th>
                             <td>{{ $item->formatted_nama_perusahaan }}</td>
+                            <td>{{ $item->maksimal_pelamar }}</td>
                             <td>{{ $item->formatted_rentang_gaji }}</td>
                             <td>{{ $item->status->label() }}</td>
                             <td>{{ $item->formatted_durasi_kontrak_kerja }}</td>

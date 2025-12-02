@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class HasilUjianPelatihan extends Model
@@ -18,6 +19,7 @@ class HasilUjianPelatihan extends Model
      * @var array
      */
     protected $fillable = [
+        'nama_materi',
         'nilai',
         'status',
         'ujian_pelatihan_id'
@@ -28,6 +30,7 @@ class HasilUjianPelatihan extends Model
      * @var array
      */
     protected $casts = [
+        'status' => StatusHasilUjianPelatihanEnum::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

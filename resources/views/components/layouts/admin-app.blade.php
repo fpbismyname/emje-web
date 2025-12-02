@@ -22,7 +22,7 @@
                                 {{ auth()->user()->formatted_name }}
                             </li>
                             <li>
-                                <a href="">Pengaturan</a>
+                                <a href="{{ route('admin.pengaturan.edit') }}">Pengaturan</a>
                             </li>
                             <form action="{{ route('admin.logout.submit') }}" method="post">
                                 @csrf

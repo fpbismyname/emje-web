@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Enums\Pelatihan\JenisPembayaranEnum;
 use App\Enums\Pelatihan\SkemaPembayaranEnum;
+use App\Enums\Pelatihan\StatusPembayaranEnum;
+use App\Enums\Pelatihan\StatusPembayaranPelatihanEnum;
 use App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum;
 use App\Enums\Pelatihan\TenorCicilanPelatihanEnum;
 use Illuminate\Database\Eloquent\Builder;
@@ -42,7 +44,7 @@ class PendaftaranPelatihan extends Model
         'created_at' => 'datetime',
         'tanggal_pembayaran' => 'datetime',
         'skema_pembayaran' => SkemaPembayaranEnum::class,
-        'tenor_cicilan' => TenorCicilanPelatihanEnum::class,
+        'tenor' => TenorCicilanPelatihanEnum::class,
     ];
     /**
      * Relationships
@@ -105,13 +107,7 @@ class PendaftaranPelatihan extends Model
     /**
      * Appends
      */
-    /**
-     * The accessors to append to the model's array form.
-     *
-     * @var array
-     */
     protected $appends = [
-        'link_bukti_pembayaran',
         'has_reviewed',
         'formatted_tanggal_dibayar',
         'formatted_nominal_dp_dibayar',
@@ -123,6 +119,8 @@ class PendaftaranPelatihan extends Model
         'pelatihan_durasi_pelatihan',
         'pelatihan_kategori_pelatihan',
         'pelatihan_deskripsi_pelatihan',
+        'pembayaran_pelatihan_lunas',
+        'layak_diterima'
     ];
     /**
      * Accessor
@@ -173,6 +171,27 @@ class PendaftaranPelatihan extends Model
     {
         return Attribute::make(
             get: fn() => in_array($this->status, [StatusPendaftaranPelatihanEnum::DITERIMA, StatusPendaftaranPelatihanEnum::DITOLAK, StatusPendaftaranPelatihanEnum::DIBATALKAN])
+        );
+    }
+    public function layakDiterima(): Attribute
+    {
+        $ada_slot_sisa_peserta = $this->pelatihan->gelombang_pelatihan()->each(function (GelombangPelatihan $gelombang) {
+            return $gelombang->maksimal_peserta > $gelombang->total_peserta_gelombang;
+        });
+        return Attribute::make(
+            get: fn() => $ada_slot_sisa_peserta
+        );
+    }
+    public function pembayaranPelatihanLunas(): Attribute
+    {
+        $total_biaya = $this->pelatihan->nominal_biaya;
+        $dp_terbayar = $this->pembayaran_pelatihan_dp?->nominal ?? 0;
+        $angsuran_terbayar = $this->pembayaran_pelatihan()->where('jenis_pembayaran', JenisPembayaranEnum::ANGSURAN)->sum('nominal');
+        $pelunasan_terbayar = $this->pembayaran_pelatihan()->where('jenis_pembayaran', JenisPembayaranEnum::PELUNASAN)->sum('nominal');
+        $total_terbayar = $dp_terbayar + $angsuran_terbayar + $pelunasan_terbayar;
+
+        return Attribute::make(
+            get: fn() => $total_terbayar >= $total_biaya
         );
     }
 }

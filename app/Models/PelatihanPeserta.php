@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Pelatihan\StatusPelatihanPesertaEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class PelatihanPeserta extends Model
@@ -45,5 +46,18 @@ class PelatihanPeserta extends Model
     public function gelombang_pelatihan()
     {
         return $this->belongsTo(GelombangPelatihan::class, 'gelombang_pelatihan_id');
+    }
+    /**
+     * Appends
+     */
+    protected $appends = ['status_lulus'];
+    /**
+     * Accessor
+     */
+    public function statusLulus(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->status === StatusPelatihanPesertaEnum::LULUS
+        );
     }
 }

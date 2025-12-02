@@ -13,10 +13,10 @@ return new class extends Migration {
         Schema::create('jadwal_ujian_pelatihan', function (Blueprint $table) {
             $table->id();
             $table->string('nama_ujian');
-            $table->dateTime('lokasi')->nullable();
+            $table->string('lokasi')->nullable();
+            $table->string('status');
             $table->dateTime('tanggal_mulai');
             $table->dateTime('tanggal_selesai');
-            $table->string('status');
             $table->timestamps();
         });
     }

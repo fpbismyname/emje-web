@@ -46,7 +46,7 @@
                             <td>{{ $item->formatted_durasi_pelatihan }}</td>
                             <td>{{ $item->formatted_tanggal_mulai }}</td>
                             <td>{{ $item->formatted_tanggal_selesai }}</td>
-                            <td>{{ $item->maksimal_peserta }}</td>
+                            <td>{{ $item->total_maksimal_peserta }}</td>
                             <td>{{ $item->sesi->label() }}</td>
                             <td>
                                 <div class="flex flex-row gap-4">

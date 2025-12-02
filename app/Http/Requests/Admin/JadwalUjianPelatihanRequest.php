@@ -22,11 +22,10 @@ class JadwalUjianPelatihanRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_pelatihan' => ['required'],
+            'nama_ujian' => ['required'],
             'lokasi' => ['required'],
-            'tanggal_mulai' => ['required'],
-            'tanggal_selesai' => ['required', 'gte:tanggal_mulai'],
-            'gelombang_pelatihan_id' => ['required'],
+            'tanggal_mulai' => ['required', 'date', 'before:tanggal_selesai'],
+            'tanggal_selesai' => ['required', 'date', 'after:tanggal_mulai'],
         ];
     }
 }

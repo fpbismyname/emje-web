@@ -34,21 +34,29 @@
             <h6>Pelatihan diikuti</h6>
         </div>
         <ul class="list bg-base-200 rounded-box">
-            @foreach ($pendaftaran_pelatihan as $pelatihan_diikuti)
+            @foreach ($pendaftaran_pelatihan as $pendaftaran)
                 <li class="list-row">
                     <div class="tabular-nums">
                         {{ $loop->iteration + ($pendaftaran_pelatihan->currentPage() - 1) * $pendaftaran_pelatihan->perPage() }}
                     </div>
                     <div class="list-col-grow">
-                        <div class="flex flex-col">
-                            <h6>{{ $pelatihan_diikuti->pelatihan->nama_pelatihan }}</h6>
-                            <small>Durasi pelatihan :
-                                {{ $pelatihan_diikuti->pelatihan->formatted_durasi_pelatihan }}</small>
-                            <small>Status : {{ $pelatihan_diikuti->status->label() }}</small>
+                        <div class="flex flex-col gap-2">
+                            <div class="flex flex-col">
+                                <h6>{{ $pendaftaran->pelatihan->nama_pelatihan }}</h6>
+                                <small>Durasi pelatihan :
+                                    {{ $pendaftaran->pelatihan->formatted_durasi_pelatihan }}</small>
+                            </div>
+                            <div class="badge badge-sm badge-primary">
+                                {{ $pendaftaran->pelatihan_peserta?->status->label() ?? $pendaftaran->status->label() }}
+                            </div>
                         </div>
                     </div>
-                    <a class="btn btn-primary btn-sm"
-                        href="{{ route('admin.pelatihan-peserta.pelatihan-diikuti.show', [$profil_user->id, $pelatihan_diikuti->id]) }}">Detail</a>
+                    @if ($pendaftaran->status === App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum::DITERIMA)
+                        <a class="btn btn-primary btn-sm"
+                            href="{{ route('admin.pelatihan-peserta.detail.show', [$profil_user->id, $pendaftaran->pelatihan_peserta->id]) }}">
+                            Detail
+                        </a>
+                    @endif
                 </li>
             @endforeach
         </ul>

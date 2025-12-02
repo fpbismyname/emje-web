@@ -90,6 +90,21 @@
                 </div>
             </fieldset>
 
+            {{-- Maksimal pelamar --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Maksimal pelamar</legend>
+                <div class="form-control">
+                    <input type="number" name="maksimal_pelamar" required min="1"
+                        class="input validator w-full" />
+                    <p class="validator-hint hidden text-error">
+                        Maksimal pelamar kerja wajib diisi.
+                    </p>
+                    @error('maksimal_pelamar')
+                        <p class="text-error">{{ $message }}</p>
+                    @enderror
+                </div>
+            </fieldset>
+
             {{-- Deskripsi --}}
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Deskripsi</legend>

@@ -84,12 +84,28 @@
                 <legend class="fieldset-legend">Durasi Kontrak Kerja (Tahun)</legend>
                 <div class="form-control">
                     <input type="number" name="durasi_kontrak_kerja" required
-                        value="{{ old('durasi_kontrak_kerja', $kontrak_kerja->durasi_kontrak_kerja ?? $kontrak_kerja->formatted_durasi_kontrak_kerja) }}"
-                        min="1" class="input validator w-full" />
+                        value="{{ old('durasi_kontrak_kerja', $kontrak_kerja->durasi_kontrak_kerja) }}" min="1"
+                        class="input validator w-full" />
                     <p class="validator-hint hidden text-error">
                         Durasi kontrak kerja wajib diisi.
                     </p>
                     @error('durasi_kontrak_kerja')
+                        <p class="text-error">{{ $message }}</p>
+                    @enderror
+                </div>
+            </fieldset>
+
+            {{-- Maksimal pelamar --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Maksimal pelamar</legend>
+                <div class="form-control">
+                    <input type="number" name="maksimal_pelamar" required
+                        value="{{ old('maksimal_pelamar', $kontrak_kerja->maksimal_pelamar) }}" min="1"
+                        class="input validator w-full" />
+                    <p class="validator-hint hidden text-error">
+                        Maksimal pelamar kerja wajib diisi.
+                    </p>
+                    @error('maksimal_pelamar')
                         <p class="text-error">{{ $message }}</p>
                     @enderror
                 </div>

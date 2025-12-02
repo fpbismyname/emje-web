@@ -21,6 +21,11 @@
             <legend class="fieldset-legend">Durasi Kontrak Kerja</legend>
             <p>{{ $kontrak_kerja->formatted_durasi_kontrak_kerja }}</p>
         </fieldset>
+        {{-- Maksimal pelamar --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Maksimal pelamar</legend>
+            <p>{{ $kontrak_kerja->maksimal_pelamar }}</p>
+        </fieldset>
         {{-- Deskripsi --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Deskripsi</legend>

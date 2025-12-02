@@ -7,7 +7,8 @@ use Illuminate\Support\Str;
 enum StatusPelatihanPesertaEnum: string
 {
     case BERLANGSUNG = 'berlangsung';
-    case SELESAI = 'selesai';
+    case LULUS = 'lulus';
+    case TIDAK_LULUS = 'tidak_lulus';
     case DIBATALKAN = 'dibatalkan';
     public function label()
     {

@@ -82,9 +82,9 @@ class GelombangPelatihan extends Model
         return $query->withCount(['pelatihan_peserta'])
             ->where('maksimal_peserta', '>', 'pelatihan_peserta_count');
     }
-    public function scopeTersedia_untuk_jadwal_ujian(Builder $query)
+    public function scopeTersedia_untuk_jadwal_ujian(Builder $query, $includeJadwalId = null)
     {
-        return $query->whereDoesntHave('jadwal_ujian_pelatihan');
+        return $query->whereDoesntHave('jadwal_ujian_pelatihan', fn($q) => $q->where('id', $includeJadwalId));
     }
     /**
      * Appends
@@ -95,6 +95,7 @@ class GelombangPelatihan extends Model
         'formatted_tanggal_selesai',
         'date_time_tanggal_mulai',
         'date_time_tanggal_selesai',
+        'total_peserta_gelombang',
     ];
     /**
      * Accessor
@@ -127,6 +128,20 @@ class GelombangPelatihan extends Model
     {
         return Attribute::make(
             get: fn() => $this->tanggal_selesai?->format('Y-m-d')
+        );
+    }
+    public function totalMaksimalPeserta(): Attribute
+    {
+        $total_peserta_gelombang = $this->pelatihan_peserta()->count();
+        $maksimal_peserta_gelombang = $this->maksimal_peserta;
+        return Attribute::make(
+            get: fn() => "$total_peserta_gelombang / $maksimal_peserta_gelombang"
+        );
+    }
+    public function totalPesertaGelombang(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->pelatihan_peserta()->count()
         );
     }
 

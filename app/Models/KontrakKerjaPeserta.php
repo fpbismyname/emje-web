@@ -29,7 +29,7 @@ class KontrakKerjaPeserta extends Model
      * @var array
      */
     protected $casts = [
-        'status' => StatusKontrakKerjaDiikutiEnum::class,
+        'status' => StatusKontrakKerjaPesertaEnum::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

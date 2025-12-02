@@ -24,9 +24,10 @@ class KontrakKerjaRequest extends FormRequest
     {
         return [
             'nama_perusahaan' => ['required', 'string', 'max:255'],
-            'gaji_terendah' => ['nullable', 'numeric', 'min:0'],
-            'gaji_tertinggi' => ['nullable', 'numeric', 'min:0', 'gte:gaji_terendah'],
+            'gaji_terendah' => ['nullable', 'numeric', 'min:0', 'lt:gaji_tertinggi'],
+            'gaji_tertinggi' => ['nullable', 'numeric', 'min:0', 'gt:gaji_terendah'],
             'status' => ['required', 'string', 'in:' . implode(",", StatusKontrakKerjaEnum::getValues())],
+            'maksimal_pelamar' => ['required', 'min:1', 'max:9999999999'],
             'durasi_kontrak_kerja' => ['nullable', 'integer', 'min:1'],
             'deskripsi' => ['nullable', 'string'],
         ];

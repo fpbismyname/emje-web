@@ -1,17 +1,25 @@
 <?php
 
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\DetailKontrakKerjaPeserta;
+use App\Http\Controllers\Admin\DetailPelatihanPesertaController;
 use App\Http\Controllers\Admin\GelombangPelatihanController;
+use App\Http\Controllers\Admin\HasilUjianPelatihanController;
 use App\Http\Controllers\Admin\JadwalUjianPelatihanController;
 use App\Http\Controllers\Admin\KontrakKerjaController;
+use App\Http\Controllers\Admin\KontrakkerjaPesertaController;
 use App\Http\Controllers\Admin\PelatihanController;
 use App\Http\Controllers\Admin\PelatihanPesertaController;
-use App\Http\Controllers\Admin\PelatihanPesertaDiikutiController;
+use App\Http\Controllers\Admin\PembayaranPelatihanController;
 use App\Http\Controllers\Admin\PendaftaranPelatihanController;
+use App\Http\Controllers\Admin\PengajuanKontrakKerjaController;
 use App\Http\Controllers\Admin\RekeningController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\Pengaturan\PengaturanController;
+use App\Http\Controllers\Sertifikasi\SertifikasiController;
 use App\Http\Middleware\Auth\AdminMiddleware;
+use App\Models\Sertifikasi;
 
 Route::prefix('/admin')->name('admin.')->group(function () {
     // Auth
@@ -30,12 +38,22 @@ Route::prefix('/admin')->name('admin.')->group(function () {
             // Pelatihan
             'pelatihan' => PelatihanController::class,
             'pendaftaran-pelatihan' => PendaftaranPelatihanController::class,
+            // Gelombang pelatihan
             'gelombang-pelatihan' => GelombangPelatihanController::class,
+            'gelombang-pelatihan.jadwal-ujian-pelatihan' => JadwalUjianPelatihanController::class,
+            // Pelatihan peserta
             'pelatihan-peserta' => PelatihanPesertaController::class,
-            'pelatihan-peserta.pelatihan-diikuti' => PelatihanPesertaDiikutiController::class,
-            'jadwal-ujian-pelatihan' => JadwalUjianPelatihanController::class,
+            'pelatihan-peserta.detail' => DetailPelatihanPesertaController::class,
+            'pelatihan-peserta.detail.jadwal-ujian.hasil-ujian' => HasilUjianPelatihanController::class,
+            // Pembayaran pelatihan
+            'pembayaran-pelatihan' => PembayaranPelatihanController::class,
+
             // Kontrak kerja
             'kontrak-kerja' => KontrakKerjaController::class,
+            'pengajuan-kontrak-kerja' => PengajuanKontrakKerjaController::class,
+            // Kontrak kerja peserta
+            'kontrak-kerja-peserta' => KontrakkerjaPesertaController::class,
+            'kontrak-kerja-peserta.detail' => DetailKontrakKerjaPeserta::class
         ]);
 
         // Users
@@ -47,6 +65,18 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         // Rekening Controller
         Route::prefix('/rekening')->name('rekening.')->group(function () {
             Route::get("/", [RekeningController::class, "index"])->name('index');
+        });
+
+        // Sertifikasi
+        Route::prefix("/sertifikasi")->name('sertifikasi.')->group(function () {
+            Route::get("/download/{id}", [SertifikasiController::class, 'download'])->name('download');
+            Route::get("/view/{id}", [SertifikasiController::class, 'view'])->name('show');
+        });
+
+        // Pengaturan
+        Route::prefix('/pengaturan')->name('pengaturan.')->group(function () {
+            Route::get('/', [PengaturanController::class, 'edit'])->name('edit');
+            Route::put('/update-pengguna', [PengaturanController::class, 'update_pengguna'])->name('update-pengguna');
         });
 
     });

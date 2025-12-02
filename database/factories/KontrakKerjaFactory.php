@@ -31,6 +31,7 @@ class KontrakKerjaFactory extends Factory
             'gaji_tertinggi' => $max,
             'status' => $this->faker->randomElement($status),
             'deskripsi' => $deskripsi_kontrak_kerja,
+            'maksimal_pelamar' => $this->faker->numberBetween(100, 200),
             'durasi_kontrak_kerja' => $this->faker->numberBetween(1, 7),
         ];
     }

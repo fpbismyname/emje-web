@@ -37,7 +37,7 @@ class GelombangPelatihanController extends Controller
         return view('admin.gelombang-pelatihan.create');
 
     }
-    public function store(GelombangPelatihanRequest $request, GelombangPelatihan $gelombang_pelatihan_model, Pelatihan $pelatihan_model)
+    public function store(GelombangPelatihanRequest $request, Pelatihan $pelatihan_model)
     {
         $create_entries = $request->validated();
 
@@ -66,7 +66,8 @@ class GelombangPelatihanController extends Controller
     public function show(string $id, GelombangPelatihan $gelombang_pelatihan_model)
     {
         $gelombang_pelatihan = $gelombang_pelatihan_model->findOrFail($id);
-        $payload = compact('gelombang_pelatihan');
+        $jadwal_ujian_pelatihan = $gelombang_pelatihan->jadwal_ujian_pelatihan()->paginate(PaginateSize::SMALL->value);
+        $payload = compact('gelombang_pelatihan', 'jadwal_ujian_pelatihan');
         return view('admin.gelombang-pelatihan.show', $payload);
     }
     public function edit(string $id, GelombangPelatihan $gelombang_pelatihan_model)

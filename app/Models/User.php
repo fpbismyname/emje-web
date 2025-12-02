@@ -65,7 +65,7 @@ class User extends Authenticatable
     }
     public function pengajuan_kontrak_kerja()
     {
-        return $this->hasMany(PengajuanKontrakKerja::class, 'user_id');
+        return $this->hasMany(PengajuanKontrakKerja::class, 'users_id');
     }
     /**
      * Scope 
@@ -105,7 +105,13 @@ class User extends Authenticatable
     public function jumlahPelatihanDiikuti(): Attribute
     {
         return Attribute::make(
-            get: fn() => $this->pendaftaran_pelatihan()->whereHas('pelatihan_peserta')->count()
+            get: fn() => $this->pendaftaran_pelatihan()->count()
+        );
+    }
+    public function jumlahKontrakKerjaDiikuti(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->pengajuan_kontrak_kerja()->count()
         );
     }
 }

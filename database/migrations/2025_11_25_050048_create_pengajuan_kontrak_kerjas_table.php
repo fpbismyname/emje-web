@@ -14,6 +14,7 @@ return new class extends Migration {
             $table->id();
             $table->string('surat_lamaran');
             $table->string('status');
+            $table->string('catatan')->nullable();
             $table->timestamps();
         });
     }

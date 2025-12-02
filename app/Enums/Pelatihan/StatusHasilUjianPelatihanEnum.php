@@ -4,7 +4,7 @@ namespace App\Enums\Pelatihan;
 
 use Illuminate\Support\Str;
 
-enum StatusUjianPelatihanEnum: string
+enum StatusHasilUjianPelatihanEnum: string
 {
     case LULUS = 'lulus';
     case TIDAK_LULUS = 'tidak_lulus';
@@ -12,5 +12,9 @@ enum StatusUjianPelatihanEnum: string
     public function label()
     {
         return Str::of($this->value)->replace("_", " ")->ucfirst();
+    }
+    public static function getValues()
+    {
+        return collect(self::cases())->pluck('value')->toArray();
     }
 }
