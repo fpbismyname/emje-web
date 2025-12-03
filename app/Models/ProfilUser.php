@@ -94,6 +94,14 @@ class ProfilUser extends Model
         }
         return $query->where($column, $operator, $keywords);
     }
+    public function scopeHas_pengajuan_kontrak_kerja($query)
+    {
+        return $query->whereHas('users.pengajuan_kontrak_kerja');
+    }
+    public function scopeHas_pendaftaran_pelatihan($query)
+    {
+        return $query->whereHas('users.pendaftaran_pelatihan');
+    }
     /**
      * Accessor
      */

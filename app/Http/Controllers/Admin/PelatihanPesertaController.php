@@ -14,7 +14,7 @@ class PelatihanPesertaController extends Controller
     {
         $filters = $request->only('jenis_kelamin', 'pendidikan_terakhir');
 
-        $query = $profil_user_model->with($this->relations);
+        $query = $profil_user_model->with($this->relations)->has_pendaftaran_pelatihan();
 
         foreach ($filters as $key => $value) {
             match ($key) {
