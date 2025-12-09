@@ -67,7 +67,7 @@ class Pelatihan extends Model
         $kw = "%{$keyword}%";
         return $query->where('nama_pelatihan', 'like', $kw)
             ->orWhere('nominal_biaya', 'like', $kw)
-            ->orWhere('durasi_bulan', 'like', $kw)
+            ->orWhere('durasi_pelatihan', 'like', $kw)
             ->orWhere('kategori_pelatihan', 'like', $kw)
             ->orWhere('deskripsi', 'like', $kw)
             ->orWhere('status', 'like', $kw);

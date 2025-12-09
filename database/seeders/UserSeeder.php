@@ -17,7 +17,6 @@ use App\Enums\User\RoleEnum;
 use App\Models\GelombangPelatihan;
 use App\Models\KontrakKerja;
 use App\Models\Pelatihan;
-use App\Models\PengajuanKontrakKerja;
 use App\Models\ProfilUser;
 use App\Models\Rekening;
 use App\Models\User;
@@ -144,7 +143,7 @@ class UserSeeder extends Seeder
 
             if ($pendaftaran->status === StatusPendaftaranPelatihanEnum::DITERIMA) {
                 $gelombang = $pelatihan_user->gelombang_pelatihan()->first();
-                if ($gelombang->id) {
+                if (isset($gelombang->id)) {
                     $pelatihan_peserta = $pendaftaran->pelatihan_peserta()->create([
                         'status' => Arr::random([StatusPelatihanPesertaEnum::LULUS, StatusPelatihanPesertaEnum::BERLANGSUNG]),
                         'gelombang_pelatihan_id' => $gelombang->id

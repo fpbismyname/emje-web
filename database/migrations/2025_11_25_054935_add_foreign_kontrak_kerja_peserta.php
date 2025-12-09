@@ -12,6 +12,7 @@ return new class extends Migration {
     {
         Schema::table('kontrak_kerja_peserta', function (Blueprint $table) {
             $table->foreignId('pengajuan_kontrak_kerja_id')
+                ->nullable()
                 ->constrained('pengajuan_kontrak_kerja')
                 ->cascadeOnUpdate()
                 ->cascadeOnDelete();

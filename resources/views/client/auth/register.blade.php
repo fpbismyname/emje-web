@@ -1,16 +1,28 @@
-<x-layouts.app title="Login ke halaman admin">
+<x-layouts.app title="Register ke {{ config('site.title') }}">
     <div class="flex flex-col min-h-screen">
         <x-ui.card class="bg-base-200 m-auto w-full max-w-md">
             <div class="card-body">
                 <div class="flex flex-col items-center gap-4">
                     <x-ui.img src="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}"
                         class="aspect-square w-24" />
-                    <h1>Login</h1>
-                    <p>Login ke halaman admin</p>
+                    <h1>Daftar</h1>
+                    <p>Daftar ke {{ config('site.title') }}</p>
                 </div>
-                <form method="post" action="{{ route('admin.login.submit') }}" class="grid grid-cols-1 gap-4 my-6">
+                <form method="post" action="{{ route('client.register.submit') }}" class="grid grid-cols-1 gap-4 my-6">
                     @csrf
                     @method('post')
+                    {{-- Nama pengguna --}}
+                    <fieldset class="fieldset">
+                        <legend class="fieldset-label">Nama pengguna</legend>
+                        <input type="text" class="input validator w-full" name="name"
+                            placeholder="Masukan nama pengguna" value="{{ old('name') }}" required />
+                        <p class="validator-hint hidden">
+                            Nama pengguna wajib diisi
+                        </p>
+                        @error('name')
+                            <p class="label text-error">{{ $message }}</p>
+                        @enderror
+                    </fieldset>
                     {{-- Email --}}
                     <fieldset class="fieldset">
                         <legend class="fieldset-label">Email</legend>
@@ -40,8 +52,13 @@
 
                     {{-- Action form --}}
                     <div class="grid gap-2">
-                        <button type="submit" class="btn btn-primary">Login</button>
+                        <button type="submit" class="btn btn-primary">Daftar</button>
                         <a href="{{ route('client.homepage.index') }}" class="btn btn-neutral">Kembali</a>
+                    </div>
+
+                    <div class="grid gap-2 text-center">
+                        <h6>Sudah punya akun ? <a href="{{ route('client.login') }}"
+                                class="link link-hover link-primary">Login disini</a></h6>
                     </div>
                 </form>
             </div>

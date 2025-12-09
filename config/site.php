@@ -8,6 +8,7 @@ return [
         'paragraph_1' => 'PT Emje Pandanjaya Indonesia adalah perusahaan yang berdedikasi untuk memajukan potensi sumber daya manusia dan ekonomi lokal. Berlokasi di Kabupaten Cianjur, Jawa Barat, kami memiliki fokus utama pada pelatihan kerja dan penempatan tenaga kerja, memastikan individu memiliki keterampilan yang relevan dan kesempatan karir yang menjanjikan.',
         'paragraph_2' => 'Selain itu, kami juga aktif dalam perdagangan besar berbagai komoditas dan produk agroindustri, mendukung rantai pasok lokal dan nasional. Sebagai perusahaan PMDN skala kecil yang terdaftar resmi di OSS, kami menjunjung tinggi integritas dan profesionalisme dalam setiap aspek bisnis kami, berupaya menjadi mitra terpercaya bagi pertumbuhan berkelanjutan.'
     ],
+    'icon' => 'icon/company_icon.png',
     'services' => [
         [
             'title' => 'Pelatihan Kerja',

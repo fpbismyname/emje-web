@@ -1,4 +1,4 @@
-<x-layouts.app title="Login ke halaman admin">
+<x-layouts.app title="Login ke {{ config('site.title') }}">
     <div class="flex flex-col min-h-screen">
         <x-ui.card class="bg-base-200 m-auto w-full max-w-md">
             <div class="card-body">
@@ -6,9 +6,9 @@
                     <x-ui.img src="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}"
                         class="aspect-square w-24" />
                     <h1>Login</h1>
-                    <p>Login ke halaman admin</p>
+                    <p>Login ke {{ config('site.title') }}</p>
                 </div>
-                <form method="post" action="{{ route('admin.login.submit') }}" class="grid grid-cols-1 gap-4 my-6">
+                <form method="post" action="{{ route('client.login.submit') }}" class="grid grid-cols-1 gap-4 my-6">
                     @csrf
                     @method('post')
                     {{-- Email --}}
@@ -42,6 +42,11 @@
                     <div class="grid gap-2">
                         <button type="submit" class="btn btn-primary">Login</button>
                         <a href="{{ route('client.homepage.index') }}" class="btn btn-neutral">Kembali</a>
+                    </div>
+
+                    <div class="grid gap-2 text-center">
+                        <h6>Belum punya akun ? <a href="{{ route('client.register') }}"
+                                class="link link-hover link-primary">Daftar disini</a></h6>
                     </div>
                 </form>
             </div>

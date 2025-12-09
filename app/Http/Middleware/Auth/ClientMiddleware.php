@@ -16,10 +16,14 @@ class ClientMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = $request->user();
+        $auth = auth()->check();
+        $user = auth()->user();
         $in_scope_role = in_array($user?->role, RoleEnum::client_user());
+        if (!$auth) {
+            return redirect()->route('client.login');
+        }
         if (!$user || !$in_scope_role) {
-            return redirect()->route('homepage.index');
+            return redirect()->route('client.login');
         }
         return $next($request);
     }

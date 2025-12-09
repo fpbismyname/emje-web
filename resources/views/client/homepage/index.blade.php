@@ -1,4 +1,4 @@
-<x-layouts.client-app>
+<x-layouts.homepage-app>
 
     {{-- Hero --}}
     <section id="hero" class="relative bg-base-200">
@@ -104,4 +104,4 @@
         </div>
     </section>
 
-</x-layouts.client-app>
+</x-layouts.homepage-app>
