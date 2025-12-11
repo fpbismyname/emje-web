@@ -39,9 +39,9 @@
 
         {{-- Surat lamaran --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Surat lamaran</legend>
+            <legend class="fieldset-legend">Surat pengajuan kontrak</legend>
             <a target="_blank" class="link link-hover link-primary"
-                href="{{ route('storage.private.show', ['file' => $pengajuan_kontrak_kerja->surat_lamaran]) }}">Lihat
+                href="{{ route('storage.private.show', ['file' => $pengajuan_kontrak_kerja->surat_pengajuan_kontrak]) }}">Lihat
                 selengkapnya</a>
         </fieldset>
     </div>

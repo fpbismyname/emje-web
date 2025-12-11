@@ -3,7 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\KontrakKerja\StatusPengajuanKontrakKerja;
 use App\Enums\Pelatihan\StatusPelatihanPesertaEnum;
+use App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum;
 use App\Enums\User\RoleEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -98,7 +100,10 @@ class User extends Authenticatable
         'jumlah_pelatihan_diikuti',
         'is_client_user',
         'profil_lengkap',
-        'dapat_mengajukan_pelatihan'
+        'dapat_mengajukan_pelatihan',
+        'kategori_pelatihan_yang_diikuti',
+        'kelengkapan_profil',
+        'formatted_kelengkapan_profil',
     ];
     /**
      * Accessor
@@ -163,6 +168,70 @@ class User extends Authenticatable
         });
         return Attribute::make(
             get: fn() => $pelatihan_peserta
+        );
+    }
+    public function dapatMengajukanKontrakKerja(): Attribute
+    {
+        $pengajuan_kontrak_selesai = $this->pengajuan_kontrak_kerja()->get()->every(function ($pengajuan) {
+            if ($pengajuan->exists()) {
+                return !in_array($pengajuan?->status, [StatusPengajuanKontrakKerja::DALAM_PROSES]);
+            } else {
+                return true;
+            }
+        });
+        return Attribute::make(
+            get: fn() => $pengajuan_kontrak_selesai
+        );
+    }
+    public function kategoriPelatihanYangDiikuti(): Attribute
+    {
+        $semua_pendaftaran_pelatihan = $this->pendaftaran_pelatihan()->get();
+
+        $pelatihan_diselesaikan = $semua_pendaftaran_pelatihan->filter(fn($pendaftaran) => $pendaftaran->status === StatusPendaftaranPelatihanEnum::DITERIMA)
+            ->map(function ($pendaftaran) {
+                return $pendaftaran->pelatihan_peserta->gelombang_pelatihan->pelatihan->kategori_pelatihan->value;
+            })->toArray();
+
+        return Attribute::make(
+            get: fn() => $pelatihan_diselesaikan
+        );
+    }
+    public function kelengkapanProfilUser(): Attribute
+    {
+        // daftar field yang wajib
+        $fields = $this->profil_user()->getModel()->getFillable();
+
+        $total = count($fields);
+
+        // hitung berapa yang terisi
+        $filled = 0;
+        foreach ($fields as $field) {
+            if (!empty($this->profil_user->{$field})) {
+                $filled++;
+            }
+        }
+
+        return Attribute::make(
+            get: fn() => round(($filled / $total) * 100)
+        );
+    }
+    public function formattedKelengkapanProfilUser(): Attribute
+    {
+        // daftar field yang wajib
+        $fields = $this->profil_user()->getModel()->getFillable();
+
+        $total = count($fields);
+
+        // hitung berapa yang terisi
+        $filled = 0;
+        foreach ($fields as $field) {
+            if (!empty($this->profil_user->{$field})) {
+                $filled++;
+            }
+        }
+
+        return Attribute::make(
+            get: fn() => round(($filled / $total) * 100) . "%"
         );
     }
 }

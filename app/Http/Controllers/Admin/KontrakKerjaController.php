@@ -16,9 +16,9 @@ class KontrakKerjaController extends Controller
     public function index(Request $request, KontrakKerja $kontrak_kerja_model)
     {
 
-        $filters = $request->only('search', 'status');
+        $filters = $request->only('search', 'kategori_kontrak_kerja');
 
-        $query = $kontrak_kerja_model->query();
+        $query = $kontrak_kerja_model->query()->kontrak_kerja_aktif();
 
         foreach ($filters as $key => $value) {
             match ($key) {

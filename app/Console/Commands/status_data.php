@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\KontrakKerja\StatusKontrakKerjaPesertaEnum;
 use App\Enums\Pelatihan\JenisPembayaranEnum;
 use App\Enums\Pelatihan\SesiGelombangPelatihanEnum;
 use App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum;
@@ -11,6 +12,7 @@ use App\Enums\Pelatihan\StatusPembayaranPelatihanEnum;
 use App\Models\GelombangPelatihan;
 use App\Models\HasilUjianPelatihan;
 use App\Models\JadwalUjianPelatihan;
+use App\Models\KontrakKerjaPeserta;
 use App\Models\PelatihanPeserta;
 use App\Models\PembayaranPelatihan;
 use App\Models\User;
@@ -150,9 +152,17 @@ class status_data extends Command
                     }
                 }
             });
-
-
-
+        KontrakKerjaPeserta::query()
+            ->where('status', StatusKontrakKerjaPesertaEnum::BERLANGSUNG)
+            ->chunk(100, function ($items) {
+                foreach ($items as $kontrak_kerja_peserta) {
+                    $durasi_kontrak_tahun = $kontrak_kerja_peserta->pengajuan_kontrak_kerja->kontrak_kerja->durasi_kontrak_kerja;
+                    $mulai_kontrak = $kontrak_kerja_peserta->created_at;
+                    if ($mulai_kontrak->addYears($durasi_kontrak_tahun)->lt(now())) {
+                        $kontrak_kerja_peserta->status = StatusKontrakKerjaPesertaEnum::SELESAI;
+                    }
+                }
+            });
 
         $this->info('Status data updated successfully.');
     }

@@ -1,73 +1,80 @@
-<x-layouts.client-app title="Detail pendaftaran pelatihan">
+<x-layouts.client-app title="Detail pengajuan kontrak kerja">
 
-    {{-- Form --}}
-    <form
-        action="{{ route('client.pelatihan.pendaftaran-pelatihan.store', ['kontrak_kerja_id' => request('kontrak_kerja_id')]) }}"
-        method="post" enctype="multipart/form-data">
-        @csrf
-        @method('put')
+    {{-- Data kontrak kerja --}}
+    <div class="grid md:grid-cols-2 gap-4 rounded-box">
+        <div class="grid md:col-span-2">
+            <h6>Data kontrak kerja</h6>
+        </div>
 
-        {{-- Data pelatihan --}}
-        <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
-            <div class="grid md:col-span-2">
-                <h6>Data pelatihan</h6>
-            </div>
+        {{-- Nama perusahaan --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Nama perusahaan</legend>
+            <p>{{ $datas->kontrak_kerja->nama_perusahaan }}</p>
+        </fieldset>
 
-            {{-- Nama perusahaan --}}
+        {{-- Durasi kontrak kerja --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Durasi kontrak kerja</legend>
+            <p>{{ $datas->kontrak_kerja->formatted_durasi_kontrak_kerja }}</p>
+        </fieldset>
+
+        {{-- Kategori kontrak kerja --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Kategori kontrak kerja</legend>
+            <p>{{ $datas->kontrak_kerja->kategori_kontrak_kerja->label() }}</p>
+        </fieldset>
+
+        {{-- Deskripsi kontrak kerja --}}
+        <div class="grid md:col-span-2">
             <fieldset class="fieldset">
-                <legend class="fieldset-legend">Nama Gelombang</legend>
-                <p>{{ $datas-> }}</p>
+                <legend class="fieldset-legend">Deskripsi</legend>
+                <p class="whitespace-pre-line">{{ $datas->kontrak_kerja->deskripsi }}</p>
             </fieldset>
         </div>
 
-        <div class="divider"></div>
+        {{-- Maksimal pelamar --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Maksimal pelamar</legend>
+            <p>{{ $datas->kontrak_kerja->maksimal_pelamar }}</p>
+        </fieldset>
 
-        {{-- Pembayaran pelatihan  --}}
-        <div class="grid md:grid-cols-2 gap-4 rounded-box p-4" x-data="{ skema: '{{ old('skema_pembayaran', $datas->skema_pembayaran) }}' }" x-cloak>
-            <div class="grid md:col-span-2">
-                <h6>Pembayaran pelatihan</h6>
-            </div>
+        {{-- Gaji tertinggi --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Gaji tertinggi</legend>
+            <p>{{ $datas->kontrak_kerja->formatted_gaji_tertinggi }}</p>
+        </fieldset>
 
-            {{-- Skema pembayaran --}}
+        {{-- Gaji terendah --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Gaji terendah</legend>
+            <p>{{ $datas->kontrak_kerja->formatted_gaji_terendah }}</p>
+        </fieldset>
+
+        {{-- Catatan --}}
+        @if ($datas->catatan)
             <fieldset class="fieldset">
-                <legend class="fieldset-legend">Tipe pembayaran pelatihan</legend>
-                <p>{{ $datas->skema_pembayaran->label() }}</p>
+                <legend class="fieldset-legend">Catatan</legend>
+                <p>{{ $datas->catatan }}</p>
             </fieldset>
+        @endif
 
-            {{-- Tenor cicilan --}}
-            <fieldset class="fieldset" x-show="skema === 'cicilan'">
-                <legend class="fieldset-legend">Tenor cicilan</legend>
-                <p>{{ old('tenor') ? App\Enums\Pelatihan\TenorCicilanPelatihanEnum::from(old('tenor'))->label() : $datas->tenor?->label() }}
-                </p>
-            </fieldset>
+        {{-- Surat pengajuan kontrak kerja --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Surat pengajuan kontrak kerja</legend>
+            <a target="_blank" href="{{ route('storage.private.show', ['file' => $datas->surat_pengajuan_kontrak]) }}"
+                class="link link-hover link-primary">Lihat selengkapnya</a>
+        </fieldset>
+    </div>
 
-            {{-- Bukti pembayaran cicilan --}}
-            <fieldset class="fieldset" x-show="skema === 'cicilan'">
-                <legend class="fieldset-legend">Bukti pembayaran DP</legend>
-                <p>{{ $datas->bukti_pembayaran_dp ?? '-' }}</p>
-            </fieldset>
-
-            {{-- Bukti pembayaran cash --}}
-            <fieldset class="fieldset" x-show="skema === 'cash'">
-                <legend class="fieldset-legend">Bukti pembayaran cash</legend>
-                @if ($datas->pembayaran_pelatihan_cash()->exists())
-                    <a target="_blank" class="link link-hover link-primary"
-                        href="{{ route('storage.private.show', ['file' => $datas->pembayaran_pelatihan_cash->bukti_pembayaran]) }}">Lihat
-                        selengkapnya</a>
-                @else
-                    <p>Tidak ada</p>
-                @endif
-            </fieldset>
+    {{-- Action  --}}
+    <div class="grid place-items-center mt-4">
+        <div class="flex flex-row gap-2">
+            @if ($datas->status === App\Enums\KontrakKerja\StatusPengajuanKontrakKerja::DALAM_PROSES)
+                <a href="{{ route('client.kontrak-kerja.pengajuan-kontrak-kerja.edit', [$datas->id]) }}"
+                    class="btn btn-primary">Edit</a>
+            @endif
+            <a href="{{ route('client.kontrak-kerja.pengajuan-kontrak-kerja.index') }}"
+                class="btn btn-neutral">Kembali</a>
         </div>
-
-        <div class="divider"></div>
-
-        {{-- Action  --}}
-        <div class="grid place-items-center mt-4">
-            <div class="flex flex-row gap-2">
-                <a href="{{ route('client.pelatihan.pendaftaran-pelatihan.index') }}"
-                    class="btn btn-neutral">Kembali</a>
-            </div>
-        </div>
-    </form>
+    </div>
 </x-layouts.client-app>

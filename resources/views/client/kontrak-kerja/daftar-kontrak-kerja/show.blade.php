@@ -51,19 +51,40 @@
     <div class="grid place-items-center">
         <div class="flex flex-row gap-2">
             @if (auth()->user()->telah_mengikuti_pelatihan)
-                <div class="{{ auth()->user()->profil_lengkap ? '' : 'tooltip' }}"
-                    data-tip="Lengkapi data profil untuk melanjutkan pendaftaran">
-                    @if (auth()->user()->profil_lengkap)
-                        <a href="{{ route('client.kontrak-kerja.pengajuan-kontrak-kerja.create', ['kontrak_kerja_id' => $kontrak_kerja->id]) }}"
-                            class="btn btn-primary">Ajukan kontrak kerja</a>
-                    @endif
-                @else
+                @if (!auth()->user()->dapat_mengajukan_kontrak_kerja)
                     <div class="tooltip"
-                        data-tip="Selesaikan salah satu pelatihan untuk dapat mengajukan kontrak kerja">
-                        <a class="btn btn-error" href="{{ route('client.pelatihan.pelatihan-diikuti.index') }}">
+                        data-tip="Terdapat kontrak kerja yang sedang berlangsung, selesaikan terlebih dahulu untuk lanjut melakukan kontrak.">
+                        <a class="btn btn-warning"
+                            href="{{ route('client.kontrak-kerja.daftar-kontrak-kerja.index') }}">
                             <x-lucide-info class="w-4" />
                         </a>
                     </div>
+                @else
+                    @if (in_array($kontrak_kerja->kategori_kontrak_kerja->value, auth()->user()->kategori_pelatihan_yang_diikuti) &&
+                            auth()->user()->dapat_mengajukan_kontrak_kerja)
+                        <div class="{{ auth()->user()->profil_lengkap ? '' : 'tooltip' }}"
+                            data-tip="Lengkapi data profil untuk melanjutkan pendaftaran">
+                            @if (auth()->user()->profil_lengkap)
+                                <a href="{{ route('client.kontrak-kerja.pengajuan-kontrak-kerja.create', ['kontrak_kerja_id' => $kontrak_kerja->id]) }}"
+                                    class="btn btn-primary">Ajukan kontrak kerja</a>
+                            @endif
+                        </div>
+                    @else
+                        <div class="tooltip"
+                            data-tip="Pelatihan yang anda ikuti tidak relevan dengan kontrak kerja ini, silahkah cari kontrak kerja lainnya.">
+                            <a class="btn btn-warning"
+                                href="{{ route('client.kontrak-kerja.daftar-kontrak-kerja.index') }}">
+                                <x-lucide-info class="w-4" />
+                            </a>
+                        </div>
+                    @endif
+                @endif
+            @else
+                <div class="tooltip" data-tip="Selesaikan salah satu pelatihan untuk dapat mengajukan kontrak kerja">
+                    <a class="btn btn-error" href="{{ route('client.pelatihan.pelatihan-diikuti.index') }}">
+                        <x-lucide-info class="w-4" />
+                    </a>
+                </div>
             @endif
             <a href="{{ route('client.kontrak-kerja.daftar-kontrak-kerja.index') }}"
                 class="btn btn-neutral">Kembali</a>

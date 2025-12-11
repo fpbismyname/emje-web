@@ -258,7 +258,7 @@ entity pengajuan_kontrak_kerja{
     -users_id : Bigint
     -kontrak_kerja_id : Bigint
     ===
-    -surat_lamaran : String
+    -surat_pengajuan_kontrak : String
     -status : StatusPengajuanKontrakKerja
 }
 
@@ -266,6 +266,7 @@ entity kontrak_kerja{
     *id : Bigint
     ===
     -nama_perusahaan : String
+    -surat_kontrak : String
     -gaji_terendah : Decimal (15,2)
     -gaji_tertinggi : Decimal (15,2)
     -deskripsi : Text

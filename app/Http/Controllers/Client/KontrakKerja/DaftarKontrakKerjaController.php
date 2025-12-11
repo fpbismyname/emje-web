@@ -11,7 +11,7 @@ class DaftarKontrakKerjaController extends Controller
 {
     public function index(Request $request, KontrakKerja $kontrak_kerja_model)
     {
-        $filters = $request->only('search', 'kategori_pelatihan');
+        $filters = $request->only('search', 'kategori_kontrak_kerja');
 
         $query = $kontrak_kerja_model->kontrak_kerja_aktif();
 

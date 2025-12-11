@@ -62,10 +62,10 @@ class UserSeeder extends Seeder
         }
 
         // Seeder Pelatihan
-        $pelatihan = Pelatihan::factory()->count(5)->create();
+        $pelatihan = Pelatihan::factory()->count(20)->create();
 
         // Seeder kontrak kekrja
-        $kontrak_kerja = KontrakKerja::factory()->count(5)->create();
+        $kontrak_kerja = KontrakKerja::factory()->count(20)->create();
 
         // Seeder Batch untuk tiap pelatihan
         foreach ($pelatihan as $p) {

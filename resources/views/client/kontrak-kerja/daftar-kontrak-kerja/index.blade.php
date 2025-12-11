@@ -3,6 +3,13 @@
     <div class="flex flex-row justify-between gap-4 flex-wrap">
         {{-- Filter & Search --}}
         <form method="get" class="flex flex-row md:flex-1 gap-4 flex-wrap">
+            <select name="kategori_kontrak_kerja" class="select">
+                <option value="">Pilih kategori kontrak kerja</option>
+                @foreach (App\Enums\Pelatihan\KategoriPelatihanEnum::cases() as $status)
+                    <option value="{{ $status->value }}" @if (request('kategori_kontrak_kerja') === $status->value) selected @endif>
+                        {{ $status->label() }}</option>
+                @endforeach
+            </select>
             <input type="text" class="input" name="search" value="{{ request('search') }}"
                 placeholder="Cari pelatihan" />
             <button class="btn btn-primary">
@@ -23,6 +30,9 @@
                         <div class="list-col-grow">
                             <div class="flex flex-col gap-2">
                                 {{ $item->nama_perusahaan }}
+                                <div class="badge badge-sm badge-primary">
+                                    {{ $item->kategori_kontrak_kerja->label() }}
+                                </div>
                                 <div class="flex flex-col">
                                     <small>
                                         Rentang gaji : {{ $item->formatted_gaji_terendah }} -
