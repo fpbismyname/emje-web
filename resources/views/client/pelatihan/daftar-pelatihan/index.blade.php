@@ -40,6 +40,10 @@
                                     <small>
                                         Durasi pelatihan : {{ $item->pelatihan->formatted_durasi_pelatihan }}
                                     </small>
+                                    <small>
+                                        Kuota peserta
+                                        : {{ $item->total_maksimal_peserta }}
+                                    </small>
                                 </div>
                             </div>
                         </div>

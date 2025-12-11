@@ -3,6 +3,8 @@
 namespace Database\Factories;
 
 use App\Enums\KontrakKerja\StatusKontrakKerjaEnum;
+use App\Enums\Pelatihan\KategoriPelatihanEnum;
+use Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +19,7 @@ class KontrakKerjaFactory extends Factory
      */
     public function definition(): array
     {
-        $status = StatusKontrakKerjaEnum::getValues();
+        $status = StatusKontrakKerjaEnum::AKTIF;
 
         // salary range realistic: min < max
         $min = $this->faker->numberBetween(8, 10) * 1000000;
@@ -29,10 +31,12 @@ class KontrakKerjaFactory extends Factory
             'nama_perusahaan' => $this->faker->company(),
             'gaji_terendah' => $min,
             'gaji_tertinggi' => $max,
-            'status' => $this->faker->randomElement($status),
+            'status' => $status,
             'deskripsi' => $deskripsi_kontrak_kerja,
+            'surat_kontrak' => 'kontrak_kerja/surat_kontrak.pdf',
             'maksimal_pelamar' => $this->faker->numberBetween(100, 200),
             'durasi_kontrak_kerja' => $this->faker->numberBetween(1, 7),
+            'kategori_kontrak_kerja' => Arr::random(KategoriPelatihanEnum::cases())
         ];
     }
 }

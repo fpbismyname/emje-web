@@ -53,8 +53,8 @@
             </fieldset>
             {{-- Total terbayar --}}
             <fieldset class="fieldset">
-                <legend class="fieldset-legend">Total biaya pelatihan</legend>
-                <p class="py-2">{{ $pendaftaran_pelatihan->pelatihan->formatted_nominal_biaya }}</p>
+                <legend class="fieldset-legend">Total biaya terbayar</legend>
+                <p class="py-2">{{ $pendaftaran_pelatihan->formatted_total_biaya_terbayar }}</p>
             </fieldset>
             {{-- Status pembayaran pelatihan --}}
             <fieldset class="fieldset">
@@ -80,10 +80,12 @@
                             <div class="badge badge-sm badge-primary">{{ $pembayaran->status->label() }}</div>
                         </div>
                     </div>
-                    <a class="btn btn-primary btn-sm" target="_blank"
-                        href="{{ route('storage.private.show', ['file' => $pembayaran->bukti_pembayaran]) }}">
-                        Bukti pembayaran
-                    </a>
+                    @if ($pembayaran->bukti_pembayaran)
+                        <a class="btn btn-primary btn-sm" target="_blank"
+                            href="{{ route('storage.private.show', ['file' => $pembayaran->bukti_pembayaran]) }}">
+                            Bukti pembayaran
+                        </a>
+                    @endif
                 </li>
             @endforeach
         </ul>

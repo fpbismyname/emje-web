@@ -8,7 +8,10 @@ use App\Http\Controllers\Client\KontrakKerja\KontrakKerjaDiikuti;
 use App\Http\Controllers\Client\KontrakKerja\PengajuanKontrakKerjaController;
 use App\Http\Controllers\Client\Pelatihan\DaftarPelatihanController;
 use App\Http\Controllers\Client\Pelatihan\PelatihanDiikutiController;
+use App\Http\Controllers\Client\Pelatihan\PembayaranPelatihanController;
 use App\Http\Controllers\Client\Pelatihan\PendaftaranPelatihanController;
+use App\Http\Controllers\Pengaturan\PengaturanController;
+use App\Http\Controllers\Sertifikasi\SertifikasiController;
 use App\Http\Middleware\Auth\ClientMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -34,7 +37,13 @@ Route::prefix('/')->name('client.')->group(function () {
                 'daftar-pelatihan' => DaftarPelatihanController::class,
                 'pendaftaran-pelatihan' => PendaftaranPelatihanController::class,
                 'pelatihan-diikuti' => PelatihanDiikutiController::class,
+                'pembayaran-pelatihan' => PembayaranPelatihanController::class,
             ]);
+            // Pembayaran pelatihan
+            Route::prefix('/pembayaran-pelatihan/{id_pembayaran}')->name('pembayaran_pelatihan.')->group(function () {
+                Route::get('/bayar-cicilan/{id}', [PembayaranPelatihanController::class, 'bayar_cicilan'])->name('bayar-cicilan');
+                Route::put('/bayar-cicilan/{id}/submit', [PembayaranPelatihanController::class, 'submit_bayar_cicilan'])->name('submit-bayar-cicilan');
+            });
         });
         // Kontrak kerja
         Route::prefix('/kontrak-kerja')->name('kontrak-kerja.')->group(function () {
@@ -43,6 +52,18 @@ Route::prefix('/')->name('client.')->group(function () {
                 'pengajuan-kontrak-kerja' => PengajuanKontrakKerjaController::class,
                 'kontrak-kerja-diikuti' => KontrakKerjaDiikuti::class
             ]);
+        });
+
+        // Pengaturan
+        Route::prefix('/pengaturan')->name('pengaturan.')->group(function () {
+            Route::get('/', [PengaturanController::class, 'client_edit'])->name('edit');
+            Route::put('/update-pengguna', [PengaturanController::class, 'client_update_pengguna'])->name('update.pengguna');
+        });
+
+        // Sertifikasi
+        Route::prefix("/sertifikasi")->name('sertifikasi.')->group(function () {
+            Route::get("/download/{id}", [SertifikasiController::class, 'download'])->name('download');
+            Route::get("/view/{id}", [SertifikasiController::class, 'view'])->name('show');
         });
     });
 });

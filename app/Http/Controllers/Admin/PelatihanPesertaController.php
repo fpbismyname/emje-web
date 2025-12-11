@@ -12,7 +12,7 @@ class PelatihanPesertaController extends Controller
     protected $relations = ['users'];
     public function index(Request $request, ProfilUser $profil_user_model)
     {
-        $filters = $request->only('jenis_kelamin', 'pendidikan_terakhir');
+        $filters = $request->only('search', 'jenis_kelamin', 'pendidikan_terakhir');
 
         $query = $profil_user_model->with($this->relations)->has_pendaftaran_pelatihan();
 

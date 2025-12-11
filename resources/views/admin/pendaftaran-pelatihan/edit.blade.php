@@ -5,10 +5,17 @@
         <div class="grid md:col-span-2">
             <h6>Data pendaftaran</h6>
         </div>
+
         {{-- Nama Pelatihan --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Nama Pelatihan</legend>
             <p class="py-2">{{ $pendaftaran_pelatihan->pelatihan_nama_pelatihan }}</p>
+        </fieldset>
+
+        {{-- Gelombang Pelatihan --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Gelombang pelatihan</legend>
+            <p class="py-2">{{ $pendaftaran_pelatihan->gelombang_pelatihan?->nama_gelombang }}</p>
         </fieldset>
 
         {{-- Durasi (Bulan) --}}
@@ -36,11 +43,13 @@
         </fieldset>
 
         {{-- Dp dibayar --}}
-        <fieldset class="fieldset">
-            <legend class="fieldset-legend">Dp dibayar</legend>
-            <p class="py-2">
-                {{ $pendaftaran_pelatihan->pembayaran_pelatihan_dp?->formatted_nominal ?? 'Rp 0' }}</p>
-        </fieldset>
+        @if ($pendaftaran_pelatihan->skema_pembayaran->value === 'cicila')
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Dp dibayar</legend>
+                <p class="py-2">
+                    {{ $pendaftaran_pelatihan->pembayaran_pelatihan_dp?->formatted_nominal ?? 'Rp 0' }}</p>
+            </fieldset>
+        @endif
 
         {{-- Bukti pembayaran --}}
         <fieldset class="fieldset w-fit">
@@ -48,6 +57,10 @@
             @if ($pendaftaran_pelatihan->pembayaran_pelatihan_dp?->bukti_pembayaran)
                 <a target="_blank"
                     href="{{ route('storage.private.show', ['file' => $pendaftaran_pelatihan->pembayaran_pelatihan_dp?->bukti_pembayaran]) }}"
+                    class="link link-primary link-hover">Lihat selengkapnya</a>
+            @elseif($pendaftaran_pelatihan->pembayaran_pelatihan_cash?->bukti_pembayaran)
+                <a target="_blank"
+                    href="{{ route('storage.private.show', ['file' => $pendaftaran_pelatihan->pembayaran_pelatihan_cash?->bukti_pembayaran]) }}"
                     class="link link-primary link-hover">Lihat selengkapnya</a>
             @else
                 <p>Tidak ada</p>
@@ -226,24 +239,6 @@
                     method="POST" class="grid gap-4 py-4">
                     @csrf
                     @method('put')
-                    {{-- Gelombang pelatihan --}}
-                    <fieldset class="fieldset">
-                        <legend class="fieldset-legend">Gelombang pelatihan</legend>
-                        <select name="gelombang_pelatihan_id" class="select validator w-full">
-                            <option value="" selected disabled>Pilih gelombang pelatihan</option>
-                            @foreach ($pendaftaran_pelatihan->pelatihan->gelombang_pelatihan()->tersedia_untuk_registrasi()->get() as $gelombang)
-                                <option value="{{ $gelombang->id }}" @selected($gelombang->id === old('gelombang_pelatihan_id'))>
-                                    {{ $gelombang->nama_gelombang }}
-                                </option>
-                            @endforeach
-                        </select>
-                        @error('gelombang_pelatihan_id')
-                            <p class="text-error">{{ $message }}</p>
-                        @enderror
-                        <p class="validator-hint hidden">
-                            Status pendaftaran wajib dipilih.
-                        </p>
-                    </fieldset>
                     {{-- Status pendaftaran --}}
                     <fieldset class="fieldset">
                         <legend class="fieldset-legend">Status</legend>

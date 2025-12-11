@@ -23,7 +23,7 @@ class PengajuanKontrakKerja extends Model
      */
     protected $fillable = [
         'status',
-        'surat_lamaran',
+        'surat_pengajuan_kontrak',
         'catatan',
         'kontrak_kerja_id',
         'users_id'

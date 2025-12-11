@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\KontrakKerja\StatusKontrakKerjaEnum;
+use App\Enums\Pelatihan\KategoriPelatihanEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -29,8 +30,10 @@ class KontrakKerja extends Model
         'gaji_tertinggi',
         'durasi_kontrak_kerja',
         'deskripsi',
+        'surat_kontrak',
         'maksimal_pelamar',
         'status',
+        'kategori_kontrak_kerja'
     ];
     /**
      * The attributes that should be cast to native types.
@@ -41,6 +44,7 @@ class KontrakKerja extends Model
         'gaji_terendah' => 'int',
         'gaji_tertinggi' => 'int',
         'status' => StatusKontrakKerjaEnum::class,
+        'kategori_kontrak_kerja' => KategoriPelatihanEnum::class,
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];
@@ -85,6 +89,10 @@ class KontrakKerja extends Model
         }
         return $query->where($column, $operator, $keywords);
     }
+    public function scopeKontrak_kerja_aktif($query)
+    {
+        return $query->search_by_column('status', StatusKontrakKerjaEnum::AKTIF);
+    }
     /**
      * Appends
      */
@@ -94,6 +102,7 @@ class KontrakKerja extends Model
         'formatted_gaji_terendah',
         'formatted_gaji_tertinggi',
         'formatted_durasi_kontrak_kerja',
+        'formatted_maksimal_pelamar',
     ];
     /**
      * Accessor
@@ -137,6 +146,12 @@ class KontrakKerja extends Model
     {
         return Attribute::make(
             get: fn() => now()->addYears($this->durasi_kontrak_kerja)->format('d F Y')
+        );
+    }
+    public function formattedMaksimalPelamar(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => "{$this->maksimal_pelamar} Orang"
         );
     }
 }

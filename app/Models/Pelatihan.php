@@ -27,6 +27,7 @@ class Pelatihan extends Model
     protected $fillable = [
         'nama_pelatihan',
         'nominal_biaya',
+        'persentase_dp',
         'durasi_pelatihan',
         'kategori_pelatihan',
         'deskripsi',
@@ -92,7 +93,11 @@ class Pelatihan extends Model
     protected $appends = [
         'formatted_nama_pelatihan',
         'formatted_nominal_biaya',
-        'formatted_durasi_pelatihan'
+        'formatted_durasi_pelatihan',
+        'formatted_nominal_dp',
+        'formatted_persentase_dp',
+        'decimal_nominal_dp',
+        'decimal_persentase_dp'
     ];
     /**
      * Accessor
@@ -113,6 +118,36 @@ class Pelatihan extends Model
     {
         return Attribute::make(
             get: fn() => "{$this->durasi_pelatihan} bulan"
+        );
+    }
+    public function formattedNominalDp(): Attribute
+    {
+        $persentase_dp = $this->persentase_dp / 100;
+        $nominal = $persentase_dp * $this->nominal_biaya;
+        return Attribute::make(
+            get: fn() => "Rp " . number_format($nominal, 0, ',', '.')
+        );
+    }
+    public function decimalNominalDp(): Attribute
+    {
+        $persentase_dp = $this->persentase_dp / 100;
+        $nominal = $persentase_dp * $this->nominal_biaya;
+        return Attribute::make(
+            get: fn() => $nominal
+        );
+    }
+    public function formattedPersentaseDp(): Attribute
+    {
+        $persentase_dp = $this->persentase_dp / 100;
+        return Attribute::make(
+            get: fn() => "{$persentase_dp} %"
+        );
+    }
+    public function decimalPersentaseDp(): Attribute
+    {
+        $persentase_dp = $this->persentase_dp / 100;
+        return Attribute::make(
+            get: fn() => $$persentase_dp
         );
     }
 }

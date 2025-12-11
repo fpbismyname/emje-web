@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\Pelatihan\StatusPelatihanPesertaEnum;
 use App\Enums\User\RoleEnum;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -92,7 +93,13 @@ class User extends Authenticatable
     /**
      * Appends
      */
-    protected $appends = ['formatted_name', 'jumlah_pelatihan_diikuti'];
+    protected $appends = [
+        'formatted_name',
+        'jumlah_pelatihan_diikuti',
+        'is_client_user',
+        'profil_lengkap',
+        'dapat_mengajukan_pelatihan'
+    ];
     /**
      * Accessor
      */
@@ -112,6 +119,50 @@ class User extends Authenticatable
     {
         return Attribute::make(
             get: fn() => $this->pengajuan_kontrak_kerja()->count()
+        );
+    }
+    public function isClientUser(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->role === RoleEnum::PESERTA
+        );
+    }
+    public function profilLengkap(): Attribute
+    {
+        $is_not_complete = [];
+        if ($this->profil_user()->exists()) {
+            foreach ($this->profil_user->getFillable() as $col) {
+                if (empty($this->profil_user->{$col})) {
+                    $is_not_complete[] = $col;
+                }
+            }
+        }
+
+        $profil_lengkap = empty($is_not_complete);
+        return Attribute::make(
+            get: fn() => $profil_lengkap && $this->profil_user()->exists()
+        );
+    }
+    public function dapatMengajukanPelatihan(): Attribute
+    {
+        $pelatihan_diikuti_selesai = $this->pendaftaran_pelatihan()->get()->every(function ($pendaftaran) {
+            if ($pendaftaran->pelatihan_peserta()->exists()) {
+                return !in_array($pendaftaran?->pelatihan_peserta?->status, [StatusPelatihanPesertaEnum::BERLANGSUNG]);
+            } else {
+                return true;
+            }
+        });
+        return Attribute::make(
+            get: fn() => $pelatihan_diikuti_selesai
+        );
+    }
+    public function telahMengikutiPelatihan(): Attribute
+    {
+        $pelatihan_peserta = $this->pendaftaran_pelatihan()->get()->some(function ($pendaftaran) {
+            return in_array($pendaftaran->pelatihan_peserta?->status, [StatusPelatihanPesertaEnum::LULUS]);
+        });
+        return Attribute::make(
+            get: fn() => $pelatihan_peserta
         );
     }
 }

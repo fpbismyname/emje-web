@@ -1,4 +1,8 @@
 import "./bootstrap";
+import Alpine from "alpinejs";
+
+window.Alpine = Alpine;
+Alpine.start();
 
 const intl_currency = new Intl.NumberFormat("id-ID", {
     style: "currency",

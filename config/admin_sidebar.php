@@ -61,14 +61,14 @@ return [
         'icon' => 'calendar-sync',
         'type' => 'menu',
         'route_name' => 'admin.gelombang-pelatihan.index',
-        'roles' => ['admin']
+        'roles' => ['pengelola_pendaftaran']
     ],
     [
         'label' => 'Pendaftaran pelatihan',
         'icon' => 'file-input',
         'type' => 'menu',
         'route_name' => 'admin.pendaftaran-pelatihan.index',
-        'roles' => ['admin', 'pengelola_pendaftaran']
+        'roles' => ['pengelola_pendaftaran']
     ],
     [
         'label' => 'Pelatihan peserta',
@@ -94,7 +94,7 @@ return [
         'icon' => 'file-input',
         'type' => 'menu',
         'route_name' => 'admin.pengajuan-kontrak-kerja.index',
-        'roles' => ['admin', 'pengelola_pendaftaran']
+        'roles' => ['pengelola_pendaftaran']
     ],
     [
         'label' => 'Kontrak kerja peserta',

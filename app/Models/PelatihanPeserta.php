@@ -47,6 +47,17 @@ class PelatihanPeserta extends Model
     {
         return $this->belongsTo(GelombangPelatihan::class, 'gelombang_pelatihan_id');
     }
+    public function hasil_ujian_pelatihan()
+    {
+        return $this->hasManyThrough(
+            HasilUjianPelatihan::class,
+            JadwalUjianPelatihan::class,
+            'gelombang_pelatihan_id',
+            'jadwal_ujian_pelatihan_id',
+            'gelombang_pelatihan_id',
+            'id'
+        );
+    }
     /**
      * Appends
      */

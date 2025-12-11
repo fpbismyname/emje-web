@@ -87,14 +87,30 @@ class PembayaranPelatihan extends Model
     /**
      * Appends
      */
-    protected $appends = ['formatted_nominal'];
+    protected $appends = [
+        'formatted_nominal',
+        'tanggal_pembayaran'
+    ];
     /**
      * Accessor
      */
+    public function nominal(): Attribute
+    {
+        return Attribute::make(
+            get: fn($value) => intval($value),
+            set: fn($value) => floatval($value)
+        );
+    }
     public function formattedNominal(): Attribute
     {
         return Attribute::make(
             get: fn() => "Rp " . number_format($this->nominal ?? 0, 0, ",", ".")
+        );
+    }
+    public function formattedTanggalPembayaran(): Attribute
+    {
+        return Attribute::make(
+            get: fn() => $this->tanggal_pembayaran->format('d F Y')
         );
     }
 }

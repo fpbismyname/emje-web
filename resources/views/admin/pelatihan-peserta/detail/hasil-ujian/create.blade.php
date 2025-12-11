@@ -24,26 +24,9 @@
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Nilai ujian</legend>
                 <input type="number" name="nilai" required value="{{ old('nilai') }}" min="1" max="100"
-                    class="input validator w-full">
+                    step="0.01" class="input validator w-full">
                 <p class="validator-hint hidden text-error">Nilai ujian wajib diisi.</p>
                 @error('nilai')
-                    <p class="text-error">{{ $message }}</p>
-                @enderror
-            </fieldset>
-
-            {{-- Status ujian --}}
-            <fieldset class="fieldset">
-                <legend class="fieldset-legend">Status ujian</legend>
-                <select name="status" required class="select validator w-full">
-                    <option value="" selected disabled>Pilih status</option>
-                    @foreach (App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum::cases() as $status)
-                        <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>
-                            {{ $status->label() }}
-                        </option>
-                    @endforeach
-                </select>
-                <p class="validator-hint hidden text-error">Sesi gelombang wajib dipilih.</p>
-                @error('status')
                     <p class="text-error">{{ $message }}</p>
                 @enderror
             </fieldset>

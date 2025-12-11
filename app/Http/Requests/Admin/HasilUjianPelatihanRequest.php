@@ -22,11 +22,9 @@ class HasilUjianPelatihanRequest extends FormRequest
      */
     public function rules(): array
     {
-        $enum_status_hasil_ujian = implode(",", StatusHasilUjianPelatihanEnum::getValues());
         return [
             'nama_materi' => ['required', 'string'],
             'nilai' => ['required', 'numeric', 'min:1', 'max:100'],
-            'status' => ['required', "in:$enum_status_hasil_ujian"]
         ];
     }
 }

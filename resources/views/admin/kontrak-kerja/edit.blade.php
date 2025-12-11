@@ -1,5 +1,6 @@
 <x-layouts.admin-app title="Edit kontrak kerja">
-    <form action="{{ route('admin.kontrak-kerja.update', $kontrak_kerja->id) }}" method="POST" class="space-y-4">
+    <form action="{{ route('admin.kontrak-kerja.update', $kontrak_kerja->id) }}" method="POST" class="space-y-4"
+        enctype="multipart/form-data">
         @csrf
         @method('put')
 
@@ -79,6 +80,30 @@
                 @enderror
             </fieldset>
 
+            {{-- Kategori kontrak kerja --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Kategori kontrak kerja</legend>
+                <select name="kategori_kontrak_kerja" required class="select validator w-full">
+                    <option value=""
+                        {{ old('kategori_kontrak_kerja', $kontrak_kerja->kategori_kontrak_kerja->value) ? '' : 'selected' }}
+                        disabled>Pilih
+                        kategori kontrak kerja
+                    </option>
+                    @foreach (App\Enums\Pelatihan\KategoriPelatihanEnum::cases() as $kategori)
+                        <option value="{{ $kategori->value }}"
+                            {{ old('kategori_kontrak_kerja') == $kategori->value ? 'selected' : '' }}>
+                            {{ $kategori->label() }}
+                        </option>
+                    @endforeach
+                </select>
+                <p class="validator-hint hidden text-error">
+                    Kategori kontrak kerja wajib dipilih.
+                </p>
+                @error('kategori_kontrak_kerja')
+                    <p class="text-error">{{ $message }}</p>
+                @enderror
+            </fieldset>
+
             {{-- Durasi Kontrak Kerja --}}
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Durasi Kontrak Kerja (Tahun)</legend>
@@ -123,6 +148,18 @@
                         <p class="text-error">{{ $message }}</p>
                     @enderror
                 </div>
+            </fieldset>
+
+            {{-- Surat kontrak --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Surat kontrak (Upload untuk mengganti surat kontrak)</legend>
+                <input type="file" name="surat_kontrak" class="file-input w-full validator" />
+                <p class="validator-hint hidden">
+                    Surat kontrak wajib dilampirkan
+                </p>
+                @error('surat_kontrak')
+                    <p class="text-error text-sm">{{ $message }}</p>
+                @enderror
             </fieldset>
         </div>
 

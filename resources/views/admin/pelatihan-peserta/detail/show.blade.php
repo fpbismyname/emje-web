@@ -34,6 +34,12 @@
             <p class="py-2">{{ $pelatihan_peserta->status->label() }}</p>
         </fieldset>
 
+        {{-- Sesi gelombang --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Sesi gelombang</legend>
+            <p class="py-2">{{ $pelatihan_peserta->gelombang_pelatihan->sesi->label() }}</p>
+        </fieldset>
+
         {{-- Gelombang pelatihan --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Gelombang pelatihan</legend>
@@ -50,14 +56,19 @@
             <div class="flex flex-col gap-4">
                 @foreach ($pelatihan_peserta->gelombang_pelatihan->jadwal_ujian_pelatihan as $jadwal_ujian)
                     <div class="flex flex-col gap-6 rounded-box bg-base-200 p-4">
-                        <div class="flex flex-col gap-2">
-                            <p>{{ $jadwal_ujian->nama_ujian }}</p>
-                            <small>{{ $jadwal_ujian->formatted_tanggal_mulai }} -
-                                {{ $jadwal_ujian->formatted_tanggal_selesai }}</small>
-                            @if (!$pelatihan_peserta->status_lulus)
-                                <a href="{{ route('admin.pelatihan-peserta.detail.jadwal-ujian.hasil-ujian.create', [$profil_user->id, $pelatihan_peserta->id, $jadwal_ujian->id]) }}"
-                                    class="text-sm link link-hover link-primary w-fit">Tambah hasil ujian</a>
-                            @endif
+                        <div class="flex flex-row gap-2 justify-between flex-wrap">
+                            <div class="flex flex-col gap-2">
+                                <p>{{ $jadwal_ujian->nama_ujian }}</p>
+                                <small>{{ $jadwal_ujian->formatted_tanggal_mulai }} -
+                                    {{ $jadwal_ujian->formatted_tanggal_selesai }}</small>
+                                <div class="badge badge-primary badge-sm">{{ $jadwal_ujian->status->label() }}</div>
+                            </div>
+                            <div class="flex flex-row gap-2">
+                                @if (!$pelatihan_peserta->status_lulus)
+                                    <a href="{{ route('admin.pelatihan-peserta.detail.jadwal-ujian.hasil-ujian.create', [$profil_user->id, $pelatihan_peserta->id, $jadwal_ujian->id]) }}"
+                                        class="btn btn-primary">Tambah hasil ujian</a>
+                                @endif
+                            </div>
                         </div>
                         <x-ui.table>
                             <thead>
@@ -136,7 +147,7 @@
     {{-- Action  --}}
     <div class="grid place-items-center">
         <div class="flex flex-row gap-2">
-            <a href="{{ route('admin.pelatihan-peserta.show', [$profil_user->id]) }}"
+            <a href="{{ route('client.pelatihan.pelatihan-diikuti.index', [$profil_user->id]) }}"
                 class="btn btn-neutral">Kembali</a>
         </div>
     </div>

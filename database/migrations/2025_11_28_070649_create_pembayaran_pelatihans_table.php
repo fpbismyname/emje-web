@@ -15,7 +15,7 @@ return new class extends Migration {
             $table->decimal('nominal', 15, 2);
             $table->string('status');
             $table->string('jenis_pembayaran');
-            $table->string('bukti_pembayaran');
+            $table->string('bukti_pembayaran')->nullable();
             $table->text('catatan')->nullable();
             $table->dateTime('tanggal_pembayaran');
             $table->timestamps();

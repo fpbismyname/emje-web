@@ -9,7 +9,6 @@ enum StatusPendaftaranPelatihanEnum: string
     case DITERIMA = 'diterima';
     case DITOLAK = 'ditolak';
     case DALAM_PROSES = 'dalam_proses';
-    case MENUNGGU_DP = 'menunggu_dp';
     case DIBATALKAN = 'dibatalkan';
     public function label()
     {
@@ -17,7 +16,7 @@ enum StatusPendaftaranPelatihanEnum: string
     }
     public static function cases_review()
     {
-        return collect(self::cases())->filter(fn($case) => in_array($case, [self::DITERIMA, self::DITOLAK, self::MENUNGGU_DP]))->toArray();
+        return collect(self::cases())->filter(fn($case) => in_array($case, [self::DITERIMA, self::DITOLAK]))->toArray();
     }
     public static function getValues($type = null)
     {

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\HasilUjianPelatihanRequest;
 use App\Models\HasilUjianPelatihan;
@@ -30,6 +31,18 @@ class HasilUjianPelatihanController extends Controller
     ) {
         $store_entries = $request->validated();
         $jadwal_ujian = $jadwal_ujian_pelatihan_model->findOrFail($id_jadwal_ujian);
+
+        $nilai_ujian = $store_entries['nilai'];
+        $min = config('rules-lpk.nilai_ujian.remedial_minimum');
+
+        if ($nilai_ujian < $min) {
+            $store_entries['status'] = StatusHasilUjianPelatihanEnum::TIDAK_LULUS;
+        } elseif ($nilai_ujian == $min) {
+            $store_entries['status'] = StatusHasilUjianPelatihanEnum::REMEDIAL;
+        } else {
+            $store_entries['status'] = StatusHasilUjianPelatihanEnum::LULUS;
+        }
+
         $create_hasil_ujian = $jadwal_ujian->hasil_ujian_pelatihan()->create($store_entries);
 
         if ($create_hasil_ujian->wasRecentlyCreated) {
@@ -64,6 +77,17 @@ class HasilUjianPelatihanController extends Controller
         $update_entries = $request->validated();
         $jadwal_ujian = $jadwal_ujian_pelatihan_model->findOrFail($id_jadwal_ujian);
         $hasil_ujian = $jadwal_ujian->hasil_ujian_pelatihan()->findOrFail($id_hasil_ujian);
+
+        $nilai_ujian = $update_entries['nilai'];
+        $min = config('rules-lpk.nilai_ujian.remedial_minimum');
+
+        if ($nilai_ujian < $min) {
+            $store_entries['status'] = StatusHasilUjianPelatihanEnum::TIDAK_LULUS;
+        } elseif ($nilai_ujian == $min) {
+            $store_entries['status'] = StatusHasilUjianPelatihanEnum::REMEDIAL;
+        } else {
+            $store_entries['status'] = StatusHasilUjianPelatihanEnum::LULUS;
+        }
 
         $hasil_ujian->update($update_entries);
 

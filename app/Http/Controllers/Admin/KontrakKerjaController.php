@@ -8,6 +8,8 @@ use App\Http\Requests\Admin\KontrakKerjaRequest;
 use App\Models\KontrakKerja;
 use App\Services\Utils\Toast;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class KontrakKerjaController extends Controller
 {
@@ -46,7 +48,34 @@ class KontrakKerjaController extends Controller
     public function store(KontrakKerjaRequest $request, KontrakKerja $kontrak_kerja_model)
     {
         $create_entries = $request->validated();
+
+        // Upload files
+        $uploadedFiles = [
+            'surat_kontrak' => $request->file('surat_kontrak'),
+        ];
+
+        $private_storage = Storage::disk('local');
+
+        $path_uploaded_file = [];
+
+        foreach ($uploadedFiles as $key => $file) {
+            if ($file) {
+                $ext = $file->getClientOriginalExtension();
+                $safeName = Str::slug($create_entries['nama_perusahaan']);
+
+                $fileName = "{$key}_{$safeName}." . $ext;
+
+                $path_uploaded_file[$key] = $private_storage->putFileAs("kontrak_kerja/surat_kontrak/{$key}", $file, $fileName);
+            }
+        }
+
+        // set path
+        foreach ($path_uploaded_file as $key => $value) {
+            $create_entries[$key] = $value;
+        }
+
         $kontrak_kerja = $kontrak_kerja_model->create($create_entries);
+
         if ($kontrak_kerja->wasRecentlyCreated) {
             Toast::success("Data kontrak kerja {$kontrak_kerja->nama_perusahaan} berhasil ditambahkan.");
         } else {
@@ -75,18 +104,44 @@ class KontrakKerjaController extends Controller
         return view('admin.kontrak-kerja.edit', $payload);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(KontrakKerjaRequest $request, string $id, KontrakKerja $kontrak_kerja_model)
     {
         $update_entries = $request->validated();
         $kontrak_kerja = $kontrak_kerja_model->findOrFail($id);
-        $kontrak_kerja->update($update_entries);
-        if ($kontrak_kerja->wasChanged()) {
+
+        // Upload files
+        $uploadedFiles = [
+            'surat_kontrak' => $request->file('surat_kontrak'),
+        ];
+
+        $private_storage = Storage::disk('local');
+
+        $path_uploaded_file = [];
+
+        foreach ($uploadedFiles as $key => $file) {
+            if ($file) {
+
+                if ($private_storage->exists($kontrak_kerja?->{$key})) {
+                    $private_storage->delete($kontrak_kerja->{$key});
+                }
+
+                $ext = $file->getClientOriginalExtension();
+                $safeName = Str::slug($update_entries['nama_perusahaan']);
+
+                $fileName = "{$key}_{$safeName}." . $ext;
+
+                $path_uploaded_file[$key] = $private_storage->putFileAs("kontrak_kerja/{$key}", $file, $fileName);
+            }
+        }
+
+        foreach ($path_uploaded_file as $key => $value) {
+            $update_entries[$key] = $value;
+        }
+
+        $update_kontrak = $kontrak_kerja->update($update_entries);
+
+        if ($update_kontrak) {
             Toast::success("Data kontrak kerja {$kontrak_kerja->nama_perusahaan} berhasil diperbarui.");
-        } elseif (empty($kontrak_kerja->getChanges())) {
-            Toast::info('Tidak ada perubahan yang dilakukan.');
         } else {
             Toast::error('Terjadi kesalahan.');
         }

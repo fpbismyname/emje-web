@@ -26,6 +26,12 @@
             <legend class="fieldset-legend">Maksimal pelamar</legend>
             <p>{{ $kontrak_kerja->maksimal_pelamar }}</p>
         </fieldset>
+        {{-- Surat kontrak --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Surat kontrak</legend>
+            <a target="_blank" href="{{ route('storage.private.show', ['file' => $kontrak_kerja->surat_kontrak]) }}"
+                class="link link-hover link-primary">Lihat selengkapnya</a>
+        </fieldset>
         {{-- Deskripsi --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Deskripsi</legend>

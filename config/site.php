@@ -40,5 +40,12 @@ return [
         'phone' => '+62 812-3456-7890',
         'address' => 'Jl. Raya Cianjur No. 123, Cianjur, Jawa Barat',
         'whatsapp' => 'https://wa.me/0826286347862'
-    ]
+    ],
+    'prosedur_pengajuan_surat_kontrak' => <<<TEXT
+    Prosedur pengajuan kontrak kerja
+    - Download surat kontrak kerja.
+    - Pastikan kualifikasi pelatihan anda sesuai dengan kategori kontrak kerja.
+    - Edit surat pengajuan kontrak kerja, Isi nama dan tanda tangan anda.
+    - Kirim surat pengajuan kontrak kerja pada form dibawah.
+    TEXT
 ];

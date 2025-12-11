@@ -32,7 +32,8 @@ class PendaftaranPelatihan extends Model
         'catatan',
         'tanggal_pembayaran',
         'users_id',
-        'pelatihan_id'
+        'pelatihan_id',
+        'gelombang_pelatihan_id'
     ];
     /**
      * The attributes that should be cast to native types.
@@ -65,9 +66,21 @@ class PendaftaranPelatihan extends Model
     {
         return $this->hasMany(PembayaranPelatihan::class, 'pendaftaran_pelatihan_id');
     }
+    public function pembayaran_pelatihan_lunas()
+    {
+        return $this->hasMany(PembayaranPelatihan::class, 'pendaftaran_pelatihan_id')->where('status', StatusPembayaranPelatihanEnum::SUDAH_BAYAR);
+    }
     public function pembayaran_pelatihan_dp()
     {
         return $this->hasOne(PembayaranPelatihan::class, 'pendaftaran_pelatihan_id')->latest('tanggal_pembayaran')->search_by_column('jenis_pembayaran', JenisPembayaranEnum::DP);
+    }
+    public function pembayaran_pelatihan_cash()
+    {
+        return $this->hasOne(PembayaranPelatihan::class, 'pendaftaran_pelatihan_id')->latest('tanggal_pembayaran')->search_by_column('jenis_pembayaran', JenisPembayaranEnum::CASH);
+    }
+    public function gelombang_pelatihan()
+    {
+        return $this->belongsTo(GelombangPelatihan::class, 'gelombang_pelatihan_id');
     }
     /**
      * Scope
@@ -120,7 +133,9 @@ class PendaftaranPelatihan extends Model
         'pelatihan_kategori_pelatihan',
         'pelatihan_deskripsi_pelatihan',
         'pembayaran_pelatihan_lunas',
-        'layak_diterima'
+        'layak_diterima',
+        'formatted_total_biaya_terbayar',
+        'decimal_total_biaya_terbayar',
     ];
     /**
      * Accessor
@@ -186,12 +201,26 @@ class PendaftaranPelatihan extends Model
     {
         $total_biaya = $this->pelatihan->nominal_biaya;
         $dp_terbayar = $this->pembayaran_pelatihan_dp?->nominal ?? 0;
-        $angsuran_terbayar = $this->pembayaran_pelatihan()->where('jenis_pembayaran', JenisPembayaranEnum::ANGSURAN)->sum('nominal');
-        $pelunasan_terbayar = $this->pembayaran_pelatihan()->where('jenis_pembayaran', JenisPembayaranEnum::PELUNASAN)->sum('nominal');
-        $total_terbayar = $dp_terbayar + $angsuran_terbayar + $pelunasan_terbayar;
+        $angsuran_terbayar = $this->pembayaran_pelatihan_lunas()->where('jenis_pembayaran', JenisPembayaranEnum::ANGSURAN)->sum('nominal');
+        $cash_terbayar = $this->pembayaran_pelatihan_cash?->nominal ?? 0;
+        $total_terbayar = $dp_terbayar + $angsuran_terbayar + $cash_terbayar;
 
         return Attribute::make(
             get: fn() => $total_terbayar >= $total_biaya
+        );
+    }
+    public function decimalTotalBiayaTerbayar(): Attribute
+    {
+        $total_biaya_terbayar = $this->pembayaran_pelatihan()->where('status', StatusPembayaranPelatihanEnum::SUDAH_BAYAR)->sum('nominal');
+        return Attribute::make(
+            get: fn() => $total_biaya_terbayar
+        );
+    }
+    public function formattedTotalBiayaTerbayar(): Attribute
+    {
+        $total_biaya_terbayar = $this->pembayaran_pelatihan()->where('status', StatusPembayaranPelatihanEnum::SUDAH_BAYAR)->sum('nominal');
+        return Attribute::make(
+            get: fn() => "Rp " . number_format($total_biaya_terbayar, 0, ",", ".")
         );
     }
 }

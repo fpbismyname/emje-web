@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('pengajuan_kontrak_kerja', function (Blueprint $table) {
             $table->id();
-            $table->string('surat_lamaran');
+            $table->string('surat_pengajuan_kontrak');
             $table->string('status');
             $table->string('catatan')->nullable();
             $table->timestamps();

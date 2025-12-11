@@ -2,14 +2,17 @@
 
 namespace App\Console\Commands;
 
+use App\Enums\Pelatihan\JenisPembayaranEnum;
 use App\Enums\Pelatihan\SesiGelombangPelatihanEnum;
 use App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum;
 use App\Enums\Pelatihan\StatusJadwalUjianPelatihanEnum;
 use App\Enums\Pelatihan\StatusPelatihanPesertaEnum;
+use App\Enums\Pelatihan\StatusPembayaranPelatihanEnum;
 use App\Models\GelombangPelatihan;
 use App\Models\HasilUjianPelatihan;
 use App\Models\JadwalUjianPelatihan;
 use App\Models\PelatihanPeserta;
+use App\Models\PembayaranPelatihan;
 use App\Models\User;
 use Illuminate\Console\Command;
 
@@ -34,56 +37,122 @@ class status_data extends Command
      */
     public function handle()
     {
-        $gelombang_pelatihan = GelombangPelatihan::query()->get();
-        $jadwal_ujian_pelatihan = JadwalUjianPelatihan::query()->get();
-        $list_pelatihan_peserta = PelatihanPeserta::query()->get();
+        $now = now();
 
-        foreach ($gelombang_pelatihan as $gelombang) {
-            match (true) {
-                $gelombang->tanggal_selesai < now() => $gelombang->update(['sesi' => SesiGelombangPelatihanEnum::SELESAI]),
-                $gelombang->tanggal_mulai > now() => $gelombang->update(['sesi' => SesiGelombangPelatihanEnum::PENDAFTARAN]),
-                $gelombang->tanggal_mulai < now() && $gelombang->tanggal_selesai > now() => $gelombang->update(['sesi' => SesiGelombangPelatihanEnum::BERLANGSUNG]),
-                default => null
-            };
+        /**
+         * 1. Update status gelombang pelatihan
+         */
+        GelombangPelatihan::query()->chunk(100, function ($items) use ($now) {
+            foreach ($items as $gelombang) {
 
-            foreach ($jadwal_ujian_pelatihan as $jadwal_ujian) {
-                match (true) {
-                    $jadwal_ujian->tanggal_selesai <= now() => $jadwal_ujian->update(['status' => StatusJadwalUjianPelatihanEnum::SELESAI]),
-                    $jadwal_ujian->tanggal_mulai >= now() => $jadwal_ujian->update(['status' => StatusJadwalUjianPelatihanEnum::TERJADWAL]),
-                    $jadwal_ujian->tanggal_mulai <= now() && $jadwal_ujian->tanggal_selesai >= now() => $jadwal_ujian->update(['status' => StatusJadwalUjianPelatihanEnum::BERLANGSUNG]),
-                    default => null
-                };
-                $data_ujian = HasilUjianPelatihan::where('jadwal_ujian_pelatihan_id', $jadwal_ujian->id)->get();
-                $pelatihan_peserta = PelatihanPeserta::where('gelombang_pelatihan_id', $gelombang->id)->first();
-                if ($gelombang->sesi === SesiGelombangPelatihanEnum::SELESAI) {
-                    foreach ($data_ujian as $hasil_ujian) {
-                        match (true) {
-                            $hasil_ujian->nilai >= config('rules-lpk.nilai_ujian.remedial_minimum') && $hasil_ujian->nilai <= config('rules-lpk.nilai_ujian.remedial_maximum') => $hasil_ujian->update(['status' => StatusHasilUjianPelatihanEnum::REMEDIAL]),
-                            $hasil_ujian->nilai < config('rules-lpk.nilai_ujian.remedial_minimum') => $hasil_ujian->update(['status' => StatusHasilUjianPelatihanEnum::TIDAK_LULUS]),
-                            $hasil_ujian->nilai > config('rules-lpk.nilai_ujian.remedial_maximum') => $hasil_ujian->update(['status' => StatusHasilUjianPelatihanEnum::LULUS]),
-                            default => null
-                        };
-                    }
+                if ($now->lte($gelombang->tanggal_mulai)) {
+                    $newSesi = SesiGelombangPelatihanEnum::PENDAFTARAN;
 
-                    $hasil_ujian_bagus = $data_ujian->each(fn($hasil) => $hasil->status === StatusHasilUjianPelatihanEnum::LULUS);
+                }
+                if ($now->between($gelombang->tanggal_mulai, $gelombang->tanggal_selesai)) {
+                    $newSesi = SesiGelombangPelatihanEnum::BERLANGSUNG;
 
-                    match (true) {
-                        $hasil_ujian_bagus && $gelombang->status === SesiGelombangPelatihanEnum::SELESAI => $pelatihan_peserta->update(['status' => StatusPelatihanPesertaEnum::LULUS]),
-                        !$hasil_ujian_bagus && $gelombang->status === SesiGelombangPelatihanEnum::SELESAI => $pelatihan_peserta->update(['status' => StatusPelatihanPesertaEnum::TIDAK_LULUS]),
-                        default => null
-                    };
+                }
+                if ($now->gte($gelombang->tanggal_selesai)) {
+                    // berarti $now > tanggal_selesai
+                    $newSesi = SesiGelombangPelatihanEnum::SELESAI;
+                }
+
+                if ($gelombang->sesi !== $newSesi) {
+                    $gelombang->update(['sesi' => $newSesi]);
+                }
+
+            }
+        });
+
+        JadwalUjianPelatihan::query()->chunk(100, function ($items) use ($now) {
+            foreach ($items as $jadwal) {
+                if ($now->lt($jadwal->tanggal_mulai)) {
+                    $new = StatusJadwalUjianPelatihanEnum::TERJADWAL;
+                } elseif ($now->between($jadwal->tanggal_mulai, $jadwal->tanggal_selesai)) {
+                    $new = StatusJadwalUjianPelatihanEnum::BERLANGSUNG;
+                } else {
+                    $new = StatusJadwalUjianPelatihanEnum::SELESAI;
+                }
+
+                if ($jadwal->status !== $new) {
+                    $jadwal->update(['status' => $new]);
                 }
             }
-        }
+        });
 
-        foreach ($list_pelatihan_peserta as $pelatihan) {
-            if ($pelatihan->status === StatusPelatihanPesertaEnum::LULUS && !$pelatihan->sertifikasi) {
-                $pelatihan->sertifikasi()->create([
-                    'nomor_sertifikat' => config('rules-lpk.prefix-sertifikasi') . now()->format('Y-m-d') . $pelatihan->id,
-                    'tanggal_terbit' => now()
-                ]);
+        HasilUjianPelatihan::query()->chunk(100, function ($items) {
+            foreach ($items as $hasil) {
+
+                $min = config('rules-lpk.nilai_ujian.remedial_minimum');
+
+                if ($hasil->nilai < $min) {
+                    $new = StatusHasilUjianPelatihanEnum::TIDAK_LULUS;
+                } elseif ($hasil->nilai == $min) {
+                    $new = StatusHasilUjianPelatihanEnum::REMEDIAL;
+                } else {
+                    $new = StatusHasilUjianPelatihanEnum::LULUS;
+                }
+
+                if ($hasil->status !== $new) {
+                    $hasil->update(['status' => $new]);
+                }
             }
-        }
+        });
+
+
+        PelatihanPeserta::query()
+            ->with('hasil_ujian_pelatihan')
+            ->where('status', StatusPelatihanPesertaEnum::BERLANGSUNG)
+            ->chunk(100, function ($items) {
+                foreach ($items as $peserta) {
+
+                    $jadwal_ujian_selesai = $peserta->gelombang_pelatihan->jadwal_ujian_pelatihan()->get()->every(fn($q) => $q->status === StatusJadwalUjianPelatihanEnum::SELESAI);
+
+                    if ($peserta->gelombang_pelatihan->sesi === SesiGelombangPelatihanEnum::SELESAI && $jadwal_ujian_selesai) {
+                        if ($peserta->hasil_ujian_pelatihan->isEmpty())
+                            continue;
+
+                        $semuaLulus = $peserta->hasil_ujian_pelatihan
+                            ->every(fn($h) => $h->status === StatusHasilUjianPelatihanEnum::LULUS);
+
+                        $peserta->update([
+                            'status' => $semuaLulus
+                                ? StatusPelatihanPesertaEnum::LULUS
+                                : StatusPelatihanPesertaEnum::TIDAK_LULUS
+                        ]);
+                    }
+                }
+            });
+
+
+        PelatihanPeserta::where('status', StatusPelatihanPesertaEnum::LULUS)
+            ->doesntHave('sertifikasi')
+            ->get()
+            ->each(function ($peserta) {
+                $peserta->sertifikasi()->create([
+                    'nomor_sertifikat' => config('rules-lpk.prefix-sertifikasi') . now()->format('Y-m-d') . $peserta->id,
+                    'tanggal_terbit' => now(),
+                ]);
+            });
+
+        PembayaranPelatihan::query()
+            ->where('jenis_pembayaran', JenisPembayaranEnum::ANGSURAN)
+            ->chunk(100, function ($items) {
+                foreach ($items as $angsuran) {
+
+                    $newStatus = $angsuran->bukti_pembayaran
+                        ? StatusPembayaranPelatihanEnum::SUDAH_BAYAR
+                        : StatusPembayaranPelatihanEnum::BELUM_BAYAR;
+
+                    if ($angsuran->status !== $newStatus) {
+                        $angsuran->update(['status' => $newStatus]);
+                    }
+                }
+            });
+
+
+
 
         $this->info('Status data updated successfully.');
     }

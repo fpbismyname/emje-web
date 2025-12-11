@@ -27,18 +27,19 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale(config('app.locale'));
 
         // Gate policies
-        // Admin
+        // User
         Gate::define('manage-user', fn($authed_user, $user) => in_array($authed_user->role, [RoleEnum::ADMIN]) || $authed_user->id === $user->id);
-        Gate::define('manage-kontrak-kerja', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
+        // Pelatihan
         Gate::define('manage-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
-        Gate::define('manage-jadwal-ujian-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
-        Gate::define('manage-hasil-ujian-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
-        Gate::define('manage-kontrak-kerja-peserta', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
-        Gate::define('manage-gelombang-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
-        // Bendahara
-        Gate::define('manage-rekening', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::BENDAHARA]));
-        // Pengelola pendaftaran
         Gate::define('manage-pendaftaran-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
+        Gate::define('manage-gelombang-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
+        Gate::define('manage-jadwal-ujian-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
+        Gate::define('manage-hasil-ujian-pelatihan', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
+        // Kontrak kerja
+        Gate::define('manage-kontrak-kerja', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
+        Gate::define('manage-kontrak-kerja-peserta', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN]));
         Gate::define('manage-pengajuan-kontrak-kerja', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::PENGELOLA_PENDAFTARAN]));
+        // Rekening
+        Gate::define('manage-rekening', fn($authed_user) => in_array($authed_user->role, [RoleEnum::ADMIN, RoleEnum::BENDAHARA]));
     }
 }

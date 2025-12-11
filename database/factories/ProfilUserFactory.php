@@ -42,7 +42,7 @@ class ProfilUserFactory extends Factory
             $user = User::factory()->create([
                 'name' => $profil_user->nama_lengkap,
                 'email' => Str::of($profil_user->nama_lengkap)->lower()->replace(" ", "_") . "@gmail.com",
-                'password' => Str::of($profil_user->nama_lengkap)->lower()->replace(" ", "_") . "123",
+                'password' => "password",
                 'role' => RoleEnum::PESERTA
             ]);
             $profil_user->users_id = $user->id;

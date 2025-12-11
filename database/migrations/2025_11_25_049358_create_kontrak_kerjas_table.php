@@ -15,10 +15,12 @@ return new class extends Migration {
             $table->string('nama_perusahaan');
             $table->decimal('gaji_terendah', 15, 2);
             $table->decimal('gaji_tertinggi', 15, 2);
+            $table->text('surat_kontrak')->nullable();
             $table->string('status');
             $table->integer('maksimal_pelamar');
             $table->text('deskripsi');
             $table->integer('durasi_kontrak_kerja');
+            $table->string('kategori_kontrak_kerja');
             $table->timestamps();
         });
     }

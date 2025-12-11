@@ -193,6 +193,7 @@ entity pendaftaran_pelatihan{
     *id : Bigint
     -users_id: Bigint
     -pelatihan_id: Bigint
+    -gelombang_pelatihan_id: Bigint
     ===
     -status : StatusPendaftaranPelatihan
     -skema_pembayaran : SkemaPembayaranPendaftaranPelatihan
@@ -270,6 +271,7 @@ entity kontrak_kerja{
     -deskripsi : Text
     -status : StatusKontrakKerja
     -durasi_kontrak_keja : Int
+    -kategori_kontrak_kerja : KategoriPelatihan
 }
 
 entity kontrak_kerja_diikuti{
@@ -306,6 +308,7 @@ users ||--o{ profil_user
 ' Flow relation pelatihan
 users ||--o{ pendaftaran_pelatihan
 pendaftaran_pelatihan ||--|| pelatihan_diikuti
+pendaftaran_pelatihan ||--|| gelombang_pelatihan
 pelatihan ||--o{ pendaftaran_pelatihan
 pelatihan ||--o{ gelombang_pelatihan
 pendaftaran_pelatihan ||--|| pembayaran_pelatihan

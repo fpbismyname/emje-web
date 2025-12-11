@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
 class HasilUjianPelatihan extends Model

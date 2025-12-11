@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 enum JenisPembayaranEnum: string
 {
-    case PELUNASAN = 'pelunasan';
+    case CASH = 'cash';
     case ANGSURAN = 'angsuran';
     case DP = 'dp';
     public function label()

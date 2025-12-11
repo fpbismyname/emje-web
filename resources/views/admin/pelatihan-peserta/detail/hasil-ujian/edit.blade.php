@@ -24,36 +24,27 @@
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Nilai ujian</legend>
                 <input type="number" name="nilai" required value="{{ old('nilai', $hasil_ujian_pelatihan->nilai) }}"
-                    min="1" max="100" class="input validator w-full">
+                    step="0.01" min="1" max="100" class="input validator w-full">
                 <p class="validator-hint hidden text-error">Nilai ujian wajib diisi.</p>
                 @error('nilai')
                     <p class="text-error">{{ $message }}</p>
                 @enderror
             </fieldset>
 
+
             {{-- Status ujian --}}
             <fieldset class="fieldset">
-                <legend class="fieldset-legend">Status ujian</legend>
-                <select name="status" required class="select validator w-full">
-                    <option value="" selected disabled>Pilih status</option>
-                    @foreach (App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum::cases() as $status)
-                        <option value="{{ $status->value }}"
-                            {{ old('status', $hasil_ujian_pelatihan->status->value) == $status->value ? 'selected' : '' }}>
-                            {{ $status->label() }}
-                        </option>
-                    @endforeach
-                </select>
-                <p class="validator-hint hidden text-error">Sesi gelombang wajib dipilih.</p>
-                @error('status')
-                    <p class="text-error">{{ $message }}</p>
-                @enderror
+                <legend class="fieldset-legend">Nilai ujian</legend>
+                <p>{{ $hasil_ujian_pelatihan->status->label() }}</p>
             </fieldset>
+
+
         </div>
 
         {{-- Action  --}}
         <div class="grid place-items-center">
             <div class="flex flex-row gap-2">
-                <button type="submit" class="btn btn-primary">Tambah</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
                 <a href="{{ route('admin.pelatihan-peserta.detail.show', [$id_profil_user, $id_pelatihan_peserta]) }}"
                     class="btn btn-neutral">Kembali</a>
             </div>

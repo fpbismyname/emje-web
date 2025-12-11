@@ -22,6 +22,12 @@ return [
                 'roles' => ['peserta']
             ],
             [
+                'label' => 'Pembayaran pelatihan',
+                'icon' => 'coins',
+                'route_name' => 'pembayaran-pelatihan.index',
+                'roles' => ['peserta']
+            ],
+            [
                 'label' => 'Pendaftaran pelatihan',
                 'icon' => 'file-user',
                 'route_name' => 'pendaftaran-pelatihan.index',

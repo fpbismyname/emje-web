@@ -1,8 +1,7 @@
 <x-layouts.admin-app title="Tambah kontrak kerja">
-    <form action="{{ route('admin.kontrak-kerja.store') }}" method="POST" class="space-y-4">
+    <form action="{{ route('admin.kontrak-kerja.store') }}" method="POST" class="space-y-4" enctype="multipart/form-data">
         @csrf
         @method('post')
-
         {{-- Data kontrak kerja --}}
         <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
             {{-- Nama Perusahaan --}}
@@ -75,6 +74,28 @@
                 @enderror
             </fieldset>
 
+            {{-- Kategori kontrak kerja --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Kategori kontrak kerja</legend>
+                <select name="kategori_kontrak_kerja" required class="select validator w-full">
+                    <option value="" {{ old('kategori_kontrak_kerja') ? '' : 'selected' }} disabled>Pilih
+                        kategori kontrak kerja
+                    </option>
+                    @foreach (App\Enums\Pelatihan\KategoriPelatihanEnum::cases() as $kategori)
+                        <option value="{{ $kategori->value }}"
+                            {{ old('kategori_kontrak_kerja') == $kategori->value ? 'selected' : '' }}>
+                            {{ $kategori->label() }}
+                        </option>
+                    @endforeach
+                </select>
+                <p class="validator-hint hidden text-error">
+                    Kategori kontrak kerja wajib dipilih.
+                </p>
+                @error('kategori_kontrak_kerja')
+                    <p class="text-error">{{ $message }}</p>
+                @enderror
+            </fieldset>
+
             {{-- Durasi Kontrak Kerja --}}
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Durasi Kontrak Kerja (Tahun)</legend>
@@ -94,8 +115,8 @@
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Maksimal pelamar</legend>
                 <div class="form-control">
-                    <input type="number" name="maksimal_pelamar" required min="1"
-                        class="input validator w-full" />
+                    <input type="number" name="maksimal_pelamar" required min="1" class="input validator w-full"
+                        value="{{ old('maksimal_pelamar') }}" />
                     <p class="validator-hint hidden text-error">
                         Maksimal pelamar kerja wajib diisi.
                     </p>
@@ -117,6 +138,18 @@
                         <p class="text-error">{{ $message }}</p>
                     @enderror
                 </div>
+            </fieldset>
+
+            {{-- Surat kontrak --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Surat kontrak</legend>
+                <input type="file" name="surat_kontrak" class="file-input w-full validator" required />
+                <p class="validator-hint hidden">
+                    Surat kontrak wajib dilampirkan
+                </p>
+                @error('surat_kontrak')
+                    <p class="text-error text-sm">{{ $message }}</p>
+                @enderror
             </fieldset>
         </div>
 

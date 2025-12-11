@@ -29,7 +29,7 @@ class PelatihanFactory extends Factory
         return [
             'nama_pelatihan' => Str::title($title),
             'nominal_biaya' => $biaya,
-            'persentasi_dp' => $this->faker->numberBetween(10, 20),
+            'persentase_dp' => $this->faker->numberBetween(10, 20),
             'durasi_pelatihan' => $durasi,
             'kategori_pelatihan' => $this->faker->randomElement($kategori_pelatihan),
             'deskripsi' => $this->faker->paragraphs(2, true),

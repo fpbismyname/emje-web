@@ -75,8 +75,8 @@ Route::prefix('/admin')->name('admin.')->group(function () {
 
         // Pengaturan
         Route::prefix('/pengaturan')->name('pengaturan.')->group(function () {
-            Route::get('/', [PengaturanController::class, 'edit'])->name('edit');
-            Route::put('/update-pengguna', [PengaturanController::class, 'update_pengguna'])->name('update-pengguna');
+            Route::get('/', [PengaturanController::class, 'admin_edit'])->name('edit');
+            Route::put('/update-pengguna', [PengaturanController::class, 'admin_update_pengguna'])->name('update-pengguna');
         });
 
     });

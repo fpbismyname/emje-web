@@ -26,6 +26,7 @@ class GelombangPelatihan extends Model
         'tanggal_selesai',
         'sesi',
         'maksimal_peserta',
+        'pelatihan_id',
     ];
     /**
      * The attributes that should be cast to native types.
@@ -51,6 +52,10 @@ class GelombangPelatihan extends Model
     public function jadwal_ujian_pelatihan()
     {
         return $this->hasMany(JadwalUjianPelatihan::class, 'gelombang_pelatihan_id');
+    }
+    public function pendaftaran_pelatihan()
+    {
+        return $this->hasOne(PendaftaranPelatihan::class, 'gelombang_pelatihan_id');
     }
     /**
      * Scope
