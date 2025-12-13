@@ -37,9 +37,9 @@ return [
     ],
     'contact' => [
         'email' => 'info@emjepandanjaya.id',
-        'phone' => '+62 812-3456-7890',
+        'phone' => '+6283181686431',
         'address' => 'Jl. Raya Cianjur No. 123, Cianjur, Jawa Barat',
-        'whatsapp' => 'https://wa.me/0826286347862'
+        'whatsapp' => 'https://wa.me/+6283181686431'
     ],
     'prosedur_pengajuan_surat_kontrak' => <<<TEXT
     Prosedur pengajuan kontrak kerja

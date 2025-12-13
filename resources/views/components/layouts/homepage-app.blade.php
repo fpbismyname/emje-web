@@ -25,11 +25,16 @@
                         </li>
                         @if (auth()->guest())
                             <li>
-                                <a href="{{ route('client.register') }}" class="btn btn-accent">Daftar sekarang</a>
+                                <a href="{{ route('client.register') }}" class="btn btn-accent">Daftar
+                                    sekarang</a>
+                            </li>
+                        @elseif(auth()->user()->is_client_user)
+                            <li>
+                                <a href="{{ route('client.dashboard.index') }}" class="btn btn-accent">Dashboard</a>
                             </li>
                         @else
                             <li>
-                                <a href="{{ route('client.dashboard.index') }}" class="btn btn-accent">Dashboard</a>
+                                <a href="{{ route('admin.dashboard.index') }}" class="btn btn-accent">Dashboard</a>
                             </li>
                         @endif
                     </ul>
@@ -59,11 +64,18 @@
                                 </li>
                                 @if (auth()->guest())
                                     <li>
-                                        <a href="" class="btn btn-accent">Daftar sekarang</a>
+                                        <a href="{{ route('client.register') }}" class="btn btn-accent">Daftar
+                                            sekarang</a>
+                                    </li>
+                                @elseif(auth()->user()->is_client_user)
+                                    <li>
+                                        <a href="{{ route('client.dashboard.index') }}"
+                                            class="btn btn-accent">Dashboard</a>
                                     </li>
                                 @else
                                     <li>
-                                        <a href="" class="btn btn-accent">Dashboard</a>
+                                        <a href="{{ route('admin.dashboard.index') }}"
+                                            class="btn btn-accent">Dashboard</a>
                                     </li>
                                 @endif
                             </ul>

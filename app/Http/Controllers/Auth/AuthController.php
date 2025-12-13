@@ -65,15 +65,26 @@ class AuthController extends Controller
     }
     public function client_submit_register(RegisterRequest $request, User $user_model)
     {
-        $users = $request->validated();
-        $users['password'] = Hash::make($users['password']);
-        $create_user = $user_model->create($users);
-        if ($create_user->wasRecentlyCreated) {
-            Toast::success('Pendaftaran berhasil. Silahkan login untuk melanjutkan.');
-            return redirect()->route('client.login');
-        }
-        Toast::error('Terjadi kesalahan.');
-        return redirect()->back()->withInput();
+        // $users = $request->validated();
+        // $users['password'] = Hash::make($users['password']);
+        // $create_user = $user_model->create($users);
+        // if ($create_user->wasRecentlyCreated) {
+        //     Toast::success('Pendaftaran berhasil. Silahkan login untuk melanjutkan.');
+        //     return redirect()->route('client.login');
+        // }
+        // Toast::error('Terjadi kesalahan.');
+        // return redirect()->back()->withInput();
+        $user = $request->validated();
+
+        $redirect_route = config('site.contact.whatsapp');
+
+        $message = urlencode(
+            "Halo admin,\n"
+            . "Saya ingin mengajukan pendaftaran untuk mengikuti pelatihan dan kontrak kerja.\n"
+            . "Nama: {$user['name']}\n"
+            . "Email: {$user['email']}"
+        );
+        return redirect("{$redirect_route}?text={$message}");
     }
     public function client_submit_logout(Request $request)
     {

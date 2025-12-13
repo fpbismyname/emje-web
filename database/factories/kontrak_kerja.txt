@@ -4,22 +4,30 @@ namespace Database\Factories;
 
 use App\Enums\KontrakKerja\StatusKontrakKerjaEnum;
 use App\Enums\Pelatihan\KategoriPelatihanEnum;
+use Arr;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
 
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\KontrakKerja>
+ */
 class KontrakKerjaFactory extends Factory
 {
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
     public function definition(): array
     {
-        // Salary range realistic
+
+        // Gaji bulanan dalam RUPIAH
         $min = $this->faker->numberBetween(12, 20) * 1000000;
         $max = $this->faker->numberBetween(25, 45) * 1000000;
+
         if ($min >= $max) {
             $max = $min + 5000000;
         }
 
-        // Deskripsi kontrak kerja
         $deskripsi_kontrak_kerja = implode("\n", [
             'Kualifikasi:',
             '- Pendidikan minimal SMK/SMA relevan',
@@ -33,19 +41,16 @@ class KontrakKerjaFactory extends Factory
             '- Mematuhi standar keselamatan kerja',
         ]);
 
-        // Pilih kategori kontrak kerja random
-        $kategori = Arr::random(KategoriPelatihanEnum::getValues());
-
         return [
             'nama_perusahaan' => $this->faker->company(),
             'gaji_terendah' => $min,
             'gaji_tertinggi' => $max,
             'status' => StatusKontrakKerjaEnum::AKTIF->value,
-            'deskripsi' => $deskripsi_kontrak_kerja,
+            'deskripsi' => $this->faker->paragraph(3),
             'surat_kontrak' => 'kontrak_kerja/surat_kontrak.pdf',
             'maksimal_pelamar' => $this->faker->numberBetween(20, 400),
             'durasi_kontrak_kerja' => $this->faker->numberBetween(1, 6),
-            'kategori_kontrak_kerja' => $kategori,
+            'kategori_kontrak_kerja' => $this->faker->randomElements([KategoriPelatihanEnum::PERTANIAN->value, KategoriPelatihanEnum::PERIKANAN->value]),
         ];
     }
 }

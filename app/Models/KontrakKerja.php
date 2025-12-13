@@ -80,13 +80,16 @@ class KontrakKerja extends Model
             return $query;
         }
         if (is_array($keyword)) {
-            return $query->whereIn($column, $operator, $keywords);
+            return $query->whereIn($column, $keywords);
         }
         if (is_array($column)) {
-            foreach ($column as $col) {
-                return $query->where($col, $operator, $keywords);
-            }
+            return $query->where(function ($q) use ($column, $operator, $keywords) {
+                foreach ($column as $col) {
+                    $q->orWhere($col, $operator, $keywords);
+                }
+            });
         }
+
         return $query->where($column, $operator, $keywords);
     }
     public function scopeKontrak_kerja_aktif($query)

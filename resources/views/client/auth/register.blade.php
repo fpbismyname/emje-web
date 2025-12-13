@@ -2,11 +2,11 @@
     <div class="flex flex-col min-h-screen">
         <x-ui.card class="bg-base-200 m-auto w-full max-w-md">
             <div class="card-body">
-                <div class="flex flex-col items-center gap-4">
+                <div class="flex flex-col items-center gap-4 text-center">
                     <x-ui.img src="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}"
                         class="aspect-square w-24" />
                     <h1>Daftar</h1>
-                    <p>Daftar ke {{ config('site.title') }}</p>
+                    <p>Ajukan pembuatan akun <br> ke admin {{ config('site.title') }}</p>
                 </div>
                 <form method="post" action="{{ route('client.register.submit') }}" class="grid grid-cols-1 gap-4 my-6">
                     @csrf
@@ -37,7 +37,7 @@
                         @enderror
                     </fieldset>
                     {{-- Password --}}
-                    <fieldset class="fieldset">
+                    {{-- <fieldset class="fieldset">
                         <legend class="fieldset-label">Password</legend>
                         <input type="password" name="password" class="input validator w-full" min="4"
                             placeholder="Masukan password" required />
@@ -48,11 +48,12 @@
                         @error('password')
                             <p class="label text-error">{{ $message }}</p>
                         @enderror
-                    </fieldset>
+                    </fieldset> --}}
 
                     {{-- Action form --}}
                     <div class="grid gap-2">
-                        <button type="submit" class="btn btn-primary">Daftar</button>
+                        {{-- <button type="submit" class="btn btn-primary">Daftar</button> --}}
+                        <button type="submit" class="btn btn-primary">Kirim</button>
                         <a href="{{ route('client.homepage.index') }}" class="btn btn-neutral">Kembali</a>
                     </div>
 
