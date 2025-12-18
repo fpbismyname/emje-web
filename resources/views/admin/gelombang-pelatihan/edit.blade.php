@@ -30,6 +30,18 @@
                 @enderror
             </fieldset>
 
+            {{-- Tanggal Selesai --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Tanggal Selesai</legend>
+                <input type="date" name="tanggal_selesai" required
+                    value="{{ old('tanggal_selesai', $gelombang_pelatihan->date_time_tanggal_selesai) }}"
+                    class="input validator w-full">
+                <p class="validator-hint hidden text-error">Tanggal selesai wajib diisi.</p>
+                @error('tanggal_selesai')
+                    <p class="text-error">{{ $message }}</p>
+                @enderror
+            </fieldset>
+
             {{-- Maksimal peserta --}}
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Maksimal peserta</legend>

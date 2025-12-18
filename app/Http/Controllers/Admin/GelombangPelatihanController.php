@@ -44,7 +44,7 @@ class GelombangPelatihanController extends Controller
         $pelatihan = $pelatihan_model->findOrFail($create_entries['pelatihan_id']);
 
         $durasi_pelatihan = $pelatihan->durasi_pelatihan;
-        $create_entries['tanggal_selesai'] = Carbon::parse($create_entries['tanggal_mulai'])->addMonths($durasi_pelatihan);
+        // $create_entries['tanggal_selesai'] = Carbon::parse($create_entries['tanggal_mulai'])->addMonths($durasi_pelatihan);
 
         match (true) {
             Carbon::parse($create_entries['tanggal_mulai'])->isFuture() => $create_entries['sesi'] = SesiGelombangPelatihanEnum::PENDAFTARAN,
@@ -82,7 +82,7 @@ class GelombangPelatihanController extends Controller
         $gelombang_pelatihan = $gelombang_pelatihan_model->findOrFail($id);
 
         $durasi_pelatihan = $gelombang_pelatihan->pelatihan->durasi_pelatihan;
-        $update_entries['tanggal_selesai'] = Carbon::parse($update_entries['tanggal_mulai'])->addMonths($durasi_pelatihan);
+        // $update_entries['tanggal_selesai'] = Carbon::parse($update_entries['tanggal_mulai'])->addMonths($durasi_pelatihan);
 
         match (true) {
             Carbon::parse($update_entries['tanggal_mulai'])->isFuture() => $update_entries['sesi'] = SesiGelombangPelatihanEnum::PENDAFTARAN,

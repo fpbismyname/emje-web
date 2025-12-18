@@ -25,13 +25,15 @@ class GelombangPelatihanRequest extends FormRequest
         return match ($method_request) {
             'POST' => [
                 'nama_gelombang' => ['required'],
-                'tanggal_mulai' => ['required'],
+                'tanggal_mulai' => ['required', 'before_or_equal:tanggal_selesai'],
+                'tanggal_selesai' => ['required', 'after_or_equal:tanggal_mulai'],
                 'maksimal_peserta' => ['required', 'numeric'],
                 'pelatihan_id' => ['required'],
             ],
             'PUT' => [
                 'nama_gelombang' => ['required'],
-                'tanggal_mulai' => ['required'],
+                'tanggal_mulai' => ['required', 'before_or_equal:tanggal_selesai'],
+                'tanggal_selesai' => ['required', 'after_or_equal:tanggal_mulai'],
                 'maksimal_peserta' => ['required', 'numeric'],
             ]
         };
