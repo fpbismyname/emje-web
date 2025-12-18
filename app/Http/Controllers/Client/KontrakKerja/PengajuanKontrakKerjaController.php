@@ -80,7 +80,7 @@ class PengajuanKontrakKerjaController extends Controller
 
         // Simpan data pengajuan 
         $simpan_kontrak = $kontrak_kerja->pengajuan_kontrak_kerja()->create([
-            'status' => StatusPengajuanKontrakKerja::DALAM_PROSES,
+            'status' => StatusPengajuanKontrakKerja::PROSES_PENGAJUAN,
             'surat_pengajuan_kontrak' => $data_kontrak_kerja['surat_pengajuan_kontrak'],
             'users_id' => $user->id
         ]);
