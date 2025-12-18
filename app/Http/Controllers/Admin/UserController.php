@@ -178,10 +178,10 @@ class UserController extends Controller
             $data_profil_user[$key] = $value;
         }
 
-        $user->update($data_user);
-        $user->profil_user->update($data_profil_user);
+        $updated_user = $user->update($data_user);
+        $updated_user_profil = $user->profil_user->update($data_profil_user);
 
-        if ($user->wasChanged() || $user->profil_user->wasChanged()) {
+        if ($updated_user || $updated_user_profil) {
             Toast::success("Data akun pengguna {$user->name} berhasil diperbarui.");
         } else {
             Toast::error('Terjadi kesalahan.');

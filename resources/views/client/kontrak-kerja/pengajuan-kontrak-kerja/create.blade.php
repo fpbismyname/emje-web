@@ -1,15 +1,13 @@
 <x-layouts.client-app title="Pengajuan kontrak kerja - {{ $datas->nama_perusahaan }}">
     {{-- Info --}}
-    <div class="flex flex-col my-6 gap-4">
+    {{-- <div class="flex flex-col my-6 gap-4">
         <p class="whitespace-pre-line">{{ config('site.prosedur_pengajuan_surat_kontrak') }}</p>
         <div class="flex flex-row">
             <a class="btn btn-primary"
                 href="{{ route('storage.private.download', ['file' => $datas->surat_kontrak]) }}">Download surat kontrak
                 kerja</a>
         </div>
-    </div>
-
-    <div class="divider"></div>
+    </div> --}}
 
     {{-- Data kontrak kerja --}}
     <div class="grid md:grid-cols-2 gap-4 rounded-box">

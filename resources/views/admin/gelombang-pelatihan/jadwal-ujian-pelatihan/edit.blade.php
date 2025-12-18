@@ -18,6 +18,24 @@
                 @enderror
             </fieldset>
 
+            {{-- Jenis ujian --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Jenis ujian</legend>
+                <select name="jenis_ujian" class="select w-full validator">
+                    <option value="" selected disabled>Pilih materi</option>
+                    @foreach (App\Enums\Pelatihan\JenisUjianEnum::cases() as $jenis_ujian)
+                        <option value="{{ $jenis_ujian->value }}" @selected(old('jenis_ujian', $jadwal_ujian->jenis_ujian->value) == $jenis_ujian->value)>
+                            {{ $jenis_ujian->label() }}
+                        </option>
+                    @endforeach
+                    </option>
+                </select>
+                <p class="validator-hint hidden text-error">Nama materi wajib diisi.</p>
+                @error('nama_materi')
+                    <p class="text-error">{{ $message }}</p>
+                @enderror
+            </fieldset>
+
             {{-- Lokasi --}}
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Lokasi ujian</legend>

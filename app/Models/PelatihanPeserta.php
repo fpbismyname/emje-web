@@ -41,7 +41,7 @@ class PelatihanPeserta extends Model
     }
     public function sertifikasi()
     {
-        return $this->hasOne(Sertifikasi::class, 'pelatihan_peserta_id');
+        return $this->hasMany(Sertifikasi::class, 'pelatihan_peserta_id');
     }
     public function gelombang_pelatihan()
     {

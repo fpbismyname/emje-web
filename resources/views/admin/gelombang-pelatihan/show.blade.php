@@ -59,8 +59,12 @@
                                     {{ $jadwal_ujian->formatted_tanggal_mulai }} -
                                     {{ $jadwal_ujian->formatted_tanggal_selesai }}
                                 </small>
-                                <small
-                                    class="badge badge-sm badge-primary">{{ $jadwal_ujian->status->label() }}</small>
+                                <div class="flex flex-row gap-2">
+                                    <small
+                                        class="badge badge-sm badge-secondary">{{ $jadwal_ujian->jenis_ujian->label() }}</small>
+                                    <small
+                                        class="badge badge-sm badge-primary">{{ $jadwal_ujian->status->label() }}</small>
+                                </div>
                             </div>
                         </div>
                         <div class="flex flex-row gap-4">

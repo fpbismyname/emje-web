@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use App\Enums\KontrakKerja\StatusKontrakKerjaPesertaEnum;
 use App\Enums\Pelatihan\JenisPembayaranEnum;
+use App\Enums\Pelatihan\JenisSertifikatEnum;
+use App\Enums\Pelatihan\JenisUjianEnum;
 use App\Enums\Pelatihan\SesiGelombangPelatihanEnum;
 use App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum;
 use App\Enums\Pelatihan\StatusJadwalUjianPelatihanEnum;
@@ -132,10 +134,20 @@ class status_data extends Command
             ->doesntHave('sertifikasi')
             ->get()
             ->each(function ($peserta) {
-                $peserta->sertifikasi()->create([
-                    'nomor_sertifikat' => config('rules-lpk.prefix-sertifikasi') . now()->format('Y-m-d') . $peserta->id,
-                    'tanggal_terbit' => now(),
-                ]);
+                foreach ($peserta->gelombang_pelatihan->jadwal_ujian_pelatihan as $jadwal_ujian) {
+                    switch ($jadwal_ujian->jenis_ujian) {
+                        case JenisUjianEnum::PELATIHAN:
+                            $hasil_ujian_lulus = $jadwal_ujian->hasil_ujian_pelatihan()->get()->every(fn($hasil_ujian) => $hasil_ujian->status === StatusHasilUjianPelatihanEnum::LULUS);
+                            if ($hasil_ujian_lulus) {
+                                $peserta->sertifikasi()->create([
+                                    'nomor_sertifikat' => config('rules-lpk.prefix-sertifikasi') . now()->format('Y-m-d') . $peserta->id,
+                                    'jenis_sertifikat' => JenisSertifikatEnum::PELATIHAN,
+                                    'tanggal_terbit' => now(),
+                                ]);
+                            }
+                            break;
+                    }
+                }
             });
 
         PembayaranPelatihan::query()
@@ -152,6 +164,7 @@ class status_data extends Command
                     }
                 }
             });
+
         KontrakKerjaPeserta::query()
             ->where('status', StatusKontrakKerjaPesertaEnum::BERLANGSUNG)
             ->chunk(100, function ($items) {

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Pelatihan\JenisUjianEnum;
 use App\Enums\Pelatihan\StatusJadwalUjianPelatihanEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -23,6 +24,7 @@ class JadwalUjianPelatihan extends Model
     protected $fillable = [
         'nama_ujian',
         'lokasi',
+        'jenis_ujian',
         'tanggal_mulai',
         'tanggal_selesai',
         'status',
@@ -36,6 +38,7 @@ class JadwalUjianPelatihan extends Model
     protected $casts = [
         'tanggal_mulai' => 'datetime',
         'tanggal_selesai' => 'datetime',
+        'jenis_ujian' => JenisUjianEnum::class,
         'status' => StatusJadwalUjianPelatihanEnum::class
     ];
     /**

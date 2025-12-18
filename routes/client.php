@@ -23,8 +23,8 @@ Route::prefix('/')->name('client.')->group(function () {
     // Auth Dashboard
     Route::get('/login', [AuthController::class, 'client_login'])->name('login');
     Route::post('/login/submit', [AuthController::class, 'client_submit_login'])->name('login.submit');
-    Route::get('/register', [AuthController::class, 'client_register'])->name('register');
-    Route::post('/register/submit', [AuthController::class, 'client_submit_register'])->name('register.submit');
+    // Route::get('/register', [AuthController::class, 'client_register'])->name('register');
+    // Route::post('/register/submit', [AuthController::class, 'client_submit_register'])->name('register.submit');
     Route::post('/logout', [AuthController::class, 'client_submit_logout'])->name('logout');
 
     // Resources 

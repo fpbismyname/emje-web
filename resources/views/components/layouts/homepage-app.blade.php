@@ -25,16 +25,18 @@
                         </li>
                         @if (auth()->guest())
                             <li>
-                                <a href="{{ route('client.register') }}" class="btn btn-accent">Daftar
+                                <a href="{{ route('client.login') }}" class="btn btn-primary">Login</a>
+                            </li>
+                            <li>
+                                <a target="_blank" href="{{ config('site.contact.whatsapp') }}"
+                                    class="btn btn-accent">Daftar
                                     sekarang</a>
                             </li>
-                        @elseif(auth()->user()->is_client_user)
+                        @endif
+                        @if (auth()->check())
                             <li>
-                                <a href="{{ route('client.dashboard.index') }}" class="btn btn-accent">Dashboard</a>
-                            </li>
-                        @else
-                            <li>
-                                <a href="{{ route('admin.dashboard.index') }}" class="btn btn-accent">Dashboard</a>
+                                <a href="{{ auth()->user()->is_client_user ? route('client.dashboard.index') : route('admin.dashboard.index') }}"
+                                    class="btn btn-accent">Dashboard</a>
                             </li>
                         @endif
                     </ul>
@@ -64,17 +66,17 @@
                                 </li>
                                 @if (auth()->guest())
                                     <li>
-                                        <a href="{{ route('client.register') }}" class="btn btn-accent">Daftar
+                                        <a href="{{ route('client.login') }}" class="btn btn-primary">Login</a>
+                                    </li>
+                                    <li>
+                                        <a target="_blank" href="{{ config('site.contact.whatsapp') }}"
+                                            class="btn btn-accent">Daftar
                                             sekarang</a>
                                     </li>
-                                @elseif(auth()->user()->is_client_user)
+                                @endif
+                                @if (auth()->check())
                                     <li>
-                                        <a href="{{ route('client.dashboard.index') }}"
-                                            class="btn btn-accent">Dashboard</a>
-                                    </li>
-                                @else
-                                    <li>
-                                        <a href="{{ route('admin.dashboard.index') }}"
+                                        <a href="{{ auth()->user()->is_client_user ? route('client.dashboard.index') : route('admin.dashboard.index') }}"
                                             class="btn btn-accent">Dashboard</a>
                                     </li>
                                 @endif

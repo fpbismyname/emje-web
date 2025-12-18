@@ -4,10 +4,14 @@ namespace Database\Seeders;
 
 use App\Enums\KontrakKerja\StatusPengajuanKontrakKerja;
 use App\Enums\Pelatihan\JenisPembayaranEnum;
+use App\Enums\Pelatihan\JenisUjianEnum;
+use App\Enums\Pelatihan\KategoriPelatihanEnum;
+use App\Enums\Pelatihan\LevelBahasaEnum;
 use App\Enums\Pelatihan\SesiGelombangPelatihanEnum;
 use App\Enums\Pelatihan\SkemaPembayaranEnum;
 use App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum;
 use App\Enums\Pelatihan\StatusJadwalUjianPelatihanEnum;
+use App\Enums\Pelatihan\StatusPelatihanEnum;
 use App\Enums\Pelatihan\StatusPelatihanPesertaEnum;
 use App\Enums\Pelatihan\StatusPembayaranPelatihanEnum;
 use App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum;
@@ -24,6 +28,7 @@ use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 
 class UserSeeder extends Seeder
 {
@@ -62,7 +67,31 @@ class UserSeeder extends Seeder
         }
 
         // Seeder Pelatihan
-        $pelatihan = Pelatihan::factory()->count(20)->create();
+        $pelatihan_list = [
+            ['title' => 'Sistem Akuakultur Cerdas Berbasis IoT dan AI', 'biaya' => 7500000, 'durasi' => 8],
+            ['title' => 'Recirculating Aquaculture System (RAS) Tingkat Lanjut', 'biaya' => 9000000, 'durasi' => 6],
+            ['title' => 'Akuakultur Berkelanjutan dan Manajemen Lingkungan', 'biaya' => 6500000, 'durasi' => 9],
+            ['title' => 'Manajemen Kesehatan Ikan dan Biosekuriti Global', 'biaya' => 7000000, 'durasi' => 6],
+            ['title' => 'Pengolahan Hasil Perikanan dan Standar Mutu Internasional', 'biaya' => 8000000, 'durasi' => 4],
+            ['title' => 'Pertanian Presisi Berbasis Drone dan GIS', 'biaya' => 8500000, 'durasi' => 7],
+            ['title' => 'Greenhouse dan Vertical Farming Modern', 'biaya' => 9000000, 'durasi' => 6],
+            ['title' => 'Sistem Irigasi Cerdas dan Manajemen Air', 'biaya' => 6000000, 'durasi' => 7],
+            ['title' => 'Manajemen Pertanian Digital dan Traceability', 'biaya' => 7000000, 'durasi' => 9],
+            ['title' => 'Pertanian Sirkular dan Bioekonomi Berkelanjutan', 'biaya' => 6500000, 'durasi' => 6],
+        ];
+        $pelatihan = [];
+
+        foreach ($pelatihan_list as $item) {
+            $pelatihan[] = Pelatihan::create([
+                'nama_pelatihan' => Str::title($item['title']),
+                'nominal_biaya' => $item['biaya'],
+                'persentase_dp' => fake()->numberBetween(10, 20),
+                'durasi_pelatihan' => $item['durasi'],
+                'kategori_pelatihan' => Arr::random(KategoriPelatihanEnum::getValues()),
+                'deskripsi' => fake()->paragraph(2, true),
+                'status' => StatusPelatihanEnum::AKTIF->value,
+            ]);
+        }
 
         // Seeder kontrak kekrja
         $kontrak_kerja = KontrakKerja::factory()->count(20)->create();
@@ -80,19 +109,30 @@ class UserSeeder extends Seeder
             ]);
 
             // jadwal ujian gelombang
-            $gelombang->jadwal_ujian_pelatihan()->create([
-                'nama_ujian' => "Ujian $p->nama_pelatihan",
-                'lokasi' => Arr::random(['Cianjur', 'Sukabumi', 'Cipanas']),
-                'tanggal_mulai' => $now,
-                'tanggal_selesai' => $now->clone()->addWeeks(1),
-                'status' => StatusJadwalUjianPelatihanEnum::TERJADWAL
-            ]);
+            $start_date = now();
+
+            $ujian_pelatihan = JenisUjianEnum::cases();
+
+
+            if (!empty($ujian_pelatihan)) {
+                foreach ($ujian_pelatihan as $ujian) {
+                    $gelombang->jadwal_ujian_pelatihan()->create([
+                        'nama_ujian' => "Ujian {$ujian->value}",
+                        'lokasi' => fake()->city(),
+                        'jenis_ujian' => $ujian,
+                        'tanggal_mulai' => $start_date,
+                        'tanggal_selesai' => $start_date->copy()->addWeek(),
+                        'status' => StatusJadwalUjianPelatihanEnum::TERJADWAL,
+                    ]);
+                    $start_date->addWeek();
+                }
+            }
         }
 
         // Seeder Profil User dan Pendaftaran
         $seeder_profil_user = ProfilUser::factory()->withUser()->count(25)->create();
         foreach ($seeder_profil_user as $profil_user) {
-            $pelatihan_user = $pelatihan->random();
+            $pelatihan_user = collect($pelatihan)->random();
 
             $pembayaran_menyicil = Arr::random([true, false]);
             $tenor_cicilan = Arr::random([TenorCicilanPelatihanEnum::TIGA_BULAN, TenorCicilanPelatihanEnum::ENAM_BULAN, TenorCicilanPelatihanEnum::SEMBILAN_BULAN, TenorCicilanPelatihanEnum::DUA_BELAS_BULAN]);

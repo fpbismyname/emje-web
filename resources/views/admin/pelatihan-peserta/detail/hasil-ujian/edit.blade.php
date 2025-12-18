@@ -6,6 +6,7 @@
         @csrf
         @method('put')
 
+
         {{-- Data gelombang pelatihan --}}
         <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
 

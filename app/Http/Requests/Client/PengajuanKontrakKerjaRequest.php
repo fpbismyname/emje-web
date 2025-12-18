@@ -26,7 +26,6 @@ class PengajuanKontrakKerjaRequest extends FormRequest
             return [
                 'surat_pengajuan_kontrak' => [
                     'nullable',
-                    'nullable',
                     'file',
                     'mimes:pdf',
                     'max:4096',

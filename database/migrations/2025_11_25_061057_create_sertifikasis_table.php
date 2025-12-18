@@ -12,8 +12,10 @@ return new class extends Migration {
     {
         Schema::create('sertifikasi', function (Blueprint $table) {
             $table->id();
-            $table->string('nomor_sertifikat');
-            $table->dateTime('tanggal_terbit');
+            $table->string('nomor_sertifikat')->nullable();
+            $table->string('sertifikat')->nullable();
+            $table->string('jenis_sertifikat');
+            $table->dateTime('tanggal_terbit')->nullable();
             $table->timestamps();
         });
     }

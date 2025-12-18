@@ -8,60 +8,14 @@
                     <h1>Daftar</h1>
                     <p>Ajukan pembuatan akun <br> ke admin {{ config('site.title') }}</p>
                 </div>
-                <form method="post" action="{{ route('client.register.submit') }}" class="grid grid-cols-1 gap-4 my-6">
-                    @csrf
-                    @method('post')
-                    {{-- Nama pengguna --}}
-                    <fieldset class="fieldset">
-                        <legend class="fieldset-label">Nama pengguna</legend>
-                        <input type="text" class="input validator w-full" name="name"
-                            placeholder="Masukan nama pengguna" value="{{ old('name') }}" required />
-                        <p class="validator-hint hidden">
-                            Nama pengguna wajib diisi
-                        </p>
-                        @error('name')
-                            <p class="label text-error">{{ $message }}</p>
-                        @enderror
-                    </fieldset>
-                    {{-- Email --}}
-                    <fieldset class="fieldset">
-                        <legend class="fieldset-label">Email</legend>
-                        <input type="email" name="email" class="input validator w-full" placeholder="Masukan email"
-                            value="{{ old('email') }}" required />
-                        <p class="validator-hint hidden">
-                            Email wajib diisi
-                            <br> Pastikan format email benar
-                        </p>
-                        @error('email')
-                            <p class="label text-error">{{ $message }}</p>
-                        @enderror
-                    </fieldset>
-                    {{-- Password --}}
-                    {{-- <fieldset class="fieldset">
-                        <legend class="fieldset-label">Password</legend>
-                        <input type="password" name="password" class="input validator w-full" min="4"
-                            placeholder="Masukan password" required />
-                        <p class="validator-hint hidden">
-                            Password wajib diisi
-                            <br> Password minimal terdiri dari 4 karakter
-                        </p>
-                        @error('password')
-                            <p class="label text-error">{{ $message }}</p>
-                        @enderror
-                    </fieldset> --}}
-
-                    {{-- Action form --}}
-                    <div class="grid gap-2">
-                        {{-- <button type="submit" class="btn btn-primary">Daftar</button> --}}
-                        <button type="submit" class="btn btn-primary">Kirim</button>
-                        <a href="{{ route('client.homepage.index') }}" class="btn btn-neutral">Kembali</a>
-                    </div>
-
-                    <div class="grid gap-2 text-center">
-                        <h6>Sudah punya akun ? <a href="{{ route('client.login') }}"
-                                class="link link-hover link-primary">Login disini</a></h6>
-                    </div>
-                </form>
+                <a target="_blank" href="{{ config('site.contact.whatsapp') }}" class="btn btn-primary">Daftar
+                    pelatihan
+                    disini</a>
+                <a href="{{ route('client.homepage.index') }}" class="btn btn-neutral">Kembali</a>
+                <div class="grid gap-2 text-center">
+                    <h6>Sudah punya akun ? <a href="{{ route('client.login') }}"
+                            class="link link-hover link-primary">Login disini</a></h6>
+                </div>
             </div>
         </x-ui.card>
     </div>

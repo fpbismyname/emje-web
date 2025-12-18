@@ -72,7 +72,8 @@
                 <select name="status" required class="select validator w-full">
                     <option value="" disabled selected>Pilih status</option>
                     @foreach (App\Enums\Pelatihan\StatusPelatihanEnum::cases() as $status)
-                        <option value="{{ $status->value }}" {{ old('status') == $status->value ? 'selected' : '' }}>
+                        <option value="{{ $status->value }}"
+                            {{ old('status', $pelatihan->status->value) == $status->value ? 'selected' : '' }}>
                             {{ $status->label() }}</option>
                     @endforeach
                 </select>

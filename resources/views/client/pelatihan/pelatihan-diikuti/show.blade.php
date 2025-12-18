@@ -30,7 +30,7 @@
 
     {{-- Data hasil ujian --}}
     <div class="flex flex-col gap-4 p-4">
-        <h6>Hasil ujian</h6>
+        <h6>Ujian pelatihan</h6>
         @if (isset($pelatihan_diikuti->gelombang_pelatihan->jadwal_ujian_pelatihan))
             <div class="flex flex-col gap-4">
                 @foreach ($pelatihan_diikuti->gelombang_pelatihan->jadwal_ujian_pelatihan as $jadwal_ujian)
@@ -39,7 +39,12 @@
                             <p>{{ $jadwal_ujian->nama_ujian }}</p>
                             <small>{{ $jadwal_ujian->formatted_tanggal_mulai }} -
                                 {{ $jadwal_ujian->formatted_tanggal_selesai }}</small>
-                            <div class="badge badge-primary badge-sm">{{ $jadwal_ujian->status->label() }}</div>
+                            <div class="flex flex-row gap-2">
+                                <div class="badge badge-accent badge-sm">{{ $jadwal_ujian->jenis_ujian->label() }}
+                                </div>
+                                <div class="badge badge-secondary badge-sm">{{ $jadwal_ujian->lokasi }}</div>
+                                <div class="badge badge-primary badge-sm">{{ $jadwal_ujian->status->label() }}</div>
+                            </div>
                         </div>
                         <x-ui.table>
                             <thead>
@@ -84,10 +89,20 @@
 
     <div class="flex flex-col gap-4 p-4">
         <h6>Sertifikasi</h6>
-        @if ($pelatihan_diikuti->sertifikasi)
-            <a href="{{ route('client.sertifikasi.download', [$pelatihan_diikuti->sertifikasi->id]) }}"
-                class="link link-hover link-primary">Unduh sertifikat
-                pelatihan</a>
+        @if ($pelatihan_diikuti->sertifikasi()->exists())
+            @foreach ($pelatihan_diikuti->sertifikasi as $sertifikat)
+                @if ($sertifikat->jenis_sertifikat === App\Enums\Pelatihan\JenisSertifikatEnum::PELATIHAN)
+                    <a href="{{ route('client.sertifikasi.download', [$sertifikat->id]) }}"
+                        class="link link-hover link-primary">
+                        Unduh sertifikat {{ $sertifikat->jenis_sertifikat->label() }}
+                    </a>
+                @else
+                    <a href="{{ route('storage.private.download', ['file' => $sertifikat->sertifikat]) }}"
+                        class="link link-hover link-primary">
+                        Unduh sertifikat {{ $sertifikat->jenis_sertifikat->label() }}
+                    </a>
+                @endif
+            @endforeach
         @else
             <p>Belum ada sertifikasi.</p>
         @endif

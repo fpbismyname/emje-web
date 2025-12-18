@@ -11,7 +11,7 @@
                     {{ config('site.description') }}
                 </p>
                 <div class="flex flex-row w-full gap-4">
-                    <a href="" class="btn btn-accent     btn-lg px-10">
+                    <a target="_blank" href="{{ config('site.contact.whatsapp') }}" class="btn btn-accent btn-lg px-10">
                         Daftar sekarang
                     </a>
                     <a href="#contact" class="btn btn-primary btn-lg px-10">

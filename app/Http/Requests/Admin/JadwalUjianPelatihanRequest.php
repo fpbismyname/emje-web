@@ -24,8 +24,8 @@ class JadwalUjianPelatihanRequest extends FormRequest
         return [
             'nama_ujian' => ['required'],
             'lokasi' => ['required'],
-            'tanggal_mulai' => ['required', 'date', 'before:tanggal_selesai'],
-            'tanggal_selesai' => ['required', 'date', 'after:tanggal_mulai'],
+            'tanggal_mulai' => ['required', 'date', 'before_or_equal:tanggal_selesai'],
+            'tanggal_selesai' => ['required', 'date', 'after_or_equal:tanggal_mulai'],
         ];
     }
 }

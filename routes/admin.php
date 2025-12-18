@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\PembayaranPelatihanController;
 use App\Http\Controllers\Admin\PendaftaranPelatihanController;
 use App\Http\Controllers\Admin\PengajuanKontrakKerjaController;
 use App\Http\Controllers\Admin\RekeningController;
+use App\Http\Controllers\Admin\SertifikasiPelatihanController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Pengaturan\PengaturanController;
@@ -44,6 +45,7 @@ Route::prefix('/admin')->name('admin.')->group(function () {
             // Pelatihan peserta
             'pelatihan-peserta' => PelatihanPesertaController::class,
             'pelatihan-peserta.detail' => DetailPelatihanPesertaController::class,
+            'pelatihan-peserta.detail.sertifikasi' => SertifikasiPelatihanController::class,
             'pelatihan-peserta.detail.jadwal-ujian.hasil-ujian' => HasilUjianPelatihanController::class,
             // Pembayaran pelatihan
             'pembayaran-pelatihan' => PembayaranPelatihanController::class,

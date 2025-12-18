@@ -145,6 +145,20 @@ enum SesiGelombangPelatihan{
     +BERLANGSUNG
     +SELESAI
 }
+' Table jadwal_ujian_pelatihan
+' enum jadwal_ujian_pelatihan.jenis_ujian
+enum JenisUjianEnum{
+    +PELATIHAN
+    +SSW
+    +JWT
+}
+' Table sertifikasi
+' enum sertifikasi.jenis_sertifikat
+enum JenisSertifikatEnum{
+    +SSW
+    +PELATIHAN
+    +BAHASA
+}
 
 
 
@@ -232,6 +246,7 @@ entity jadwal_ujian_pelatihan{
     -gelombang_pelatihan_id : Bigint
     ===
     -nama_ujian : String
+    -jenis_ujian : JenisUjianEnum
     -lokasi : String
     -tanggal_mulai : Datetime
     -tanggal_selesai : Datetime
@@ -241,6 +256,7 @@ entity hasil_ujian_pelatihan{
     *id : Bigint
     -jadwal_ujian_pelatihan_id : Bigint
     ===
+    -nama_materi : String
     -nilai : decimal(5,2)
     -status : StatusHasilUjianPelatihan
 }
@@ -249,6 +265,8 @@ entity sertifikasi{
     -pelatihan_diikuti_id : Bigint
     ===
     nomor_sertifikat : String
+    path : String
+    jenis_sertifikat : JenisSertifikatEnum
     tanggal_terbit : Datetime
 }
 
@@ -314,7 +332,7 @@ pelatihan ||--o{ pendaftaran_pelatihan
 pelatihan ||--o{ gelombang_pelatihan
 pendaftaran_pelatihan ||--|| pembayaran_pelatihan
 gelombang_pelatihan ||--o{ pelatihan_diikuti
-pelatihan_diikuti ||--|| sertifikasi
+pelatihan_diikuti ||--o{ sertifikasi
 gelombang_pelatihan ||--o{ jadwal_ujian_pelatihan
 jadwal_ujian_pelatihan ||--o{ hasil_ujian_pelatihan
 

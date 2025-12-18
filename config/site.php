@@ -47,5 +47,20 @@ return [
     - Pastikan kualifikasi pelatihan anda sesuai dengan kategori kontrak kerja.
     - Edit surat pengajuan kontrak kerja, Isi nama dan tanda tangan anda.
     - Kirim surat pengajuan kontrak kerja pada form dibawah.
-    TEXT
+    TEXT,
+    'ujian_bahasa' => [
+        'N4' => ['Kosakata', 'Tata bahasa', 'Pengetahuan bahasa', 'Membaca', 'Mendengar'],
+        'N3' => ['Kosakata', 'Tata bahasa', 'Pengetahuan bahasa', 'Membaca', 'Mendengar'],
+        'N2' => ['Kosakata', 'Tata bahasa', 'Pengetahuan bahasa', 'Membaca', 'Mendengar'],
+        'N1' => ['Kosakata', 'Tata bahasa', 'Pengetahuan bahasa', 'Membaca', 'Mendengar'],
+    ],
+    'ujian_softskill' => [
+        'Disiplin & ketepatan waktu',
+        'Sikap kerja',
+        'Ketaatan SOP & Keselamatan',
+        'Komunikasi dasar tempat kerja',
+        'Kerja tim',
+        'Etika & Budaya kerja',
+        'Manajemen Emosi & Stress'
+    ]
 ];
