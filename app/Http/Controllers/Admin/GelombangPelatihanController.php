@@ -89,9 +89,9 @@ class GelombangPelatihanController extends Controller
             Carbon::parse($update_entries['tanggal_mulai'])->isToday() || Carbon::parse($update_entries['tanggal_mulai'])->isPast() => $update_entries['sesi'] = SesiGelombangPelatihanEnum::BERLANGSUNG,
         };
 
-        $gelombang_pelatihan->update($update_entries);
+        $update_gelombang = $gelombang_pelatihan->update($update_entries);
 
-        if ($gelombang_pelatihan->wasChanged()) {
+        if ($update_gelombang) {
             Toast::success('Gelombang pelatihan berhasil diperbarui.');
         } else {
             Toast::error('Terjadi kesalahan.');

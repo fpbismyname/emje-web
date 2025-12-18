@@ -46,34 +46,36 @@
                                 <div class="badge badge-primary badge-sm">{{ $jadwal_ujian->status->label() }}</div>
                             </div>
                         </div>
-                        <x-ui.table>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nama materi</th>
-                                    <th>Nilai</th>
-                                    <th>Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @if ($jadwal_ujian->hasil_ujian_pelatihan()->exists())
-                                    @foreach ($jadwal_ujian->hasil_ujian_pelatihan as $hasil_ujian)
-                                        <tr>
-                                            <td>
-                                                {{ $loop->iteration }}
-                                            </td>
-                                            <td>{{ $hasil_ujian->nama_materi }} </td>
-                                            <td>{{ $hasil_ujian->nilai }}</td>
-                                            <td>{{ $hasil_ujian->status->label() }}</td>
-                                        </tr>
-                                    @endforeach
-                                @else
+                        @if ($jadwal_ujian->jenis_ujian === App\Enums\Pelatihan\JenisUjianEnum::PELATIHAN)
+                            <x-ui.table>
+                                <thead>
                                     <tr>
-                                        <td>Tidak ada data hasil ujian.</td>
+                                        <th>#</th>
+                                        <th>Nama materi</th>
+                                        <th>Nilai</th>
+                                        <th>Status</th>
                                     </tr>
-                                @endif
-                            </tbody>
-                        </x-ui.table>
+                                </thead>
+                                <tbody>
+                                    @if ($jadwal_ujian->hasil_ujian_pelatihan()->exists())
+                                        @foreach ($jadwal_ujian->hasil_ujian_pelatihan as $hasil_ujian)
+                                            <tr>
+                                                <td>
+                                                    {{ $loop->iteration }}
+                                                </td>
+                                                <td>{{ $hasil_ujian->nama_materi }} </td>
+                                                <td>{{ $hasil_ujian->nilai }}</td>
+                                                <td>{{ $hasil_ujian->status->label() }}</td>
+                                            </tr>
+                                        @endforeach
+                                    @else
+                                        <tr>
+                                            <td>Tidak ada data hasil ujian.</td>
+                                        </tr>
+                                    @endif
+                                </tbody>
+                            </x-ui.table>
+                        @endif
                     </div>
                     @if (!$loop->last)
                         <div class="divider"></div>

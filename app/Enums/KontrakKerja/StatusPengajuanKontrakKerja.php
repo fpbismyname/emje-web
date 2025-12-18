@@ -8,7 +8,7 @@ enum StatusPengajuanKontrakKerja: string
 {
     case DITOLAK = 'ditolak';
     case DITERIMA = 'diterima';
-    case DALAM_PROSES = 'dalam_proses';
+    case PROSES_PENGAJUAN = 'proses_pengajuan';
     case DIBATALKAN = 'dibatalkan';
     public static function case_review()
     {

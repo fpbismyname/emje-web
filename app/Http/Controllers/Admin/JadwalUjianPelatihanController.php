@@ -86,12 +86,10 @@ class JadwalUjianPelatihanController extends Controller
         };
 
         $jadwal_ujian_pelatihan = $gelombang_pelatihan->jadwal_ujian_pelatihan()->findOrFail($jadwal_ujian_id);
-        $jadwal_ujian_pelatihan->update($update_entries);
+        $update_jadwal = $jadwal_ujian_pelatihan->update($update_entries);
 
-        if ($jadwal_ujian_pelatihan->wasChanged()) {
+        if ($update_jadwal) {
             Toast::success("Data jadwal ujian {$jadwal_ujian_pelatihan->nama_ujian} berhasil ditambahkan.");
-        } elseif (!$jadwal_ujian_pelatihan->getChanges()) {
-            Toast::info("Tidak ada perubahan yang dilakukan.");
         } else {
             Toast::error("Terjadi kesalahan.");
         }

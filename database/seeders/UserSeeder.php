@@ -2,14 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Enums\KontrakKerja\StatusPengajuanKontrakKerja;
 use App\Enums\Pelatihan\JenisPembayaranEnum;
 use App\Enums\Pelatihan\JenisUjianEnum;
 use App\Enums\Pelatihan\KategoriPelatihanEnum;
-use App\Enums\Pelatihan\LevelBahasaEnum;
 use App\Enums\Pelatihan\SesiGelombangPelatihanEnum;
 use App\Enums\Pelatihan\SkemaPembayaranEnum;
-use App\Enums\Pelatihan\StatusHasilUjianPelatihanEnum;
 use App\Enums\Pelatihan\StatusJadwalUjianPelatihanEnum;
 use App\Enums\Pelatihan\StatusPelatihanEnum;
 use App\Enums\Pelatihan\StatusPelatihanPesertaEnum;
@@ -24,7 +21,6 @@ use App\Models\Pelatihan;
 use App\Models\ProfilUser;
 use App\Models\Rekening;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Carbon;
