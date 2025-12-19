@@ -125,14 +125,22 @@ enum SkemaPembayaranPendaftaranPelatihan{
     +CASH
     +CICILAN
 }
-' Table pembayaran_pendaftaran
-' enum pembayaran_pendaftaran.status
-enum StatusPembayaran{
-    +DITERIMA
-    +DITOLAK
+' Table pembayaran_pelatihan
+' enum pembayaran_pelatihan.status
+enum StatusPembayaranPelatihan{
+    +LUNAS
+    +BELUM_LUNAS
+    +DIKEMBALIKAN
 }
-' Table pembayaran_pendaftaran
-' enum pembayaran_pendaftaran.metode_pembayaran
+' Table pembayaran_kontrak_kerja
+' enum pembayaran_kontrak_kerja.status
+enum StatusPembayaranKontrakKerja{
+    +LUNAS
+    +BELUM_LUNAS
+    +DIKEMBALIKAN
+}
+' Table pembayaran_pelatihan
+' enum pembayaran_pelatihan.metode_pembayaran
 enum JenisPembayaran{
     +ANGSURAN
     +PELUNASAN
@@ -147,17 +155,23 @@ enum SesiGelombangPelatihan{
 }
 ' Table jadwal_ujian_pelatihan
 ' enum jadwal_ujian_pelatihan.jenis_ujian
-enum JenisUjianEnum{
+enum JenisUjian{
     +PELATIHAN
     +SSW
     +JWT
 }
 ' Table sertifikasi
 ' enum sertifikasi.jenis_sertifikat
-enum JenisSertifikatEnum{
+enum JenisSertifikat{
     +SSW
     +PELATIHAN
     +BAHASA
+}
+' Table pengajuan_kontrak_kerja
+' enum pengajuan_kontrak_kerja.sumber_dana
+enum SumberDana{
+    +DANA_TALANG
+    +MANDIRI
 }
 
 
@@ -219,11 +233,11 @@ entity pembayaran_pelatihan{
     -pendaftaran_pelatihan_id : Bigint
     ===
     -nominal : Decimal (15,2)
-    -status : StatusPembayaran
+    -status : StatusPembayaranPelatihan
     -jenis_pembayaran : JenisPembayaran
     -bukti_pembayaran : String
     -catatan : Text
-    -tanggal_bayar : Datetime
+    -tanggal_pembayaran : Datetime
 }
 entity pelatihan_diikuti{
     *id : Bigint
@@ -246,7 +260,7 @@ entity jadwal_ujian_pelatihan{
     -gelombang_pelatihan_id : Bigint
     ===
     -nama_ujian : String
-    -jenis_ujian : JenisUjianEnum
+    -jenis_ujian : JenisUjian
     -lokasi : String
     -tanggal_mulai : Datetime
     -tanggal_selesai : Datetime
@@ -266,7 +280,7 @@ entity sertifikasi{
     ===
     nomor_sertifikat : String
     path : String
-    jenis_sertifikat : JenisSertifikatEnum
+    jenis_sertifikat : JenisSertifikat
     tanggal_terbit : Datetime
 }
 
@@ -276,6 +290,7 @@ entity pengajuan_kontrak_kerja{
     -users_id : Bigint
     -kontrak_kerja_id : Bigint
     ===
+    -sumber_dana : SumberDana
     -surat_pengajuan_kontrak : String
     -status : StatusPengajuanKontrakKerja
 }
@@ -298,6 +313,17 @@ entity kontrak_kerja_diikuti{
     -pengajuan_kontrak_kerja_id : Bigint
     ===
     -status : StatusKontrakKerjaDiikuti
+}
+entity pembayaran_dana_talang{
+    *id : Bigint
+    -pengajuan_kontrak_kerja_id : Bigint
+    ===
+    -nominal : Decimal (15,2)
+    -jenis_pembayaran : JenisPembayaran
+    -status : StatusPembayaran
+    -bukti_pembayaran : String
+    -catatan : Text
+    -tanggal_pembayaran : Datetime
 }
 
 ' Rekening flow
@@ -330,7 +356,7 @@ pendaftaran_pelatihan ||--|| pelatihan_diikuti
 pendaftaran_pelatihan ||--|| gelombang_pelatihan
 pelatihan ||--o{ pendaftaran_pelatihan
 pelatihan ||--o{ gelombang_pelatihan
-pendaftaran_pelatihan ||--|| pembayaran_pelatihan
+pendaftaran_pelatihan ||--o{ pembayaran_pelatihan
 gelombang_pelatihan ||--o{ pelatihan_diikuti
 pelatihan_diikuti ||--o{ sertifikasi
 gelombang_pelatihan ||--o{ jadwal_ujian_pelatihan
@@ -340,6 +366,7 @@ jadwal_ujian_pelatihan ||--o{ hasil_ujian_pelatihan
 users ||--o{ pengajuan_kontrak_kerja
 kontrak_kerja ||--o{ pengajuan_kontrak_kerja
 pengajuan_kontrak_kerja ||--|| kontrak_kerja_diikuti
+pengajuan_kontrak_kerja ||--o{ pembayaran_dana_talang
 
 ' Flow rekening
 rekening ||--o{ transaksi_rekening

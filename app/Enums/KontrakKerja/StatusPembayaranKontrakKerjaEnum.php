@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Enums\Pelatihan;
+namespace App\Enums\KontrakKerja;
 
 use Illuminate\Support\Str;
 
-enum StatusPembayaranEnum: string
+enum StatusPembayaranKontrakKerjaEnum: string
 {
-    case LUNAS = 'lunas';
-    case BELUM_LUNAS = 'belum_lunas';
+    case DIKEMBALIKAN = 'dikembalikan';
+    case SUDAH_BAYAR = 'sudah_bayar';
+    case BELUM_BAYAR = 'belum_bayar';
     public function label()
     {
         return Str::of($this->value)->replace("_", " ")->ucfirst();

@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Enums\KontrakKerja\StatusKontrakKerjaPesertaEnum;
+use App\Enums\KontrakKerja\StatusPembayaranKontrakKerjaEnum;
 use App\Enums\Pelatihan\JenisPembayaranEnum;
 use App\Enums\Pelatihan\JenisSertifikatEnum;
 use App\Enums\Pelatihan\JenisUjianEnum;
@@ -16,6 +17,7 @@ use App\Models\HasilUjianPelatihan;
 use App\Models\JadwalUjianPelatihan;
 use App\Models\KontrakKerjaPeserta;
 use App\Models\PelatihanPeserta;
+use App\Models\PembayaranDanaTalang;
 use App\Models\PembayaranPelatihan;
 use App\Models\User;
 use Illuminate\Console\Command;
@@ -158,6 +160,21 @@ class status_data extends Command
                     $newStatus = $angsuran->bukti_pembayaran
                         ? StatusPembayaranPelatihanEnum::SUDAH_BAYAR
                         : StatusPembayaranPelatihanEnum::BELUM_BAYAR;
+
+                    if ($angsuran->status !== $newStatus) {
+                        $angsuran->update(['status' => $newStatus]);
+                    }
+                }
+            });
+
+        PembayaranDanaTalang::query()
+            ->where('jenis_pembayaran', JenisPembayaranEnum::ANGSURAN)
+            ->chunk(100, function ($items) {
+                foreach ($items as $angsuran) {
+
+                    $newStatus = $angsuran->bukti_pembayaran
+                        ? StatusPembayaranKontrakKerjaEnum::SUDAH_BAYAR
+                        : StatusPembayaranKontrakKerjaEnum::BELUM_BAYAR;
 
                     if ($angsuran->status !== $newStatus) {
                         $angsuran->update(['status' => $newStatus]);

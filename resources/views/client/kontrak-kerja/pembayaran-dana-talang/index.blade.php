@@ -1,4 +1,4 @@
-<x-layouts.client-app title="Pembayaran pelatihan">
+<x-layouts.client-app title="Pembayaran dana talang">
     {{-- Header --}}
     <div class="flex flex-row justify-between gap-4 flex-wrap">
         {{-- Filter & Search --}}
@@ -22,23 +22,28 @@
                         </div>
                         <div class="list-col-grow">
                             <div class="flex flex-col gap-2">
-                                {{ $item->gelombang_pelatihan->nama_gelombang }}
+                                {{ $item->pengajuan_kontrak_kerja->kontrak_kerja->nama_perusahaan }}
                                 <small>
-                                    Jenis pembayaran : {{ $item->pendaftaran_pelatihan->skema_pembayaran->label() }}
+                                    Durasi kontrak :
+                                    {{ $item->pengajuan_kontrak_kerja->kontrak_kerja->formatted_durasi_kontrak_kerja }}
+                                </small>
+                                <small>
+                                    Sumber dana pemberangkatan :
+                                    {{ $item->pengajuan_kontrak_kerja->sumber_dana->label() }}
                                 </small>
                                 <div class="flex flex-row gap-2">
                                     <div class="badge badge-sm badge-primary">
-                                        {{ $item->gelombang_pelatihan->pelatihan->kategori_pelatihan->label() }}
+                                        {{ $item->pengajuan_kontrak_kerja->kontrak_kerja->kategori_kontrak_kerja->label() }}
                                     </div>
                                     <small class="badge badge-sm badge-secondary">
-                                        {{ $item->pendaftaran_pelatihan->pembayaran_pelatihan_lunas == true ? 'Lunas' : 'Belum Lunas' }}
+                                        {{ $item->pengajuan_kontrak_kerja->pembayaran_dana_talang_lunas == true ? 'Lunas' : 'Belum Lunas' }}
                                     </small>
                                 </div>
                             </div>
                         </div>
                         <div>
                             <div class="flex flex-row gap-2">
-                                <a href="{{ route('client.pelatihan.pembayaran-pelatihan.show', [$item->id]) }}"
+                                <a href="{{ route('client.kontrak-kerja.pembayaran-dana-talang.show', [$item->id]) }}"
                                     class="btn btn-primary">Lihat</a>
                             </div>
                         </div>
@@ -47,7 +52,7 @@
             @else
                 <li class="list-row">
                     <div>
-                        Tidak ada data pelatihan tersedia.
+                        Tidak ada data pembayaran dana talang tersedia.
                     </div>
                 </li>
             @endif

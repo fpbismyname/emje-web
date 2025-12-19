@@ -2,20 +2,20 @@
 
 namespace App\Models;
 
+use App\Enums\KontrakKerja\StatusPembayaranKontrakKerjaEnum;
 use App\Enums\Pelatihan\JenisPembayaranEnum;
-use App\Enums\Pelatihan\StatusPembayaranPelatihanEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 
-class PembayaranPelatihan extends Model
+class PembayaranDanaTalang extends Model
 {
     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'pembayaran_pelatihan';
+    protected $table = 'pembayaran_dana_talang';
     /**
      * The attributes that are mass assignable.
      *
@@ -28,7 +28,7 @@ class PembayaranPelatihan extends Model
         'bukti_pembayaran',
         'catatan',
         'tanggal_pembayaran',
-        'pendaftaran_pelatihan_id'
+        'pengajuan_kontrak_kerja_id'
     ];
     /**
      * The attributes that should be cast to native types.
@@ -36,7 +36,7 @@ class PembayaranPelatihan extends Model
      * @var array
      */
     protected $casts = [
-        'status' => StatusPembayaranPelatihanEnum::class,
+        'status' => StatusPembayaranKontrakKerjaEnum::class,
         'created_at' => 'datetime',
         'tanggal_pembayaran' => 'datetime',
         'jenis_pembayaran' => JenisPembayaranEnum::class,
@@ -44,9 +44,9 @@ class PembayaranPelatihan extends Model
     /**
      * Relationships
      */
-    public function pendaftaran_pelatihan()
+    public function pengajuan_kontrak_kerja()
     {
-        return $this->belongsTo(PendaftaranPelatihan::class, 'pendaftaran_pelatihan_id');
+        return $this->belongsTo(PengajuanKontrakKerja::class, 'pengajuan_kontrak_kerja_id');
     }
     /**
      * Scope
@@ -61,13 +61,13 @@ class PembayaranPelatihan extends Model
             ->orWhere('status', 'like', $kw)
             ->orWhere('jenis_pembayaran', 'like', $kw)
             ->orWhere('catatan', 'like', $kw)
-            ->orWhereHas('pendaftaran_pelatihan', function ($q) use ($kw) {
+            ->orWhereHas('pengajuan_kontrak_kerja', function ($q) use ($kw) {
                 $q->whereHas('users', function ($nqr) use ($kw) {
                     $nqr->whereHas('profil_user', function ($nnqr) use ($kw) {
                         $nnqr->where('nama_lengkap', 'like', $kw);
                     });
-                })->orWhereHas('pelatihan', function ($nqr) use ($kw) {
-                    $nqr->where('nama_pelatihan', 'like', $kw);
+                })->orWhereHas('kontrak_kerja', function ($nqr) use ($kw) {
+                    $nqr->where('nama_perusahaan', 'like', $kw);
                 });
             });
     }
@@ -89,8 +89,7 @@ class PembayaranPelatihan extends Model
      */
     protected $appends = [
         'formatted_nominal',
-        'tanggal_pembayaran',
-        'link_bukti_pembayaran'
+        'formatted_tanggal_pembayaran'
     ];
     /**
      * Accessor
@@ -112,12 +111,6 @@ class PembayaranPelatihan extends Model
     {
         return Attribute::make(
             get: fn() => $this->tanggal_pembayaran->format('d F Y')
-        );
-    }
-    public function linkBuktiPembayaran(): Attribute
-    {
-        return Attribute::make(
-            get: fn() => url('storage/private?file=') . urlencode($this->bukti_pembayaran)
         );
     }
 }

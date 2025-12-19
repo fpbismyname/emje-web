@@ -174,7 +174,7 @@ class User extends Authenticatable
     {
         $pengajuan_kontrak_selesai = $this->pengajuan_kontrak_kerja()->get()->every(function ($pengajuan) {
             if ($pengajuan->exists()) {
-                return !in_array($pengajuan?->status, [StatusPengajuanKontrakKerja::DALAM_PROSES]);
+                return !in_array($pengajuan?->status, [StatusPengajuanKontrakKerja::PROSES_PENGAJUAN]);
             } else {
                 return true;
             }

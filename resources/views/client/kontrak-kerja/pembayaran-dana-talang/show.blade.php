@@ -1,53 +1,48 @@
-<x-layouts.client-app title="{{ $pelatihan_diikuti->pendaftaran_pelatihan->pelatihan->nama_pelatihan }}">
-    {{-- Data gelombang pelatihan --}}
+<x-layouts.client-app title="{{ $kontrak_kerja_diikuti->pengajuan_kontrak_kerja->kontrak_kerja->nama_perusahaan }}">
     <div class="grid md:grid-cols-2 gap-4 rounded-box p-4">
 
         <div class="grid md:col-span-2">
-            <h6>Data pelatihan</h6>
+            <h6>Data kontrak kerja</h6>
         </div>
 
-        {{-- Nama Gelombang --}}
+        {{-- Nama Perusahaan --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Nama Gelombang</legend>
-            <p class="w-full">{{ $pelatihan_diikuti->gelombang_pelatihan->nama_gelombang }}</p>
+            <legend class="fieldset-legend">Nama Perusahaan</legend>
+            <p>{{ $kontrak_kerja_diikuti->pengajuan_kontrak_kerja->kontrak_kerja->nama_perusahaan }}</p>
         </fieldset>
-
-        {{-- Sesi Gelombang --}}
+        {{-- Rentang Gaji --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Sesi Gelombang</legend>
-            <p class="w-full">{{ $pelatihan_diikuti->gelombang_pelatihan->sesi->label() }}</p>
+            <legend class="fieldset-legend">Rentang Gaji</legend>
+            <p>{{ $kontrak_kerja_diikuti->pengajuan_kontrak_kerja->kontrak_kerja->formatted_rentang_gaji }}</p>
         </fieldset>
-
-        {{-- Biaya pelatihan --}}
+        {{-- Status --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Biaya pelatihan</legend>
-            <p class="w-full">{{ $pelatihan_diikuti->gelombang_pelatihan->pelatihan->formatted_nominal_biaya }}</p>
+            <legend class="fieldset-legend">Status</legend>
+            <p>{{ $kontrak_kerja_diikuti->pengajuan_kontrak_kerja->kontrak_kerja->status->label() }}</p>
         </fieldset>
-
-        {{-- Nominal DP pendaftaran --}}
+        {{-- Durasi Kontrak Kerja --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Nominal DP pendaftaran</legend>
-            <p class="w-full">{{ $pelatihan_diikuti->gelombang_pelatihan->pelatihan->formatted_nominal_dp }}</p>
+            <legend class="fieldset-legend">Durasi Kontrak Kerja</legend>
+            <p>{{ $kontrak_kerja_diikuti->pengajuan_kontrak_kerja->kontrak_kerja->formatted_durasi_kontrak_kerja }}</p>
         </fieldset>
-
-        {{-- Tanggal Mulai --}}
+        {{-- Maksimal pelamar --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Tanggal Mulai</legend>
-            <p class="w-full">{{ $pelatihan_diikuti->gelombang_pelatihan->formatted_tanggal_mulai }}</p>
+            <legend class="fieldset-legend">Maksimal pelamar</legend>
+            <p>{{ $kontrak_kerja_diikuti->pengajuan_kontrak_kerja->kontrak_kerja->maksimal_pelamar }}</p>
         </fieldset>
-
-        {{-- Tanggal Selesai --}}
+        {{-- Surat kontrak --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Tanggal Selesai</legend>
-            <p class="w-full">{{ $pelatihan_diikuti->gelombang_pelatihan->formatted_tanggal_selesai }}</p>
+            <legend class="fieldset-legend">Surat kontrak</legend>
+            <a target="_blank"
+                href="{{ route('storage.private.show', ['file' => $kontrak_kerja_diikuti->pengajuan_kontrak_kerja->kontrak_kerja->surat_kontrak]) }}"
+                class="link link-hover link-primary">Lihat selengkapnya</a>
         </fieldset>
-
-        {{-- Maksimal peserta --}}
+        {{-- Deskripsi --}}
         <fieldset class="fieldset">
-            <legend class="fieldset-legend">Kuota peserta pelatihan</legend>
-            <p class="w-full">{{ $pelatihan_diikuti->gelombang_pelatihan->total_maksimal_peserta }}</p>
+            <legend class="fieldset-legend">Deskripsi</legend>
+            <p class="whitespace-pre-line">
+                {{ $kontrak_kerja_diikuti->pengajuan_kontrak_kerja->kontrak_kerja->deskripsi }}</p>
         </fieldset>
-
     </div>
 
     <div class="divider"></div>
@@ -57,7 +52,7 @@
             <h6>Histori pembayaran</h6>
         </div>
         <ul class="list bg-base-200 rounded-box">
-            @foreach ($pelatihan_diikuti->pendaftaran_pelatihan->pembayaran_pelatihan as $pembayaran)
+            @foreach ($kontrak_kerja_diikuti->pengajuan_kontrak_kerja->pembayaran_dana_talang as $pembayaran)
                 <li class="list-row">
                     <div class="tabular-nums">
                         {{ $loop->iteration }}
@@ -79,7 +74,7 @@
                         </a>
                     @else
                         <a class="btn btn-primary btn-sm"
-                            href="{{ route('client.pelatihan.pembayaran-pelatihan.bayar-cicilan', [$pelatihan_diikuti->id, $pembayaran->id]) }}">
+                            href="{{ route('client.kontrak-kerja.pembayaran-dana-talang.bayar-cicilan', [$kontrak_kerja_diikuti->id, $pembayaran->id]) }}">
                             Bayar cicilan
                         </a>
                     @endif
@@ -92,7 +87,8 @@
     {{-- Action  --}}
     <div class="grid place-items-center">
         <div class="flex flex-row gap-2">
-            <a href="{{ route('client.pelatihan.pembayaran-pelatihan.index') }}" class="btn btn-neutral">Kembali</a>
+            <a href="{{ route('client.kontrak-kerja.pembayaran-dana-talang.index') }}"
+                class="btn btn-neutral">Kembali</a>
         </div>
     </div>
 </x-layouts.client-app>

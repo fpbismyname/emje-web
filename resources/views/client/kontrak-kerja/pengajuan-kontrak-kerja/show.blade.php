@@ -58,6 +58,12 @@
             </fieldset>
         @endif
 
+        {{-- Sumber dana pemberangkatan --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Sumber dana pemberangkatan</legend>
+            <p>{{ $datas->sumber_dana->label() }}</p>
+        </fieldset>
+
         {{-- Surat pengajuan kontrak kerja --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Surat pengajuan kontrak kerja</legend>
@@ -69,7 +75,7 @@
     {{-- Action  --}}
     <div class="grid place-items-center mt-4">
         <div class="flex flex-row gap-2">
-            @if ($datas->status === App\Enums\KontrakKerja\StatusPengajuanKontrakKerja::DALAM_PROSES)
+            @if ($datas->status === App\Enums\KontrakKerja\StatusPengajuanKontrakKerja::PROSES_PENGAJUAN)
                 <a href="{{ route('client.kontrak-kerja.pengajuan-kontrak-kerja.edit', [$datas->id]) }}"
                     class="btn btn-primary">Edit</a>
             @endif

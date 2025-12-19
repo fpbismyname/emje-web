@@ -10,12 +10,14 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('pengajuan_kontrak_kerja', function (Blueprint $table) {
+        Schema::create('pembayaran_dana_talang', function (Blueprint $table) {
             $table->id();
-            $table->string('surat_pengajuan_kontrak');
-            $table->string('sumber_dana');
+            $table->decimal('nominal', 15, 2);
             $table->string('status');
-            $table->string('catatan')->nullable();
+            $table->string('jenis_pembayaran');
+            $table->string('bukti_pembayaran')->nullable();
+            $table->text('catatan')->nullable();
+            $table->dateTime('tanggal_pembayaran');
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('pengajuan_kontrak_kerja');
+        Schema::dropIfExists('pembayaran_dana_talang');
     }
 };

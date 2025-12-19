@@ -35,6 +35,10 @@
                 <x-lucide-search class="w-4" />
             </button>
         </form>
+        <div class="flex flex-row">
+            <a href="{{ route('admin.export.transaksi-rekening', ['search' => request('search'), 'tipe_transaksi' => request('tipe_transaksi')]) }}"
+                class="btn btn-primary">Export data</a>
+        </div>
     </div>
 
     {{-- Datatable --}}

@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Client;
 
+use App\Enums\KontrakKerja\SumberDanaEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PengajuanKontrakKerjaRequest extends FormRequest
 {
@@ -24,6 +26,7 @@ class PengajuanKontrakKerjaRequest extends FormRequest
         $request_method = $this->getMethod();
         if ($request_method === 'PUT') {
             return [
+                'sumber_dana' => ['required', Rule::in(array_column(SumberDanaEnum::cases(), 'value'))],
                 'surat_pengajuan_kontrak' => [
                     'nullable',
                     'file',
@@ -33,6 +36,7 @@ class PengajuanKontrakKerjaRequest extends FormRequest
             ];
         }
         return [
+            'sumber_dana' => ['required', Rule::in(array_column(SumberDanaEnum::cases(), 'value'))],
             'surat_pengajuan_kontrak' => [
                 'required',
                 'nullable',

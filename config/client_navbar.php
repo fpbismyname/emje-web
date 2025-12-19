@@ -55,6 +55,12 @@ return [
                 'roles' => ['peserta']
             ],
             [
+                'label' => 'Pembayaran dana talang',
+                'icon' => 'coins',
+                'route_name' => 'pembayaran-dana-talang.index',
+                'roles' => ['peserta']
+            ],
+            [
                 'label' => 'Pengajuan kontrak kerja',
                 'icon' => 'file-user',
                 'route_name' => 'pengajuan-kontrak-kerja.index',

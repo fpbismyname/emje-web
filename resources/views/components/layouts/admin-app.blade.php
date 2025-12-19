@@ -14,12 +14,13 @@
                 </div>
                 <div class="flex flex-none">
                     <div class="dropdown dropdown-bottom dropdown-end">
-                        <div role="button" tabindex="0" class="btn btn-primary btn-circle">
+                        <div role="button" tabindex="0" class="btn btn-primary ">
                             <x-lucide-user class="w-4" />
+                            {{ auth()->user()->formatted_name }}
                         </div>
                         <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-64 shadow-sm">
                             <li class="menu-title">
-                                {{ auth()->user()->formatted_name }}
+                                Menu
                             </li>
                             <li>
                                 <a href="{{ route('admin.pengaturan.edit') }}">Pengaturan</a>

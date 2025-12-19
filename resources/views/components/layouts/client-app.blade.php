@@ -61,11 +61,12 @@
                     @endforeach
                 </ul>
                 <div class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn btn-circle btn-primary m-1">
+                    <div tabindex="0" role="button" class="btn  btn-primary m-1">
                         <x-lucide-user class="w-4" />
+                        {{ auth()->user()->name }}
                     </div>
                     <ul tabindex="-1" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
-                        <li class="menu-title">{{ auth()->user()->name }}</li>
+                        <li class="menu-title">Menu</li>
                         <li><a href="{{ route('client.pengaturan.edit') }}">Pengaturan</a></li>
                         <form action="{{ route('client.logout') }}" method="post">
                             @csrf

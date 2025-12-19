@@ -1,5 +1,5 @@
 <x-layouts.admin-app
-    title="Upload sertifikat peserta - {{ $pelatihan_peserta->gelombang_pelatihan->pelatihan->nama_pelatihan }}">
+    title="Upload sertifikat peserta - {{ $pelatihan_peserta->pendaftaran_pelatihan->users->profil_user->nama_lengkap }}">
     {{-- Data pelatihan --}}
     <form
         action="{{ route('admin.pelatihan-peserta.detail.sertifikasi.store', [$profil_user->id, $pelatihan_peserta->id]) }}"

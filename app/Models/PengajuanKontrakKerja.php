@@ -2,7 +2,10 @@
 
 namespace App\Models;
 
+use App\Enums\KontrakKerja\StatusPembayaranKontrakKerjaEnum;
 use App\Enums\KontrakKerja\StatusPengajuanKontrakKerja;
+use App\Enums\KontrakKerja\SumberDanaEnum;
+use App\Enums\Pelatihan\JenisPembayaranEnum;
 use App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -23,6 +26,7 @@ class PengajuanKontrakKerja extends Model
      */
     protected $fillable = [
         'status',
+        'sumber_dana',
         'surat_pengajuan_kontrak',
         'catatan',
         'kontrak_kerja_id',
@@ -34,6 +38,7 @@ class PengajuanKontrakKerja extends Model
      * @var array
      */
     protected $casts = [
+        'sumber_dana' => SumberDanaEnum::class,
         'status' => StatusPengajuanKontrakKerja::class,
         'created_at' => 'datetime',
     ];
@@ -51,6 +56,14 @@ class PengajuanKontrakKerja extends Model
     public function kontrak_kerja_peserta()
     {
         return $this->hasOne(KontrakKerjaPeserta::class, 'pengajuan_kontrak_kerja_id');
+    }
+    public function pembayaran_dana_talang_angsuran()
+    {
+        return $this->hasMany(PembayaranDanaTalang::class, 'pengajuan_kontrak_kerja_id')->latest('tanggal_pembayaran')->search_by_column('jenis_pembayaran', JenisPembayaranEnum::ANGSURAN);
+    }
+    public function pembayaran_dana_talang()
+    {
+        return $this->hasMany(PembayaranDanaTalang::class, 'pengajuan_kontrak_kerja_id');
     }
     /**
      * Scope
@@ -82,7 +95,10 @@ class PengajuanKontrakKerja extends Model
      */
     protected $appends = [
         'has_reviewed',
-        'layak_diterima'
+        'layak_diterima',
+        'pembayaranDanaTalangLunas',
+        'decimal_total_dana_talang_terbayar',
+        'formatted_total_dana_talang_terbayar'
     ];
     /**
      * Accessor
@@ -100,6 +116,30 @@ class PengajuanKontrakKerja extends Model
 
         return Attribute::make(
             get: fn() => $sisaKuota > 0
+        );
+    }
+    public function decimalTotalDanaTalangTerbayar(): Attribute
+    {
+        $total_biaya_terbayar = $this->pembayaran_dana_talang()->where('status', StatusPembayaranKontrakKerjaEnum::SUDAH_BAYAR)->sum('nominal');
+        return Attribute::make(
+            get: fn() => $total_biaya_terbayar
+        );
+    }
+    public function formattedTotalDanaTalangTerbayar(): Attribute
+    {
+        $total_biaya_terbayar = $this->decimal_total_dana_talang_terbayar;
+        return Attribute::make(
+            get: fn() => "Rp " . number_format($total_biaya_terbayar, 0, ",", ".")
+        );
+    }
+    public function pembayaranDanaTalangLunas(): Attribute
+    {
+        $total_biaya = config('rules-lpk.biaya_pemberangkatan');
+        $angsuran_terbayar = $this->pembayaran_dana_talang()->where('status', StatusPembayaranKontrakKerjaEnum::SUDAH_BAYAR)->sum('nominal');
+        $total_terbayar = $angsuran_terbayar;
+
+        return Attribute::make(
+            get: fn() => $total_terbayar >= $total_biaya
         );
     }
 }

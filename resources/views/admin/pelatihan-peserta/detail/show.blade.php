@@ -160,7 +160,9 @@
             @if ($pelatihan_peserta->sertifikasi()->exists())
                 @foreach ($pelatihan_peserta->sertifikasi as $sertifikat)
                     <li class="list-row">
-                        <div class="list-col-grow">Sertifikat {{ $sertifikat->jenis_sertifikat->label() }}</div>
+                        <div class="list-col-grow">Sertifikat
+                            {{ $sertifikat->jenis_sertifikat === App\Enums\Pelatihan\JenisSertifikatEnum::SSW ? 'Specified Skilled Worker' : $sertifikat->jenis_sertifikat->value }}
+                        </div>
                         @if ($sertifikat->jenis_sertifikat === App\Enums\Pelatihan\JenisSertifikatEnum::PELATIHAN)
                             <a href="{{ route('admin.sertifikasi.download', [$sertifikat->id]) }}"
                                 class="btn btn-primary btn-sm">

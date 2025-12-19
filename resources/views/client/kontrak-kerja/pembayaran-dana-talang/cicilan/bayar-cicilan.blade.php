@@ -2,7 +2,7 @@
 
     {{-- Form --}}
     <form
-        action="{{ route('client.pelatihan.pembayaran-pelatihan.submit-bayar-cicilan', [$id_pelatihan_diikuti, $cicilan->id]) }}"
+        action="{{ route('client.kontrak-kerja.pembayaran-dana-talang.submit-bayar-cicilan', [$id_kontrak_kerja_diikuti, $cicilan->id]) }}"
         method="post" enctype="multipart/form-data">
         @csrf
         @method('put')
@@ -33,7 +33,7 @@
         <div class="grid place-items-center mt-4">
             <div class="flex flex-row gap-2">
                 <button type="submit" class="btn btn-primary">Bayar</button>
-                <a href="{{ route('client.pelatihan.pembayaran-pelatihan.show', [$id_pelatihan_diikuti]) }}"
+                <a href="{{ route('client.pelatihan.pembayaran-pelatihan.show', [$id_kontrak_kerja_diikuti]) }}"
                     class="btn btn-neutral">Kembali</a>
             </div>
         </div>

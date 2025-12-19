@@ -37,6 +37,12 @@
             </fieldset>
         @endif
 
+        {{-- Sumber dana --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Sumber dana pemberangkatan</legend>
+            <p class="py-2">{{ $pengajuan_kontrak_kerja->sumber_dana->label() }}</p>
+        </fieldset>
+
         {{-- Surat lamaran --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Surat pengajuan kontrak</legend>

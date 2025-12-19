@@ -74,7 +74,7 @@ class PembayaranPelatihanController extends Controller
             $ext_file = $bukti_pembayaran->getClientOriginalExtension();
             $safe_nama_pelatihan = Str::slug($pelatihan_diikuti->gelombang_pelatihan->nama_gelombang);
             $safe_name = Str::slug($user->name);
-            $file_name = "pembayaran_angsuran_cicilan_pelatihan {$safe_nama_pelatihan} dari {$safe_name} .{$ext_file}";
+            $file_name = "pembayaran_angsuran_cicilan_pelatihan_{$safe_nama_pelatihan}_dari_{$safe_name}.{$ext_file}";
             $path_bukti_pembayaran = $private_storage->putFileAs('users/pembayaran_pelatihan', $bukti_pembayaran, $file_name);
         }
 

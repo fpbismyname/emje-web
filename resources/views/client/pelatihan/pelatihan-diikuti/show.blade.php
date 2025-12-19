@@ -96,12 +96,13 @@
                 @if ($sertifikat->jenis_sertifikat === App\Enums\Pelatihan\JenisSertifikatEnum::PELATIHAN)
                     <a href="{{ route('client.sertifikasi.download', [$sertifikat->id]) }}"
                         class="link link-hover link-primary">
-                        Unduh sertifikat {{ $sertifikat->jenis_sertifikat->label() }}
+                        Unduh sertifikat {{ $sertifikat->jenis_sertifikat->value }}
                     </a>
                 @else
                     <a href="{{ route('storage.private.download', ['file' => $sertifikat->sertifikat]) }}"
                         class="link link-hover link-primary">
-                        Unduh sertifikat {{ $sertifikat->jenis_sertifikat->label() }}
+                        Unduh sertifikat
+                        {{ $sertifikat->jenis_sertifikat === App\Enums\Pelatihan\JenisSertifikatEnum::SSW ? 'Specified Skilled Worker' : $sertifikat->jenis_sertifikat->value }}
                     </a>
                 @endif
             @endforeach

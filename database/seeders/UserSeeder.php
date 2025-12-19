@@ -14,6 +14,7 @@ use App\Enums\Pelatihan\StatusPembayaranPelatihanEnum;
 use App\Enums\Pelatihan\StatusPendaftaranPelatihanEnum;
 use App\Enums\Pelatihan\TenorCicilanPelatihanEnum;
 use App\Enums\Rekening\TipeTransaksiEnum;
+use App\Enums\User\JenisKelaminEnum;
 use App\Enums\User\RoleEnum;
 use App\Models\GelombangPelatihan;
 use App\Models\KontrakKerja;
@@ -64,16 +65,16 @@ class UserSeeder extends Seeder
 
         // Seeder Pelatihan
         $pelatihan_list = [
-            ['title' => 'Sistem Akuakultur Cerdas Berbasis IoT dan AI', 'biaya' => 7500000, 'durasi' => 8],
-            ['title' => 'Recirculating Aquaculture System (RAS) Tingkat Lanjut', 'biaya' => 9000000, 'durasi' => 6],
-            ['title' => 'Akuakultur Berkelanjutan dan Manajemen Lingkungan', 'biaya' => 6500000, 'durasi' => 9],
-            ['title' => 'Manajemen Kesehatan Ikan dan Biosekuriti Global', 'biaya' => 7000000, 'durasi' => 6],
-            ['title' => 'Pengolahan Hasil Perikanan dan Standar Mutu Internasional', 'biaya' => 8000000, 'durasi' => 4],
-            ['title' => 'Pertanian Presisi Berbasis Drone dan GIS', 'biaya' => 8500000, 'durasi' => 7],
-            ['title' => 'Greenhouse dan Vertical Farming Modern', 'biaya' => 9000000, 'durasi' => 6],
-            ['title' => 'Sistem Irigasi Cerdas dan Manajemen Air', 'biaya' => 6000000, 'durasi' => 7],
-            ['title' => 'Manajemen Pertanian Digital dan Traceability', 'biaya' => 7000000, 'durasi' => 9],
-            ['title' => 'Pertanian Sirkular dan Bioekonomi Berkelanjutan', 'biaya' => 6500000, 'durasi' => 6],
+            ['title' => 'Sistem Akuakultur Cerdas Berbasis IoT dan AI', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 8],
+            ['title' => 'Recirculating Aquaculture System (RAS) Tingkat Lanjut', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 6],
+            ['title' => 'Akuakultur Berkelanjutan dan Manajemen Lingkungan', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 9],
+            ['title' => 'Manajemen Kesehatan Ikan dan Biosek    uriti Global', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 6],
+            ['title' => 'Pengolahan Hasil Perikanan dan Standar Mutu Internasional', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 4],
+            ['title' => 'Pertanian Presisi Berbasis Drone dan GIS', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 7],
+            ['title' => 'Greenhouse dan Vertical Farming Modern', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 6],
+            ['title' => 'Sistem Irigasi Cerdas dan Manajemen Air', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 7],
+            ['title' => 'Manajemen Pertanian Digital dan Traceability', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 9],
+            ['title' => 'Pertanian Sirkular dan Bioekonomi Berkelanjutan', 'biaya' => config('rules-lpk.biaya_pelatihan'), 'durasi' => 6],
         ];
         $pelatihan = [];
 
@@ -96,7 +97,7 @@ class UserSeeder extends Seeder
         foreach ($pelatihan as $p) {
             // Misal tiap pelatihan punya 1 batch
             $gelombang = GelombangPelatihan::create([
-                'nama_gelombang' => "{$p->nama_pelatihan} - Gelombang ke 1",
+                'nama_gelombang' => "{$p->nama_pelatihan} - Gelombang 1",
                 'pelatihan_id' => $p->id,
                 'tanggal_mulai' => now(),
                 'tanggal_selesai' => now()->addMonths($p->durasi_pelatihan),
@@ -126,7 +127,26 @@ class UserSeeder extends Seeder
         }
 
         // Seeder Profil User dan Pendaftaran
-        $seeder_profil_user = ProfilUser::factory()->withUser()->count(25)->create();
+        $users = [
+            ['nama_lengkap' => 'Avi', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Dedi Hidayat', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Dimas Ariandi', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Donny Renaldi', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Fitrah Alfiansyah', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Gunanta Barus', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Prima Renaldi Sitepu', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Rafli Kurniawan', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Riza Rinaldi', 'gender' => JenisKelaminEnum::PRIA],
+            ['nama_lengkap' => 'Sandi Erlangga', 'gender' => JenisKelaminEnum::PRIA],
+        ];
+        $seeder_profil_user = [];
+        foreach ($users as $user) {
+            $seeder_profil_user[] = ProfilUser::factory()->withUser()->create([
+                'nama_lengkap' => $user['nama_lengkap'],
+                'jenis_kelamin' => $user['gender'],
+            ]);
+        }
+        // $seeder_profil_user = ProfilUser::factory()->withUser()->count(25)->create();
         foreach ($seeder_profil_user as $profil_user) {
             $pelatihan_user = collect($pelatihan)->random();
 

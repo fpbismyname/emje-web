@@ -78,12 +78,11 @@ class PengajuanKontrakKerjaController extends Controller
             $data_kontrak_kerja[$key] = $path;
         }
 
+        $data_kontrak_kerja['status'] = StatusPengajuanKontrakKerja::PROSES_PENGAJUAN;
+        $data_kontrak_kerja['users_id'] = $user->id;
+
         // Simpan data pengajuan 
-        $simpan_kontrak = $kontrak_kerja->pengajuan_kontrak_kerja()->create([
-            'status' => StatusPengajuanKontrakKerja::PROSES_PENGAJUAN,
-            'surat_pengajuan_kontrak' => $data_kontrak_kerja['surat_pengajuan_kontrak'],
-            'users_id' => $user->id
-        ]);
+        $simpan_kontrak = $kontrak_kerja->pengajuan_kontrak_kerja()->create($data_kontrak_kerja);
 
         if ($simpan_kontrak->wasRecentlyCreated) {
             Toast::success('Pengajuan kontrak kerja berhasil dikirim.');

@@ -5,6 +5,7 @@ use App\Http\Controllers\Client\DashboardController;
 use App\Http\Controllers\Client\HomepageController;
 use App\Http\Controllers\Client\KontrakKerja\DaftarKontrakKerjaController;
 use App\Http\Controllers\Client\KontrakKerja\KontrakKerjaDiikuti;
+use App\Http\Controllers\Client\KontrakKerja\PembayaranDanaTalangController;
 use App\Http\Controllers\Client\KontrakKerja\PengajuanKontrakKerjaController;
 use App\Http\Controllers\Client\Pelatihan\DaftarPelatihanController;
 use App\Http\Controllers\Client\Pelatihan\PelatihanDiikutiController;
@@ -40,7 +41,7 @@ Route::prefix('/')->name('client.')->group(function () {
                 'pembayaran-pelatihan' => PembayaranPelatihanController::class,
             ]);
             // Pembayaran pelatihan
-            Route::prefix('/pembayaran-pelatihan/{id_pembayaran}')->name('pembayaran_pelatihan.')->group(function () {
+            Route::prefix('/pembayaran-pelatihan/{id_pembayaran}')->name('pembayaran-pelatihan.')->group(function () {
                 Route::get('/bayar-cicilan/{id}', [PembayaranPelatihanController::class, 'bayar_cicilan'])->name('bayar-cicilan');
                 Route::put('/bayar-cicilan/{id}/submit', [PembayaranPelatihanController::class, 'submit_bayar_cicilan'])->name('submit-bayar-cicilan');
             });
@@ -50,8 +51,14 @@ Route::prefix('/')->name('client.')->group(function () {
             Route::resources([
                 'daftar-kontrak-kerja' => DaftarKontrakKerjaController::class,
                 'pengajuan-kontrak-kerja' => PengajuanKontrakKerjaController::class,
-                'kontrak-kerja-diikuti' => KontrakKerjaDiikuti::class
+                'kontrak-kerja-diikuti' => KontrakKerjaDiikuti::class,
+                'pembayaran-dana-talang' => PembayaranDanaTalangController::class
             ]);
+            // Pembayaran pelatihan
+            Route::prefix('/pembayaran-dana-talang/{id_pembayaran}')->name('pembayaran-dana-talang.')->group(function () {
+                Route::get('/bayar-cicilan/{id}', [PembayaranDanaTalangController::class, 'bayar_cicilan'])->name('bayar-cicilan');
+                Route::put('/bayar-cicilan/{id}/submit', [PembayaranDanaTalangController::class, 'submit_bayar_cicilan'])->name('submit-bayar-cicilan');
+            });
         });
 
         // Pengaturan

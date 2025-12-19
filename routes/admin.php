@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\KontrakKerjaController;
 use App\Http\Controllers\Admin\KontrakkerjaPesertaController;
 use App\Http\Controllers\Admin\PelatihanController;
 use App\Http\Controllers\Admin\PelatihanPesertaController;
+use App\Http\Controllers\Admin\PembayaranDanaTalangController;
 use App\Http\Controllers\Admin\PembayaranPelatihanController;
 use App\Http\Controllers\Admin\PendaftaranPelatihanController;
 use App\Http\Controllers\Admin\PengajuanKontrakKerjaController;
@@ -55,7 +56,9 @@ Route::prefix('/admin')->name('admin.')->group(function () {
             'pengajuan-kontrak-kerja' => PengajuanKontrakKerjaController::class,
             // Kontrak kerja peserta
             'kontrak-kerja-peserta' => KontrakkerjaPesertaController::class,
-            'kontrak-kerja-peserta.detail' => DetailKontrakKerjaPeserta::class
+            'kontrak-kerja-peserta.detail' => DetailKontrakKerjaPeserta::class,
+            // Pembayaran pelatihan
+            'pembayaran-dana-talang' => PembayaranDanaTalangController::class,
         ]);
 
         // Users
@@ -79,6 +82,16 @@ Route::prefix('/admin')->name('admin.')->group(function () {
         Route::prefix('/pengaturan')->name('pengaturan.')->group(function () {
             Route::get('/', [PengaturanController::class, 'admin_edit'])->name('edit');
             Route::put('/update-pengguna', [PengaturanController::class, 'admin_update_pengguna'])->name('update-pengguna');
+        });
+
+        // Exports data
+        Route::prefix('/export')->name('export.')->group(function () {
+            // Transaksi rekening
+            Route::get('/transaksi-rekening', [RekeningController::class, 'export'])->name('transaksi-rekening');
+            // Pembayaran pelatihan
+            Route::get('/pembayaran-pelatihan', [PembayaranPelatihanController::class, 'export'])->name('pembayaran_pelatihan');
+            // Pembayaran kontrak kerja
+            Route::get('/pembayaran-dana-talang', [PembayaranDanaTalangController::class, 'export'])->name('pembayaran_dana_talang');
         });
 
     });

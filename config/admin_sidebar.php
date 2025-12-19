@@ -45,6 +45,13 @@ return [
         'roles' => ['bendahara']
     ],
     [
+        'label' => 'Pembayaran dana talang',
+        'icon' => 'coins',
+        'type' => 'menu',
+        'route_name' => 'admin.pembayaran-dana-talang.index',
+        'roles' => ['bendahara']
+    ],
+    [
         'label' => 'Manajemen Pelatihan',
         'type' => 'menu-title',
         'roles' => ['admin', 'pengelola_pendaftaran']

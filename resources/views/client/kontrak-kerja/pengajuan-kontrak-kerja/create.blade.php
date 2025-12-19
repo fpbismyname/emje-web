@@ -1,13 +1,4 @@
 <x-layouts.client-app title="Pengajuan kontrak kerja - {{ $datas->nama_perusahaan }}">
-    {{-- Info --}}
-    {{-- <div class="flex flex-col my-6 gap-4">
-        <p class="whitespace-pre-line">{{ config('site.prosedur_pengajuan_surat_kontrak') }}</p>
-        <div class="flex flex-row">
-            <a class="btn btn-primary"
-                href="{{ route('storage.private.download', ['file' => $datas->surat_kontrak]) }}">Download surat kontrak
-                kerja</a>
-        </div>
-    </div> --}}
 
     {{-- Data kontrak kerja --}}
     <div class="grid md:grid-cols-2 gap-4 rounded-box">
@@ -69,6 +60,18 @@
         @method('post')
         {{-- Surat pengajuan kontrak kerja --}}
         <div class="grid md:grid-cols-2 gap-4 rounded-box">
+            {{-- Sumber dana --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Sumber dana pemberangkatan</legend>
+                <select name="sumber_dana" class="select w-full" required>
+                    <option value="" selected disabled>Pilih sumber dana pemberangkatan</option>
+                    @foreach (App\Enums\KontrakKerja\SumberDanaEnum::cases() as $sumber)
+                        <option value="{{ $sumber->value }}" @if (old('sumber_dana') === $sumber->value) selected @endif>
+                            {{ $sumber->label() }}</option>
+                    @endforeach
+                </select>
+            </fieldset>
+
             {{-- Surat pengajuan kontrak kerja --}}
             <fieldset class="fieldset">
                 <legend class="fieldset-legend">Surat pengajuan kontrak</legend>
