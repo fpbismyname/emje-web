@@ -7,6 +7,7 @@
                     <x-ui.img :src="route('storage.public.show', ['file' => config('site.icon')])" class="max-w-12" />
                 </a>
             </div>
+            {{-- Nav men --}}
             <div class="md:flex md:flex-none hidden">
                 <ul class="menu menu-horizontal gap-4 items-center">
                     @foreach (config('client_navbar') as $menu)
@@ -87,6 +88,7 @@
                             <x-lucide-menu class="w-4" />
                         </label>
                     </div>
+                    {{-- Side menu --}}
                     <div class="drawer-side">
                         <label for="client-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
                         <ul class="menu bg-base-200 min-h-full w-80 p-4">
@@ -96,26 +98,50 @@
                                     <x-lucide-x class="w-4" />
                                 </label>
                             </div>
-                            <li>
-                                <details>
-                                    <summary>Pelatihan</summary>
-                                    <ul>
-                                        <li><a href="">Daftar pelatihan</a></li>
-                                        <li><a href="">Pendaftaran pelatihan</a></li>
-                                        <li><a href="">Pelatihan diikuti</a></li>
-                                    </ul>
-                                </details>
-                            </li>
-                            <li>
-                                <details>
-                                    <summary>Kontrak kerja</summary>
-                                    <ul>
-                                        <li><a href="">Daftar kontrak kerja</a></li>
-                                        <li><a href="">Pengajuan kontrak kerja</a></li>
-                                        <li><a href="">Kontrak kerja diikuti</a></li>
-                                    </ul>
-                                </details>
-                            </li>
+                            @foreach (config('client_navbar') as $menu)
+                                @switch($menu['type'])
+                                    @case('dropdown')
+                                        @php
+                                            $parent_route = $menu['route_name'];
+                                            $is_parent_active = request()->routeIs($parent_route . '*');
+                                        @endphp
+                                        <li>
+                                            <details>
+                                                <summary class="{{ $is_parent_active ? 'font-bold' : '' }}"> <x-dynamic-component :component="'lucide-' . $menu['icon']" class="w-4" /> {{ $menu['label'] }}</summary>
+                                                <ul>
+                                                    @foreach ($menu['children'] as $child)
+                                                        @php
+                                                            $child_route = $parent_route . $child['route_name'];
+                                                            $is_child_active = request()->routeIs($child_route . '*');
+                                                        @endphp
+                                                            <li class="{{ $is_child_active ? 'menu-active' : '' }} rounded-field">
+                                                                <a href="{{ route($child_route)}}">
+                                                                <x-dynamic-component :component="'lucide-' . $child['icon']" class="w-4" />
+                                                                    {{ $child['label'] }}</a></li>
+                                                    @endforeach
+                                                </ul>
+                                            </details>
+                                    @break
+
+                                    @case('menu')
+                                        @php
+                                            $base_route =
+                                                implode('.', array_slice(explode('.', $menu['route_name']), 0, 2)) .
+                                                '.';
+                                            $is_active = request()->routeIs($base_route . '*');
+                                        @endphp
+                                        <li>
+                                            <a href="{{ route($menu['route_name']) }}"
+                                                class="{{ $is_active ? 'font-bold' : null }}">
+                                                <x-dynamic-component :component="'lucide-' . $menu['icon']" class="w-4" />
+                                                {{ $menu['label'] }}
+                                            </a>
+                                        </li>
+                                    @break
+
+                                    @default
+                                @endswitch
+                            @endforeach
                             <li>
                                 <details>
                                     <summary>
