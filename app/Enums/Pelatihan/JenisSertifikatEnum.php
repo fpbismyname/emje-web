@@ -6,7 +6,7 @@ use Illuminate\Support\Str;
 
 enum JenisSertifikatEnum: string
 {
-    case SSW = 'ssw';
+    case SSW = 'Specified Skilled Worker (SSW)';
     case PELATIHAN = 'pelatihan';
     case BAHASA = 'bahasa';
 
