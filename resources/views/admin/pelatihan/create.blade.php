@@ -30,11 +30,22 @@
 
             {{-- Durasi (Bulan) --}}
             <fieldset class="fieldset">
-                <legend class="fieldset-legend">Durasi (Bulan)</legend>
-                <input type="number" name="durasi_bulan" required value="{{ old('durasi_bulan') }}" min="1"
+                <legend class="fieldset-legend">Durasi pelatihan (Bulan)</legend>
+                <input type="number" name="durasi_pelatihan" required value="{{ old('durasi_pelatihan') }}" min="1"
                     class="input validator w-full">
                 <p class="validator-hint hidden text-error">Durasi pelatihan wajib diisi.</p>
-                @error('durasi_bulan')
+                @error('durasi_pelatihan')
+                    <p class="text-error">{{ $message }}</p>
+                @enderror
+            </fieldset>
+
+            {{-- Persentase dp --}}
+            <fieldset class="fieldset">
+                <legend class="fieldset-legend">Persentase DP</legend>
+            <input type="number" name="persentase_dp" required value="{{ old('persentase_dp') }}" min="1" max="75"
+                    class="input validator w-full">
+                <p class="validator-hint hidden text-error">Durasi pelatihan wajib diisi.</p>
+                @error('persentase_dp')
                     <p class="text-error">{{ $message }}</p>
                 @enderror
             </fieldset>

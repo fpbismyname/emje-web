@@ -28,9 +28,10 @@ class PelatihanRequest extends FormRequest
         return [
             'nama_pelatihan' => ['required', 'string', 'max:255'],
             'nominal_biaya' => ['required', 'numeric', 'min:0'],
-            'durasi_bulan' => ['required', 'integer', 'min:1'],
+            'durasi_pelatihan' => ['required', 'integer', 'min:1'],
             'kategori_pelatihan' => ['required', 'string', "in:$enum_kategori_pelatihan"],
             'deskripsi' => ['nullable', 'string'],
+            'persentase_dp' => ['numeric'],
             'status' => ['required', "in:$enum_status_pelatihan"],
         ];
     }

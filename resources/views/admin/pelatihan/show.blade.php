@@ -19,6 +19,12 @@
             <p class="py-2">{{ $pelatihan->formatted_durasi_pelatihan }}</p>
         </fieldset>
 
+        {{-- Persentase DP --}}
+        <fieldset class="fieldset">
+            <legend class="fieldset-legend">Persentase DP</legend>
+            <p class="py-2">{{ $pelatihan->formatted_persentase_dp }}</p>
+        </fieldset>
+
         {{-- Kategori Pelatihan --}}
         <fieldset class="fieldset">
             <legend class="fieldset-legend">Kategori Pelatihan</legend>
