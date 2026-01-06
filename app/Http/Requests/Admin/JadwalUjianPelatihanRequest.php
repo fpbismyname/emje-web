@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Enums\Pelatihan\JenisUjianEnum;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class JadwalUjianPelatihanRequest extends FormRequest
 {
@@ -24,6 +26,7 @@ class JadwalUjianPelatihanRequest extends FormRequest
         return [
             'nama_ujian' => ['required'],
             'lokasi' => ['required'],
+            'jenis_ujian' => ['required', 'string', Rule::in(array_column(JenisUjianEnum::cases(),'value'))],
             'tanggal_mulai' => ['required', 'date', 'before_or_equal:tanggal_selesai'],
             'tanggal_selesai' => ['required', 'date', 'after_or_equal:tanggal_mulai'],
         ];
