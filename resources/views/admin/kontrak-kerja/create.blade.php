@@ -141,7 +141,7 @@
             </fieldset>
 
             {{-- Surat kontrak --}}
-            <fieldset class="fieldset">
+            {{-- <fieldset class="fieldset">
                 <legend class="fieldset-legend">Surat kontrak</legend>
                 <input type="file" name="surat_kontrak" class="file-input w-full validator" required />
                 <p class="validator-hint hidden">
@@ -150,7 +150,7 @@
                 @error('surat_kontrak')
                     <p class="text-error text-sm">{{ $message }}</p>
                 @enderror
-            </fieldset>
+            </fieldset> --}}
         </div>
 
         {{-- Action  --}}

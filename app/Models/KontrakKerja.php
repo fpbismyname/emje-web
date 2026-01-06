@@ -30,7 +30,6 @@ class KontrakKerja extends Model
         'gaji_tertinggi',
         'durasi_kontrak_kerja',
         'deskripsi',
-        'surat_kontrak',
         'maksimal_pelamar',
         'status',
         'kategori_kontrak_kerja'

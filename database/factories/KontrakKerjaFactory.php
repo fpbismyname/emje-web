@@ -42,7 +42,6 @@ class KontrakKerjaFactory extends Factory
             'gaji_tertinggi' => $max,
             'status' => StatusKontrakKerjaEnum::AKTIF->value,
             'deskripsi' => $deskripsi_kontrak_kerja,
-            'surat_kontrak' => 'kontrak_kerja/surat_kontrak.pdf',
             'maksimal_pelamar' => $this->faker->numberBetween(20, 400),
             'durasi_kontrak_kerja' => $this->faker->numberBetween(1, 6),
             'kategori_kontrak_kerja' => $kategori,

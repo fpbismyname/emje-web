@@ -24,7 +24,7 @@ class KontrakKerjaRequest extends FormRequest
      */
     public function rules(): array
     {
-        $method_request = $this->getMethod();
+        // $method_request = $this->getMethod();
 
         $request_validation = [
             'nama_perusahaan' => ['required', 'string', 'max:255'],
@@ -36,12 +36,6 @@ class KontrakKerjaRequest extends FormRequest
             'deskripsi' => ['nullable', 'string'],
             'kategori_kontrak_kerja' => ['required', Rule::in(array_column(KategoriPelatihanEnum::cases(), 'value'))],
         ];
-        if ($method_request == 'POST') {
-            $request_validation['surat_kontrak'] = ['required', 'file'];
-        }
-        if ($method_request == 'PUT') {
-            $request_validation['surat_kontrak'] = ['nullable', 'file'];
-        }
 
         return $request_validation;
     }
