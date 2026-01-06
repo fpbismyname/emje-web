@@ -12,6 +12,6 @@ enum TenorCicilanPelatihanEnum: int
     case DUA_BELAS_BULAN = 12;
     public function label()
     {
-        return Str::of($this->value)->replace("_", " ")->ucfirst() . " Bulan";
+        return Str::of($this->value) . " Bulan";
     }
 }

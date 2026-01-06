@@ -23,7 +23,7 @@ class PembayaranPelatihanExport implements FromCollection, WithHeadings
                 'nama_peserta' => $data->users->profil_user->nama_lengkap,
                 'nama_pelatihan' => $data->pelatihan->nama_pelatihan,
                 'skema_pembayaran' => $data->skema_pembayaran->label(),
-                'tenor' => $data->tenor->label(),
+                'tenor' => $data->tenor?->label() ?? '-',
                 'catatan' => $data->catatan ?? "-",
                 "status_pembayaran" => $data->pembayaran_pelatihan_lunas ? "Lunas" : "Belum Lunas"
             ];

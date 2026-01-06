@@ -58,9 +58,7 @@
                     <x-ui.img src="{{ route('storage.public.show', ['file' => 'icon/company_icon.png']) }}"
                         class="w-full max-w-12" />
                     <div class="flex flex-col gap-2 is-drawer-close:hidden items-center">
-                        <label class="whitespace-nowrap">PT
-                            Pandajaya
-                            Indonesia
+                        <label class="whitespace-nowrap">{{ config('site.title') }}
                         </label>
                         <div class="badge badge-primary">{{ auth()->user()->role->label() }}</div>
                     </div>

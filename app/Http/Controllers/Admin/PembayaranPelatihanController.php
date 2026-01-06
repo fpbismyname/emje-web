@@ -55,6 +55,7 @@ class PembayaranPelatihanController extends Controller
         $today = now()->format('d_M_Y-H_i_s');
         $file_name = "data_pembayaran_pelatihan_{$today}.xlsx";
 
+
         return $excel->download(new PembayaranPelatihanExport($data_export), $file_name);
     }
 }

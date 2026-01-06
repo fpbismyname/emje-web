@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'title' => 'PT Emje Pandanjaya Indonesia', // No change in this line
+    'title' => 'PT Emje Pandanjaya Indonesia',
     'tagline' => 'Mendorong Pertumbuhan Ekonomi Melalui Layanan Terpercaya dan Berkelanjutan',
     'description' => 'PT Emje Pandanjaya Indonesia adalah perusahaan berbasis di Kabupaten Cianjur, Jawa Barat, yang bergerak di bidang pelatihan kerja, penempatan tenaga kerja, serta perdagangan besar berbagai komoditas dan produk agroindustri. Terdaftar resmi dalam sistem OSS sebagai perusahaan PMDN skala usaha kecil, kami berkomitmen mendukung pengembangan sumber daya manusia dan menyediakan layanan perdagangan serta jasa profesional bagi berbagai mitra bisnis. Dengan cakupan usaha yang fleksibel dan terintegrasi, PT Emje Pandanjaya Indonesia hadir untuk mendorong pertumbuhan ekonomi lokal dan nasional melalui layanan yang terpercaya dan berkelanjutan.',
     'about' => [
