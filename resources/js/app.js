@@ -17,15 +17,17 @@ window.format_currency = (nominal) => {
 };
 
 window.toggle_hidden_input_element = (e, targetId) => {
-    const fieldsetElement = document.getElementById("fieldset-" + targetId);
-    const inputElement = document.getElementById("input-" + targetId);
-    if (e.checked) {
-        fieldsetElement.hidden = false;
-        inputElement.required = true;
-    } else {
-        fieldsetElement.hidden = true;
-        inputElement.required = false;
-    }
+    targetId.forEach((idEl) => {
+        const fieldsetElement = document.getElementById("fieldset-" + idEl);
+        const inputElement = document.getElementById("input-" + idEl);
+        if (e.checked) {
+            fieldsetElement.hidden = false;
+            inputElement.required = true;
+        } else {
+            fieldsetElement.hidden = true;
+            inputElement.required = false;
+        }
+    });
 };
 
 window.render_currency_to = (input, targetId) => {

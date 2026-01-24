@@ -49,6 +49,7 @@ class UserRequest extends FormRequest
                     'email' => ['required', 'string', 'email', 'max:255'],
                     'role' => ['required', 'string', "in:{$enum_role_admin}"],
                     'reset_password' => ['nullable'],
+                    'old_password' => ['nullable', 'string', 'min:6'],
                     'new_password' => ['nullable', 'string', 'min:6'],
                 ];
             }
@@ -84,6 +85,7 @@ class UserRequest extends FormRequest
                     'ktp' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:8192'],
                     'ijazah' => ['nullable', 'image', 'mimes:jpeg,png,jpg,gif,svg', 'max:8192'],
                     'reset_password' => ['nullable'],
+                    'old_password' => ['nullable', 'string', 'min:6'],
                     'new_password' => ['nullable', 'string', 'min:6'],
                 ];
             }

@@ -193,21 +193,28 @@
                 {{-- Checbox reset password --}}
                 <label class="label w-fit">
                     <input type="checkbox" class="checkbox" name="reset_password"
-                        onchange="window.toggle_hidden_input_element(this, 'new-password')" />
+                        onchange="window.toggle_hidden_input_element(this, ['new-password','old-password'])" />
                     Ingin melakukan reset password
                 </label>
+                {{-- Password lama --}}
+                <fieldset id="fieldset-old-password" class="fieldset" hidden>
+                    <legend class="fieldset-legend">Password lama</legend>
+                    <input id="input-old-password" type="text" name="old_password" class="input validator w-full"
+                        minlength="6" />
+                    <p class="validator-hint hidden">
+                        Password lama wajib diisi
+                        <br> Password baru minimal terdiri dari 6 karakter
+                    </p>
+                </fieldset>
                 {{-- Password baru --}}
                 <fieldset id="fieldset-new-password" class="fieldset" hidden>
                     <legend class="fieldset-legend">Password baru</legend>
                     <input id="input-new-password" type="text" name="new_password" class="input validator w-full"
                         minlength="6" />
                     <p class="validator-hint hidden">
-                        Password baru wajib diis
+                        Password baru wajib diisi
                         <br> Password baru minimal terdiri dari 6 karakter
                     </p>
-                    @error('nama_lengkap')
-                        <p class="text-error text-sm">{{ $message }}</p>
-                    @enderror
                 </fieldset>
             </div>
         </div>

@@ -136,6 +136,15 @@ class UserController extends Controller
         $user = $user_model->findOrFail($id);
 
         if ($is_reset_password) {
+            if (empty($update_entries['old_password'])) {
+                Toast::error('Password lama wajib diisi.');
+                return redirect()->back();
+            }
+            if (!Hash::check($update_entries['old_password'], $user->password)) {
+                Toast::error('Password lama salah.');
+                return redirect()->back();
+
+            }
             $user->password = Hash::make($update_entries['new_password']);
             $user->save();
             if (auth()->user()->name === $update_entries['name']) {

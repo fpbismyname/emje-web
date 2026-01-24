@@ -25,6 +25,7 @@ class PengaturanRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255'],
             'reset_password' => ['nullable'],
+            'old_password' => ['nullable', 'string', 'min:6'],
             'new_password' => ['nullable', 'string', 'min:6'],
         ];
     }
